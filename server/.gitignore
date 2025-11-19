@@ -1,5 +1,16 @@
+# Dependencies
 node_modules/
 
+# Environment files
+.env
+.env.*
+
+# Local config directory
+config/
 ./config
 
+# Uploads
 uploads/
+
+# macOS junk
+.DS_Store
