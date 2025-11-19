@@ -3,6 +3,7 @@ import {config} from "dotenv"
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import fileUpload from 'express-fileupload'
+import { createTables } from "./utils/createTables.js";
 
 const app = express()
 
@@ -26,6 +27,9 @@ app.use(fileUpload({
 app.get("/", (req, res) => {
     res.send("I am Divyanshu Raj");
 });
+
+
+createTables();
 
 export default app;
 

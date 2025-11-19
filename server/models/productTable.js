@@ -19,7 +19,6 @@ export async function createProductsTable() {
     `;
 
     await database.query(query);
-    console.log("✅ Products table created successfully");
   } catch (error) {
     console.error("❌ Failed To Create Products Table.", error);
     process.exit(1);

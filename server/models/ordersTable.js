@@ -18,7 +18,6 @@ export async function createOrdersTable() {
     `;
 
     await database.query(query);
-    console.log("✅ Orders table created successfully");
   } catch (error) {
     console.error("❌ Failed To Create Orders Table.", error);
     process.exit(1);

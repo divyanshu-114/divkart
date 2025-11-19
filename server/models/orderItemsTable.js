@@ -18,7 +18,6 @@ export async function createOrderItemTable() {
     `;
 
     await database.query(query);
-    console.log("✅ Ordered items table created successfully");
   } catch (error) {
     console.error("❌ Failed To Create Ordered Items Table.", error);
     process.exit(1);

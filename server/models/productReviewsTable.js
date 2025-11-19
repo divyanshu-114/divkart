@@ -16,7 +16,6 @@ export async function createProductReviewsTable() {
     `;
 
     await database.query(query);
-    console.log("✅ Product reviews table created successfully");
   } catch (error) {
     console.error("❌ Failed To Create Products Reviews Table.", error);
     process.exit(1);
