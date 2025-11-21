@@ -20,6 +20,7 @@ export const register = catchAsyncErrors(async(req, res, next) => {
         `insert into users (name, email, password) values ($1, $2, $3) returning *`,
         [name, email, hashedPassword]
     );
+    
 });
 
 
