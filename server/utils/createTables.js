@@ -1,5 +1,4 @@
 // utils/createTables.js
-import database from "../database/db.js";
 import { createOrdersTable } from "../models/ordersTable.js";
 import { createOrderItemTable } from "../models/orderItemsTable.js";
 import { createProductsTable } from "../models/productTable.js";

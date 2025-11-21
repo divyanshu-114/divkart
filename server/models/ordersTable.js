@@ -1,4 +1,4 @@
-import database from "../database/db.js";
+import pool from "../database/db.js";
 
 export async function createOrdersTable() {
   try {
@@ -17,7 +17,7 @@ export async function createOrdersTable() {
       );
     `;
 
-    await database.query(query);
+    await pool.query(query);
   } catch (error) {
     console.error("❌ Failed To Create Orders Table.", error);
     process.exit(1);

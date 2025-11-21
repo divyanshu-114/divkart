@@ -1,4 +1,4 @@
-import database from "../database/db.js";
+import pool from "../database/db.js";
 
 export async function createPaymentsTable() {
   try {
@@ -14,7 +14,7 @@ export async function createPaymentsTable() {
       );
     `;
 
-    await database.query(query);
+    await pool.query(query);
   } catch (error) {
     console.error("❌ Failed To Create Payments Table.", error);
     process.exit(1);

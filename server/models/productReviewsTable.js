@@ -1,4 +1,4 @@
-import database from "../database/db.js";
+import pool from "../database/db.js";
 
 export async function createProductReviewsTable() {
   try {
@@ -15,7 +15,7 @@ export async function createProductReviewsTable() {
       );
     `;
 
-    await database.query(query);
+    await pool.query(query);
   } catch (error) {
     console.error("❌ Failed To Create Products Reviews Table.", error);
     process.exit(1);

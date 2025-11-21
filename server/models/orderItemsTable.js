@@ -1,4 +1,4 @@
-import database from "../database/db.js";
+import pool from "../database/db.js";
 
 export async function createOrderItemTable() {
   try {
@@ -17,7 +17,7 @@ export async function createOrderItemTable() {
       );
     `;
 
-    await database.query(query);
+    await pool.query(query);
   } catch (error) {
     console.error("❌ Failed To Create Ordered Items Table.", error);
     process.exit(1);

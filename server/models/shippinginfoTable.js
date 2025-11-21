@@ -1,4 +1,4 @@
-import database from "../database/db.js";
+import pool from "../database/db.js";
 
 export async function createShippingInfoTable() {
   try {
@@ -17,7 +17,7 @@ export async function createShippingInfoTable() {
       );
     `;
 
-    await database.query(query);
+    await pool.query(query);
   } catch (error) {
     console.error("❌ Failed To Create Shipping Info Table.", error);
     process.exit(1);

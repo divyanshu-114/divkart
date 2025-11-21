@@ -4,6 +4,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import fileUpload from 'express-fileupload'
 import { createTables } from "./utils/createTables.js";
+import {errorMiddleware} from "./middlewares/errorMiddleware.js";
 
 const app = express()
 
@@ -25,11 +26,13 @@ app.use(fileUpload({
 }));
 
 app.get("/", (req, res) => {
-    res.send("I am Divyanshu Raj");
+    res.send("I am Divyanshu Raj and i am duniya ka papa");
 });
 
 
 createTables();
+
+app.use(errorMiddleware)
 
 export default app;
 

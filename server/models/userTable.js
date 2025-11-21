@@ -1,4 +1,4 @@
-import database from "../database/db.js";
+import pool from "../database/db.js";
 
 export async function createUserTable() {
     const query = `
@@ -16,7 +16,7 @@ export async function createUserTable() {
     `;
     
     try {
-        await database.query(query);
+        await pool.query(query);
     } catch (error) {
         console.error("❌ Failed To Create Products Table.", error);
         process.exit(1);
