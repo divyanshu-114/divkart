@@ -5,13 +5,16 @@ export const sendToken = (user, statusCode, message, res) => {
         expiresIn: process.env.JWT_EXPIRES_IN
     })
 
+    const cookieMaxAge = Number(process.env.COOKIE_EXPIRES_IN) || 30 * 24 * 60 * 60 * 1000;
+
+
     res.status(statusCode).cookie("token", token, {
-        expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN ),
-        httpOnly: true
+        expires: new Date(Date.now() + cookieMaxAge ),
+        httpOnly: true,
     }).json({
         success: true,
         user,
         message,
-        token
+        token,
     })
 };
