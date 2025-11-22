@@ -16,7 +16,7 @@ const pool = new Pool({
   // optional tuning:
   // max: 10,
   // idleTimeoutMillis: 30000,
-  // connectionTimeoutMillis: 2000,
+  // connectionTimeoutMillis: 2000, 
 });
 
 // Log pool connect

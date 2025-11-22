@@ -2,7 +2,7 @@ import pool from "../database/db.js";
 
 export async function createOrdersTable() {
   try {
-    const query = `
+    const query = ` 
       CREATE TABLE IF NOT EXISTS orders (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         buyer_id UUID NOT NULL,
@@ -22,4 +22,5 @@ export async function createOrdersTable() {
     console.error("❌ Failed To Create Orders Table.", error);
     process.exit(1);
   }
-}
+
+};
