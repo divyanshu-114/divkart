@@ -64,3 +64,44 @@ export const logout = catchAsyncErrors(async(req, res, next) => {
     });
 });
 
+
+
+export const forgotPassword = catchAsyncErrors(async(req, res, next) => {
+    const {email} = req.body;
+    const {frontendUrl} = req.query;
+    if(!email){
+        return next(new ErrorHandler("Please provide email", 400));
+    }
+    let userResult = await pool.query(
+        `select * from users where email = $1`, [email]
+    );
+    if(userResult.rows.length === 0){
+        return next(new ErrorHandler("User not found", 400));
+    }
+    const user = userResult.rows[0];
+    const {resetToken, hashedToken, resetPasswordExpireTime} = generateResetPasswordToken();
+
+    await pool.query(`update users set reset_password_token = $1, reset_password_expire = to_timestamp($2) 
+        where id = $3`, [hashedToken, resetPasswordExpireTime / 1000, user.id]);
+
+        const resetPasswordUrl = `${frontendUrl}/password/reset/${resetToken}`;
+
+        const message = generateEmailTemplate(resetPasswordUrl)
+
+        try {
+            sendEmail({
+                email: user.email,
+                subject: "Reset Password",
+                message
+            })
+            res.status(200).json({
+                success: true,
+                message: `A reset password link has been sent to your email address ${user.email}`
+            });
+        } catch (error) {
+            await pool.query(`update users set reset_password_token = null, reset_password_expire = null 
+                where id = $1`, [user.id]);
+            return next(new ErrorHandler("Failed to send reset password email", 500));
+        }
+
+});
