@@ -6,10 +6,17 @@ import { sendToken } from "../utils/jwtToken.js";
 import { generateResetPasswordToken } from "../utils/generateResetPasswordToken.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import {generateEmailTemplate} from "../utils/generateForgotPasswordEmailTemplate.js";
+import crypto from "crypto";
 
 
 export const register = catchAsyncErrors(async(req, res, next) => {
     const {name, email, password} = req.body;
+
+    if(password.length < 8 ||
+        password.length > 16 
+     ){
+        return next(new ErrorHandler("Password must be between 8 and 16 characters", 400));
+     }
 
     if(!name || !email || !password){
         return next(new ErrorHandler("Please provide all required fields", 400));
@@ -108,4 +115,62 @@ export const forgotPassword = catchAsyncErrors(async(req, res, next) => {
             return next(new ErrorHandler("Failed to send reset password email", 500));
         }
 
+});
+
+export const resetPassword = catchAsyncErrors(async (req, res, next) => {
+        const { token } = req.params;
+        if (!token) {
+            return next(new ErrorHandler("Reset token is required", 400));
+        }
+
+        // 1) Hash the incoming token exactly the same way it was hashed when generated
+        const resetPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
+
+        // 2) Use to_timestamp($2) in SQL so Postgres compares timestamps correctly.
+        //    We pass seconds (integer) as the second parameter (not milliseconds).
+        const nowInSeconds = Math.floor(Date.now() / 1000);
+
+        const userResult = await pool.query(
+            `SELECT * FROM users WHERE reset_password_token = $1 AND reset_password_expire > to_timestamp($2)`,
+            [resetPasswordToken, nowInSeconds]
+        );
+
+        if (userResult.rows.length === 0) {
+            return next(new ErrorHandler("Invalid reset password token", 400));
+        }
+
+        const user = userResult.rows[0];
+
+        // 3) Validate new password fields
+        const { password, confirmPassword } = req.body;
+        if (!password || !confirmPassword) {
+            return next(new ErrorHandler("Please provide password and confirmPassword", 400));
+        }
+
+        if (password !== confirmPassword) {
+            return next(new ErrorHandler("Passwords do not match", 400));
+        }
+
+        if (
+            password.length < 8 ||
+            password.length > 16 ||
+            confirmPassword.length < 8 ||
+            confirmPassword.length > 16
+        ) {
+            return next(new ErrorHandler("Password must be between 8 and 16 characters", 400));
+        }
+
+        // 4) Hash and save new password, clear reset token/expire
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const updateResult = await pool.query(
+            `UPDATE users
+            SET password = $1, reset_password_token = NULL, reset_password_expire = NULL
+            WHERE id = $2
+            RETURNING *`,
+            [hashedPassword, user.id]
+        );
+
+        // 5) Send a new auth token (or a success response). Here we issue a new token.
+        sendToken(updateResult.rows[0], 200, "Password reset successfully", res);
 });
