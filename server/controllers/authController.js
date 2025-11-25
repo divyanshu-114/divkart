@@ -148,7 +148,7 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
         }
 
         if (password !== confirmPassword) {
-            return next(new ErrorHandler("Passwords do not match", 400));
+            return next(new ErrorHandler("Password and confirm password do not match", 400));
         }
 
         if (
@@ -174,3 +174,5 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
         // 5) Send a new auth token (or a success response). Here we issue a new token.
         sendToken(updateResult.rows[0], 200, "Password reset successfully", res);
 });
+
+
