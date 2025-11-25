@@ -176,3 +176,31 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 
+export const updatePassword = catchAsyncErrors(async(req,res,next)=>{
+    const {currentPassword , newPassword, confirmPassword} = req.body;
+    if(!currentPassword || !newPassword || !confirmPassword){
+        return next(new ErrorHandler("Please provide all required fields",400))
+    }
+    const isPasswordMatch = await bcrypt.compare(currentPassword, req.user.password)
+    if(!isPasswordMatch){
+        return next(new ErrorHandler("Invalid current password",400))
+    }
+    if(newPassword !== confirmPassword){
+        return next(new ErrorHandler("Password and confirm password do not match",400))
+    }
+    if (
+            newPassword.length < 8 ||
+            newPassword.length > 16 ||
+            confirmPassword.length < 8 ||
+            confirmPassword.length > 16
+        ) {
+            return next(new ErrorHandler("Password must be between 8 and 16 characters", 400));
+        }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await pool.query(`update users set password = $1 where id = $2`, [hashedPassword, req.user.id]);
+
+    res.status(200).json({
+        success: true,
+        message: "Password updated successfully"
+    });
+});
