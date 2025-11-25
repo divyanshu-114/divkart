@@ -124,11 +124,8 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
             return next(new ErrorHandler("Reset token is required", 400));
         }
 
-        // 1) Hash the incoming token exactly the same way it was hashed when generated
         const resetPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
 
-        // 2) Use to_timestamp($2) in SQL so Postgres compares timestamps correctly.
-        //    We pass seconds (integer) as the second parameter (not milliseconds).
         const nowInSeconds = Math.floor(Date.now() / 1000);
 
         const userResult = await pool.query(
@@ -161,7 +158,6 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
             return next(new ErrorHandler("Password must be between 8 and 16 characters", 400));
         }
 
-        // 4) Hash and save new password, clear reset token/expire
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const updateResult = await pool.query(
@@ -172,7 +168,6 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
             [hashedPassword, user.id]
         );
 
-        // 5) Send a new auth token (or a success response). Here we issue a new token.
         sendToken(updateResult.rows[0], 200, "Password reset successfully", res);
 });
 
