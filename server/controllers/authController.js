@@ -7,6 +7,7 @@ import { generateResetPasswordToken } from "../utils/generateResetPasswordToken.
 import { sendEmail } from "../utils/sendEmail.js";
 import {generateEmailTemplate} from "../utils/generateForgotPasswordEmailTemplate.js";
 import crypto from "crypto";
+import {v2 as cloudinary} from "cloudinary";
 
 
 export const register = catchAsyncErrors(async(req, res, next) => {
@@ -203,4 +204,63 @@ export const updatePassword = catchAsyncErrors(async(req,res,next)=>{
         success: true,
         message: "Password updated successfully"
     });
+});
+
+
+export const updateProfile = catchAsyncErrors(async (req, res, next) => {
+
+const name = typeof req.body.name === 'string' ? req.body.name.trim() : req.body.name;
+  const email = typeof req.body.email === 'string' ? req.body.email.trim() : req.body.email;
+
+  if (!name || !email) {
+    return next(new ErrorHandler("Please provide name and email", 400));
+  }
+  if (name === "" || email === "") {
+    return next(new ErrorHandler("Name and email cannot be empty", 400));
+  }
+
+  let avatarData = {};
+  if (req.files && req.files.avatar) {
+    const { avatar } = req.files;
+
+    if (req.user?.avatar?.public_id) {
+        await cloudinary.uploader.destroy(req.user.avatar.public_id);      
+    }
+
+    const newProfileImage = await cloudinary.uploader.upload(avatar.tempFilePath, {
+      folder: "Ecommerce_avatars",
+      width: 150,
+      crop: "scale"
+    });
+
+    avatarData = {
+      public_id: newProfileImage.public_id,
+      secure_url: newProfileImage.secure_url
+    };
+  }
+
+  let user;
+
+if (Object.keys(avatarData).length > 0) {
+  // Avatar exists → update name, email, avatar
+  user = await pool.query(
+    `UPDATE users SET name = $1, email = $2, avatar = $3 WHERE id = $4 RETURNING *`,
+    [name, email, avatarData, req.user.id]
+  );
+} else {
+  // No avatar uploaded → update only name & email
+  user = await pool.query(
+    `UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *`,
+    [name, email, req.user.id]
+  );
+}
+
+
+  const updatedUser = user.rows[0];
+
+  return res.status(200).json({
+    success: true,
+    message: "Profile updated successfully",
+    user: updatedUser
+  });
 });

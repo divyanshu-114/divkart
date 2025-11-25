@@ -8,6 +8,7 @@ import {errorMiddleware} from "./middlewares/errorMiddleware.js";
 import authRouter from "./router/authRoutes.js";
 
 const app = express()
+app.use(express.json());
 
 config({path: './config/config.env'})
 
