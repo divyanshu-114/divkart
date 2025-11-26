@@ -13,4 +13,4 @@ config/
 uploads/
 
 # macOS junk
-.DS_Store
+.DS_Store.DS_Store
