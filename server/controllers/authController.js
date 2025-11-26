@@ -259,3 +259,6 @@ if (Object.keys(avatarData).length > 0) {
     user: updatedUser
   });
 });
+
+
+// created auth api
