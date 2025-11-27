@@ -29,7 +29,7 @@ app.use(fileUpload({
 }));
 
 app.get("/", (req, res) => {
-    res.send("I am Divyanshu Raj and i am duniya ka papa");
+    res.send("I am Divyanshu Raj and i am the best");
 });
 
 app.use("/api/v1/auth", authRouter);

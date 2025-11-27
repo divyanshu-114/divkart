@@ -260,5 +260,3 @@ if (Object.keys(avatarData).length > 0) {
   });
 });
 
-
-// created auth api
