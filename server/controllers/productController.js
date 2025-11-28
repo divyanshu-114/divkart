@@ -37,3 +37,119 @@ export const createProduct = catchAsyncErrors(async(req,res,next)=>{
         product: product.rows[0]
     });
 });
+
+export const fetchAllproducts = catchAsyncErrors(async(req,res,next)=>{
+    const {availability, price, category, ratings, search} = req.query;
+     const page = parseInt(req.query.page) || 1;
+     const limit = 10;
+     const offset = (page - 1) * limit;
+     const conditions = [];
+     let values = [];
+     let index = 1;
+
+     let pagination = {};
+
+    //  Filter prodcuts based on availability
+     if(availability === 'in-stock'){
+        conditions.push('stock > 5');
+     } else if (availability === 'limited') {
+        conditions.push('stock > 0 AND stock <= 5');
+     } else if (availability === 'out-of-stock') {
+        conditions.push('stock = 0');
+     } 
+
+    //  Filter products based on price
+     if (price) {
+        const [minPrice, maxPrice] = price.split('-');
+       if (minPrice && maxPrice) {
+        conditions.push(`price BETWEEN ${index} AND ${index + 1}`);
+        values.push(minPrice, maxPrice);
+        index += 2;
+       }
+     }
+    // filter products ny category
+    if(category){
+        conditions.push(`category ILIKE $${index}`)
+        values.push(`%${category}%`)
+        index++;
+    }
+    // filter products ny ratings
+    if(ratings){
+        conditions.push(`rating >= $${index}`)
+        values.push(ratings)
+        index++;
+    }
+    // filter products ny search
+    if(search){
+        conditions.push(`p.name ILIKE $${index} OR p.description ILIKE $${index}`)
+        values.push(`%${search}%`)
+        index++;
+    }
+
+    const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+    
+    // get count of filtered products
+    const totalProductsResult = await pool.query(
+        `SELECT COUNT(*) FROM products p ${whereClause}`,
+        values
+    );
+    const totalProducts = totalProductsResult.rows[0].count;
+
+    paginationPlaceholders.limit = `${index}`;
+    values.push(limit);
+    index++;
+
+    paginationPlaceholders.offset = `${index}`;
+    values.push(offset);
+    index++;
+
+    // fetch with reviews
+    const query =  `
+        select p.*, 
+        count(r.id) as review_count
+        from products p 
+        left join reviews r on p.id = r.product_id 
+        ${whereClause}
+        group by p.id
+        order by p.created_at desc
+        limit ${paginationPlaceholders.limit}
+        offset ${paginationPlaceholders.offset}
+        `;
+    
+    const result = await pool.query(query, values);
+
+    // query for fetching new products
+    const newProductsQuery = `
+        select p.*, 
+        count(r.id) as review_count,
+        from products p left join reviews r on p.id = r.product_id 
+        where p.created_at >= now() - interval '30 days'
+        group by p.id
+        order by p.created_at desc
+        limit 8
+        `;
+    
+    const newProductsResult = await pool.query(newProductsQuery);
+
+     // query for fetching top rated products (rating >= 4.5)
+    const topRatedQuery = `
+        select p.*, 
+        count(r.id) as review_count,
+        from products p left join reviews r on p.id = r.product_id 
+        where p.ratings >= 4.5
+        group by p.id
+        order by p.created_at desc
+        limit 8
+       
+        `;
+    
+    const topRatedResult = await pool.query(topRatedQuery);
+
+    res.status(200).json({
+        success: true,
+        products: result.rows,
+        totalProducts,
+        newProducts: newProductsResult.rows,
+        topRatedProducts: topRatedResult.rows
+    });
+});
