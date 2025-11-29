@@ -153,3 +153,5 @@ export const fetchAllproducts = catchAsyncErrors(async(req,res,next)=>{
         topRatedProducts: topRatedResult.rows
     });
 });
+
+// new api
