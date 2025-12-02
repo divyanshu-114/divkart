@@ -47,7 +47,7 @@ export const fetchAllproducts = catchAsyncErrors(async(req,res,next)=>{
      let values = [];
      let index = 1;
 
-     let pagination = {};
+     let paginationPlaceHolders = {};
 
     //  Filter prodcuts based on availability
      if(availability === 'in-stock'){
@@ -62,7 +62,7 @@ export const fetchAllproducts = catchAsyncErrors(async(req,res,next)=>{
      if (price) {
         const [minPrice, maxPrice] = price.split('-');
        if (minPrice && maxPrice) {
-        conditions.push(`price BETWEEN ${index} AND ${index + 1}`);
+        conditions.push(`price BETWEEN $${index} AND $${index + 1}`);
         values.push(minPrice, maxPrice);
         index += 2;
        }
@@ -90,16 +90,16 @@ export const fetchAllproducts = catchAsyncErrors(async(req,res,next)=>{
     
     // get count of filtered products
     const totalProductsResult = await pool.query(
-        `SELECT COUNT(*) FROM products p ${whereClause}`,
+        `SELECT COUNT(*) FROM products p ${whereClause}`, 
         values
     );
     const totalProducts = totalProductsResult.rows[0].count;
 
-    paginationPlaceholders.limit = `${index}`;
+    paginationPlaceHolders.limit = `$${index}`;
     values.push(limit);
     index++;
 
-    paginationPlaceholders.offset = `${index}`;
+    paginationPlaceHolders.offset = `$${index}`;
     values.push(offset);
     index++;
 
@@ -112,8 +112,8 @@ export const fetchAllproducts = catchAsyncErrors(async(req,res,next)=>{
         ${whereClause}
         group by p.id
         order by p.created_at desc
-        limit ${paginationPlaceholders.limit}
-        offset ${paginationPlaceholders.offset}
+        limit ${paginationPlaceHolders.limit}
+        offset ${paginationPlaceHolders.offset}
         `;
     
     const result = await pool.query(query, values);
@@ -121,7 +121,7 @@ export const fetchAllproducts = catchAsyncErrors(async(req,res,next)=>{
     // query for fetching new products
     const newProductsQuery = `
         select p.*, 
-        count(r.id) as review_count,
+        count(r.id) as review_count 
         from products p left join reviews r on p.id = r.product_id 
         where p.created_at >= now() - interval '30 days'
         group by p.id
@@ -134,11 +134,11 @@ export const fetchAllproducts = catchAsyncErrors(async(req,res,next)=>{
      // query for fetching top rated products (rating >= 4.5)
     const topRatedQuery = `
         select p.*, 
-        count(r.id) as review_count,
+        count(r.id) as review_count
         from products p left join reviews r on p.id = r.product_id 
         where p.ratings >= 4.5
         group by p.id
-        order by p.created_at desc
+        order by p.ratings desc, p.created_at desc
         limit 8
        
         `;
