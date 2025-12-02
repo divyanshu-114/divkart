@@ -226,12 +226,15 @@ export const fetchSingleProduct = catchAsyncErrors(async(req,res,next)=>{
         `,
         [productId]
     );
-    
+
     if(result.rows.length === 0){
         return next(new ErrorHandler("Product not found", 404));
     }
     res.status(200).json({
         success: true,
+        message: "Product fetched successfully",
         product: result.rows[0]
     });
 })
+
+// post product review api 
