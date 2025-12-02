@@ -172,6 +172,3 @@ export const updateProduct = catchAsyncErrors(async(req,res,next)=>{
         updatedProduct: result.rows[0]
     });
 })
-
-// comment again
-// comment again
