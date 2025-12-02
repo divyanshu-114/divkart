@@ -199,3 +199,39 @@ export const deleteProduct = catchAsyncErrors(async(req,res,next) =>{
 
 
 })
+
+export const fetchSingleProduct = catchAsyncErrors(async(req,res,next)=>{
+    const {productId} = req.params;
+    const result = await pool.query(
+        ` 
+            select p.*,
+            coalesce(
+            json_agg(
+            json_build_object(
+                'review_id', r.id,
+                'rating', r.rating,
+                'comment', r.comment,
+                'reviewer', json_build_object(
+                'id', u.id,
+                'name', u.name,
+                'avatar', u.avatar
+              ))
+
+                ) filter (where r.id is not null), '[]') as reviews
+            from products p
+            left join reviews r on p.id = r.product_id
+            left join users u on r.user_id = u.id
+            where p.id = $1
+            group by p.id
+        `,
+        [productId]
+    );
+    
+    if(result.rows.length === 0){
+        return next(new ErrorHandler("Product not found", 404));
+    }
+    res.status(200).json({
+        success: true,
+        product: result.rows[0]
+    });
+})
