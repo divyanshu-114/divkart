@@ -244,18 +244,34 @@ export const postProductReview = catchAsyncErrors(async(req,res,next)=>{
     if(!rating || !comment){
         return next(new ErrorHandler("Please provide all required fields", 400));
     }
-    const product = await pool.query(`select * from products where id = $1 `, [productId]);
+    const purchasedCheckQuery  = `select oi.product_id 
+                           from order_items oi 
+                           join orders o on o.id = oi.order_id 
+                           join payments p on p.order_id = o.id 
+                           where o.buyer_id =$1 and
+                           oi.product_id = $2 and
+                           p.payment_status = 'paid' 
+                           limit 1`;
+    const  {rows} = await pool.query(purchasedCheckQuery, [req.user.id, productId, ]);
+    if(rows.length === 0){
+        return res.status(403).json({
+            success: false,
+            message: "You are not authorized to post a review"
+        })
+    }
+
+    const product = await pool.query(`select * from products where id = $1`, [productId]);
+
     if(product.rows.length === 0){
         return next(new ErrorHandler("Product not found", 404));
     }
-    const user = await pool.query(`select * from users where id = $1 `, [req.user.id]);
-    if(user.rows.length === 0){
-        return next(new ErrorHandler("User not found", 404));
+    const isAlreadyReviewed = await pool.query(`select * from reviews where product_id = $1 and user_id = $2`, [productId, req.user.id]);
+
+    let review;
+    if(isAlreadyReviewed.rows.length > 0){
+        review = await pool.query(`update reviews set rating = $1, comment = $2 where product_id = $3 and user_id = $4`, [rating, comment, productId, req.user.id]);
+    }else{
+        review = await pool.query(`insert into reviews (product_id, user_id, rating, comment) values ($1, $2, $3, $4)`, [productId, req.user.id, rating, comment]);
     }
-    const review = await pool.query(`insert into reviews (product_id, user_id, rating, comment) values ($1, $2, $3, $4) returning *`, [productId, req.user.id, rating, comment]);
-    res.status(200).json({
-        success: true,
-        message: "Review added successfully",
-        review: review.rows[0]
-    });
+    
 })
