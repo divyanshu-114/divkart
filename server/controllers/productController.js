@@ -236,5 +236,3 @@ export const fetchSingleProduct = catchAsyncErrors(async(req,res,next)=>{
         product: result.rows[0]
     });
 })
-
-// post product review api 
