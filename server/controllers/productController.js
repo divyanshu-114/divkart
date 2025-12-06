@@ -273,5 +273,9 @@ export const postProductReview = catchAsyncErrors(async(req,res,next)=>{
     }else{
         review = await pool.query(`insert into reviews (product_id, user_id, rating, comment) values ($1, $2, $3, $4) returning *`, [productId, req.user.id, rating, comment]);
     }
+
+    const allReviews = await pool.query(`select avg(rating) as avg_rating from reviews where product_id = $1`, [productId]);
+    await pool.query(`update products set rating = $1 where id = $2`, [allReviews.rows[0].avg_rating, productId]);
+    
     
 })
