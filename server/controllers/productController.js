@@ -236,3 +236,26 @@ export const fetchSingleProduct = catchAsyncErrors(async(req,res,next)=>{
         product: result.rows[0]
     });
 })
+
+// post product review api 
+export const postProductReview = catchAsyncErrors(async(req,res,next)=>{
+    const {productId} = req.params;
+    const {rating, comment} = req.body;
+    if(!rating || !comment){
+        return next(new ErrorHandler("Please provide all required fields", 400));
+    }
+    const product = await pool.query(`select * from products where id = $1 `, [productId]);
+    if(product.rows.length === 0){
+        return next(new ErrorHandler("Product not found", 404));
+    }
+    const user = await pool.query(`select * from users where id = $1 `, [req.user.id]);
+    if(user.rows.length === 0){
+        return next(new ErrorHandler("User not found", 404));
+    }
+    const review = await pool.query(`insert into reviews (product_id, user_id, rating, comment) values ($1, $2, $3, $4) returning *`, [productId, req.user.id, rating, comment]);
+    res.status(200).json({
+        success: true,
+        message: "Review added successfully",
+        review: review.rows[0]
+    });
+})
