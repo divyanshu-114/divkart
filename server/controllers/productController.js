@@ -244,7 +244,7 @@ export const postProductReview = catchAsyncErrors(async(req,res,next)=>{
     if(!rating || !comment){
         return next(new ErrorHandler("Please provide all required fields", 400));
     }
-    const purchasedCheckQuery  = `select oi.product_id 
+    const purchaseCheckQuery  = `select oi.product_id 
                            from order_items oi 
                            join orders o on o.id = oi.order_id 
                            join payments p on p.order_id = o.id 
@@ -252,7 +252,7 @@ export const postProductReview = catchAsyncErrors(async(req,res,next)=>{
                            oi.product_id = $2 and
                            p.payment_status = 'paid' 
                            limit 1`;
-    const  {rows} = await pool.query(purchasedCheckQuery, [req.user.id, productId, ]);
+    const  {rows} = await pool.query(purchaseCheckQuery, [req.user.id, productId]);
     if(rows.length === 0){
         return res.status(403).json({
             success: false,
@@ -275,7 +275,13 @@ export const postProductReview = catchAsyncErrors(async(req,res,next)=>{
     }
 
     const allReviews = await pool.query(`select avg(rating) as avg_rating from reviews where product_id = $1`, [productId]);
-    await pool.query(`update products set rating = $1 where id = $2`, [allReviews.rows[0].avg_rating, productId]);
+    const updatedProduct = await pool.query(`update products set ratings = $1 where id = $2`, [allReviews.rows[0].avg_rating, productId]);
     
+    res.status(200).json({
+        success: true,
+        message: "Review posted successfully",
+        review: review.rows[0],
+        product: updatedProduct.rows[0]
+    })
     
 })
