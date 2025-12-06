@@ -269,9 +269,9 @@ export const postProductReview = catchAsyncErrors(async(req,res,next)=>{
 
     let review;
     if(isAlreadyReviewed.rows.length > 0){
-        review = await pool.query(`update reviews set rating = $1, comment = $2 where product_id = $3 and user_id = $4`, [rating, comment, productId, req.user.id]);
+        review = await pool.query(`update reviews set rating = $1, comment = $2 where product_id = $3 and user_id = $4 returning *`, [rating, comment, productId, req.user.id]);
     }else{
-        review = await pool.query(`insert into reviews (product_id, user_id, rating, comment) values ($1, $2, $3, $4)`, [productId, req.user.id, rating, comment]);
+        review = await pool.query(`insert into reviews (product_id, user_id, rating, comment) values ($1, $2, $3, $4) returning *`, [productId, req.user.id, rating, comment]);
     }
     
 })
