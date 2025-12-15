@@ -288,5 +288,3 @@ export const postProductReview = catchAsyncErrors(async(req,res,next)=>{
 
 
 
-// get all reviews api 
-
