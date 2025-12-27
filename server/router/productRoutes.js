@@ -1,5 +1,11 @@
 import express from "express";
-import {createProduct, deleteProduct, fetchAllproducts, fetchSingleProduct, postProductReview, updateProduct} from "../controllers/productController.js";
+import {createProduct,
+         deleteProduct, 
+         deleteReview, 
+         fetchAllproducts, 
+         fetchSingleProduct, 
+         postProductReview, 
+         updateProduct} from "../controllers/productController.js";
 import {authorizedRoles, isAuthenticated} from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -25,5 +31,7 @@ router.delete("/admin/delete/:productId",
 router.get("/singleProduct/:productId", fetchSingleProduct);
 
 router.put("/post-new/review/:productId", isAuthenticated, postProductReview);
+
+router.delete('/delete/review/:productId',isAuthenticated, deleteReview);
 
 export default router;

@@ -284,7 +284,119 @@ export const postProductReview = catchAsyncErrors(async(req,res,next)=>{
         product: updatedProduct.rows[0]
     })
     
+});
+
+export  const deleteReview = catchAsyncErrors(async (req,res,next) =>{
+    const { productId } = req.params;
+   const review = await pool.query(`delete from reviews where product_id = $1 and user_id = $2 returning *`, [productId, req.user.id]);
+   
+    if(review.rows.length === 0){
+        return next(new ErrorHandler("Review not found", 404));
+    };
+
+
+    const allReviews = await pool.query(`select avg(rating) as avg_rating from reviews where product_id = $1`, [productId]);
+    const updatedProduct = await pool.query(`update products set ratings = $1 where id = $2`, [allReviews.rows[0].avg_rating, productId]);
+    
+    res.status(200).json({
+        success: true,
+        message: "Review deleted successfully",
+        review: review.rows[0],
+        product: updatedProduct.rows[0]
+    });
+
 })
 
+export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) => {
+    const {userPrompt} = req.body;
+
+    if(!userPrompt){
+        return next(new ErrorHandler("User prompt is required", 400));
+    }
+
+    const filterKeywords = (query) =>{
+        const stopWords = new Set([
+        "the",
+        "they",
+        "them",
+        "then",
+        "I",
+        "we",
+        "you",
+        "he",
+        "she",
+        "it",
+        "is",
+        "a",
+        "an",
+        "of",
+        "and",
+        "or",
+        "to",
+        "for",
+        "from",
+        "on",
+        "who",
+        "whom",
+        "why",
+        "when",
+        "which",
+        "with",
+        "this",
+        "that",
+        "in",
+        "at",
+        "by",
+        "be",
+        "not",
+        "was",
+        "were",
+        "has",
+        "have",
+        "had",
+        "do",
+        "does",
+        "did",
+        "so",
+        "some",
+        "any",
+        "how",
+        "can",
+        "could",
+        "should",
+        "would",
+        "there",
+        "here",
+        "just",
+        "than",
+        "because",
+        "but",
+        "its",
+        "it's",
+        "if",
+        ".",
+        ",",
+        "!",
+        "?",
+        ">",
+        "<",
+        ";",
+        "`",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+      ]);
+
+    }
+
+    
 
 
+});
