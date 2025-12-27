@@ -394,9 +394,49 @@ export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) =
         "10",
       ]);
 
+      return query
+            .toLowerCase()
+            .replace(/[^\w\s]/g, '')
+            .split(/\s+/)
+            .filter(word => !stopWords.has(word))
+            .map((word) => `%${word}%`);
+    //   replace ke andar jo hai usse sare punctuations replace ho jayenge space se 
+    //   and split ho jayenge space ke basis par and fir return karega filter query jisme stop words nhi honge
+    //   aur har word ke start and end me % add ho jayega for fuzzy matching
+
     }
 
-    
+    const keywords = filterKeywords(userPrompt);
+
+    // step 1 : Basic sql fetching
+
+    const result = await database.query(
+        `select * from products
+        where name ILIKE  ANY($1)
+        or description ILIKE ANY($1)
+        or category ILIKE ANY($1)
+        limit 200`,
+        [keywords]
+    )
+
+    const filteredProducts = result.rows;
+
+    if(filteredProducts.length === 0) {
+        return res.status(200).json({
+            success: true,
+            message: "No products found matching your prompt",
+            products : []
+        });
+    }
+
+    // step 2 : AI filtering 
+    const {success,products} = await getAIRecommendation(req,res,userPrompt , filteredProducts);
+
+    res.status(200).json({
+        success : success,
+        message: "AI filtered products",
+        products : products
+    });
 
 
 });
