@@ -2,6 +2,7 @@ import {catchAsyncErrors} from "../middlewares/catchAsyncError.js";
 import ErrorHandler from "../middlewares/errorMiddleware.js";
 import pool from "../database/db.js";
 import {v2 as cloudinary} from "cloudinary";
+import { getAIRecommendation } from "../utils/getAIRecommendation.js";
 
 export const createProduct = catchAsyncErrors(async(req,res,next)=>{
     const {name, description, price, category , stock} = req.body;
@@ -440,3 +441,4 @@ export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) =
 
 
 });
+
