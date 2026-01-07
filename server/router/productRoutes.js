@@ -2,6 +2,7 @@ import express from "express";
 import {createProduct,
          deleteProduct, 
          deleteReview, 
+         fetchAIFilteredProducts, 
          fetchAllproducts, 
          fetchSingleProduct, 
          postProductReview, 
@@ -33,5 +34,7 @@ router.get("/singleProduct/:productId", fetchSingleProduct);
 router.put("/post-new/review/:productId", isAuthenticated, postProductReview);
 
 router.delete('/delete/review/:productId',isAuthenticated, deleteReview);
+
+router.post("/ai-search", isAuthenticated , fetchAIFilteredProducts)
 
 export default router;
