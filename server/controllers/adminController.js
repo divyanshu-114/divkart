@@ -4,21 +4,30 @@ import pool from "../database/db.js";
 
 
 
-export const getAllUsers = catchAsyncErrors(async(req, res, next) => {
-    const page = parseInt(req.query.page) || 1;
+export const getAllUsers = catchAsyncErrors(async (req, res, next) => {
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.max(1, parseInt(req.query.limit) || 10);
+    const offset = (page - 1) * limit;
 
-    const totalUsersResult = await pool.query(`select count(*) from users where role = $1`,["User"]);
+    const totalUsersResult = await pool.query(
+        `SELECT COUNT(*) FROM users WHERE role = $1`,
+        ["User"]
+    );
     const totalUsers = parseInt(totalUsersResult.rows[0].count);
 
-    const offset = (page - 1) * 10;
-    
-    const users = await pool.query(`select * from users where role = $1 order by created_at desc limit $2 offset $3`,["User", 10, offset]);
+    const usersResult = await pool.query(
+        `SELECT id, name, email, role, created_at
+         FROM users
+         WHERE role = $1
+         ORDER BY created_at DESC
+         LIMIT $2 OFFSET $3`,
+        ["User", limit, offset]
+    );
 
     res.status(200).json({
         success: true,
         totalUsers,
         currentPage: page,
-        users : users.rows
+        users: usersResult.rows
     });
-
-})
+});
