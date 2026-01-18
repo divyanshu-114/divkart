@@ -15,7 +15,17 @@ const popupSlice = createSlice({
     },
     toggleSidebar(state){
       state.isSidebarOpen = !state.isSidebarOpen;
+    },
+    toggleSearchBar(state){
+      state.isSearchBarOpen = !state.isSearchBarOpen;
+    },
+    toggleCart(state){
+      state.isCartOpen = !state.isCartOpen;
+    },
+    toggleAIModal(state){
+      state.isAIPopupOpen = !state.isAIPopupOpen;
     }
+    
   },
 });
 
