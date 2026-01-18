@@ -50,7 +50,7 @@ export const placeNewOrder = catchAsyncErrors(async (req, res, next) => {
 
     if (!product) {
       return next(
-        new ErrorHandler(`Product not found for ID: ${item.product.id}`, 404)
+        new ErrorHandler(`Product not found : ${item.product.id}`, 404)
       );
     }
 
