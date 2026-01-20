@@ -16,12 +16,13 @@ const ProfilePanel = () => {
   const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
-    if(authUser){
-    setName(authUser?.name || "");
-    setEmail(authUser?.email || "");
-    setAvatar(authUser?.avatar || null);
+    if (authUser) {
+      setName(authUser.name || "");
+      setEmail(authUser.email || "");
+      setAvatar(null); 
     }
   }, [authUser]);
+
 
   const [showPassword, setShowPassword] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
@@ -68,7 +69,7 @@ const ProfilePanel = () => {
           </div>
 
           <div className="p-6">
-            {/* AVATAR BASIC INFO */}\
+            {/* AVATAR BASIC INFO */}
             <div className="text-center mb-6 ">
               <img 
                   src={authUser?.avatar?.url || "/avatar-holder.avif"} 
@@ -83,12 +84,12 @@ const ProfilePanel = () => {
           {/* profile update form */}
           {
             authUser && (
-              <div className="space-y-4 mb=8">
+              <div className="space-y-4 mb-8">
                 <h3 className="text-lg font-semibold text-primary">Update Profile</h3>
                 <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} className="w-full p-2 rounded border border-border bg-secondary text-foreground"/>
                 <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 rounded border border-border bg-secondary text-foreground"/>
                  
-                <label className="flex items-center gpa-2 cursor-pointer text-sm text-muted-foreground">
+                <label className="flex items-center gap-2 cursor-pointer text-sm text-muted-foreground">
                   <Upload className="w-4 h-4 text-primary"/>
                   <span>Upload Avatar</span>
                   <input type="file" accept="image/*" onChange={(e) => setAvatar(e.target.files[0])} className="hidden"/>
@@ -110,7 +111,7 @@ const ProfilePanel = () => {
           }
 
           {/* updating password ui */}
-          <div className="space-y-4 mb=8">
+          <div className="space-y-4 mb-8">
                 <h3 className="text-lg font-semibold text-primary">Update Password</h3>
                 <input type={showPassword ? "text" : "password"} placeholder="Current Password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="w-full p-2 rounded border border-border bg-secondary text-foreground"/>
                 <input type={showPassword ? "text" : "password"} placeholder="New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full p-2 rounded border border-border bg-secondary text-foreground"/>
