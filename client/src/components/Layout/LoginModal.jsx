@@ -71,7 +71,26 @@ const LoginModal = () => {
 
   let isLoading = isLoggingIn || isSigningUp || isRequestingForToken;
 
-  return <></>;
+
+
+  return <>
+  <div className="fixed inset-0 z-50 flex items-center justify-center ">
+    {/* overlay */}
+    <div className="absolute inset-0 backdrop-blur-md bg-[hsla(var(--glass-bg))]"/>
+    <div className="relative z-10 glass-panel w-full max-w-md mx-4 animate-fade-in-up">
+      {/* header */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2l font-bold text-primary ">
+          {
+            mode === "reset" ? "Reset Password" : mode === "signup" ? "Create Account" : mode === "forgot" ? "Forgot Password" : "Welcome back"
+          }
+        </h2>
+        <button onClick={()=>dispatch(toggleAuthPopup())} className="p-2 rounded-lg glass-card hover:glow-on-hover animate-smooth"><X className="w-5 h-5 text-primary"/></button>
+      </div>
+    </div>
+  </div>
+  
+  </>;
 };
 
 
