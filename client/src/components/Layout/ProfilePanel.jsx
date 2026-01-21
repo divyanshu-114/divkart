@@ -36,7 +36,6 @@ const ProfilePanel = () => {
 
   if (!isAuthPopupOpen) return null;
 
-  // ✅ loader instead of blank screen
   if (!authUser) {
     return (
       <>
