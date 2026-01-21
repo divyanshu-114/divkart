@@ -1,6 +1,11 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ToastContainer } from "react-toastify";
+
+// Redux
+import { getUser } from "./store/slices/authSlice";
 
 // Layout Components
 import Navbar from "./components/Layout/Navbar";
@@ -22,38 +27,55 @@ import About from "./pages/About";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const {authUser,isCheckingAuth} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  // ✅ Fetch user on app load to persist login
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
+
+  if (isCheckingAuth && !authUser) {
   return (
-    <>
-      <ThemeProvider>
-        <BrowserRouter>
-          <div className="min-h-screen bg-background">
-            <Navbar />
-            <Sidebar />
-            <SearchOverlay />
-            <CartSidebar />
-            <ProfilePanel />
-            <LoginModal />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/password/reset/:token" element={<Index />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/payment" element={<Payment />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Footer />
-          </div>
-          <ToastContainer />
-        </BrowserRouter>
-      </ThemeProvider>
-    </>
+    <div className="flex items-center justify-center h-screen">
+      <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+    </div>
+  );
+}
+
+  return (
+    <ThemeProvider>
+      <BrowserRouter>
+        <div className="min-h-screen bg-background">
+          <Navbar />
+          <Sidebar />
+          <SearchOverlay />
+          <CartSidebar />
+          <ProfilePanel />
+          <LoginModal />
+
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/password/reset/:token" element={<Index />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+
+          <Footer />
+        </div>
+        <ToastContainer />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 

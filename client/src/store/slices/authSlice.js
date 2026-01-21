@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../lib/axios";
 import { toast } from "react-toastify";
-import { toggleAuthPopup } from "./popupSlice";
 
 /* ===================== REGISTER ===================== */
 export const register = createAsyncThunk(
@@ -10,11 +9,9 @@ export const register = createAsyncThunk(
     try {
       const res = await axiosInstance.post("/auth/register", data);
       toast.success(res.data.message);
-      thunkAPI.dispatch(toggleAuthPopup());
       return res.data.user;
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Registration failed";
+      const message = error.response?.data?.message || "Registration failed";
       toast.error(message);
       return thunkAPI.rejectWithValue(message);
     }
@@ -28,11 +25,9 @@ export const login = createAsyncThunk(
     try {
       const res = await axiosInstance.post("/auth/login", data);
       toast.success("User Logged In Successfully");
-      thunkAPI.dispatch(toggleAuthPopup());
       return res.data.user;
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Login failed";
+      const message = error.response?.data?.message || "Login failed";
       toast.error(message);
       return thunkAPI.rejectWithValue(message);
     }
@@ -46,10 +41,8 @@ export const getUser = createAsyncThunk(
     try {
       const res = await axiosInstance.get("/auth/me");
       return res.data.user;
-    } catch (error) {
-      const message =
-        error.response?.data?.message || "Unauthorized";
-      return thunkAPI.rejectWithValue(message);
+    } catch {
+      return thunkAPI.rejectWithValue("Unauthorized");
     }
   }
 );
@@ -60,11 +53,9 @@ export const logout = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       await axiosInstance.get("/auth/logout");
-      thunkAPI.dispatch(toggleAuthPopup());
       return null;
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Logout failed";
+      const message = error.response?.data?.message || "Logout failed";
       toast.error(message);
       return thunkAPI.rejectWithValue(message);
     }
@@ -74,7 +65,7 @@ export const logout = createAsyncThunk(
 /* ===================== FORGOT PASSWORD ===================== */
 export const forgotPassword = createAsyncThunk(
   "auth/forgot/password",
-  async (email, thunkAPI) => {
+  async ({ email }, thunkAPI) => {
     try {
       const res = await axiosInstance.post(
         "/auth/password/forgot?frontendUrl=http://localhost:5173",
@@ -83,8 +74,7 @@ export const forgotPassword = createAsyncThunk(
       toast.success(res.data.message);
       return null;
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Something went wrong";
+      const message = error.response?.data?.message || "Something went wrong";
       toast.error(message);
       return thunkAPI.rejectWithValue(message);
     }
@@ -117,31 +107,25 @@ export const updatePassword = createAsyncThunk(
   "auth/password/update",
   async (data, thunkAPI) => {
     try {
-      const res = await axiosInstance.put(
-        "/auth/password/update",
-        data
-      );
+      const res = await axiosInstance.put("/auth/password/update", data);
       toast.success(res.data.message);
-      return null;
+      return res.data.user;
     } catch (error) {
       const message =
-        error.response?.data?.message ||
-        "Something went wrong. Please try again.";
+        error.response?.data?.message || "Something went wrong.";
       toast.error(message);
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
+
 /* ===================== UPDATE PROFILE ===================== */
 export const updateProfile = createAsyncThunk(
   "auth/me/update",
   async (data, thunkAPI) => {
     try {
-      const res = await axiosInstance.put(
-        "/auth/profile/update",
-        data
-      );
+      const res = await axiosInstance.put("/auth/profile/update", data);
       toast.success(res.data.message);
       return res.data.user;
     } catch (error) {
@@ -237,8 +221,9 @@ const authSlice = createSlice({
       .addCase(updatePassword.pending, (state) => {
         state.isUpdatingPassword = true;
       })
-      .addCase(updatePassword.fulfilled, (state) => {
+      .addCase(updatePassword.fulfilled, (state, action) => {
         state.isUpdatingPassword = false;
+        state.authUser = action.payload; // ✅ FIX
       })
       .addCase(updatePassword.rejected, (state) => {
         state.isUpdatingPassword = false;

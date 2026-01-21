@@ -11,6 +11,7 @@ export const sendToken = (user, statusCode, message, res) => {
     res.status(statusCode).cookie("token", token, {
         expires: new Date(Date.now() + cookieMaxAge ),
         httpOnly: true,
+        sameSite: "lax",
     }).json({
         success: true,
         user,
