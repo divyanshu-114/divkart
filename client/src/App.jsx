@@ -28,17 +28,32 @@ import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import { useSelector } from "react-redux";
+import { fetchAllProducts } from "./store/slices/productSlice";
 
 const App = () => {
   const {authUser,isCheckingAuth} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  // ✅ Fetch user on app load to persist login
+  
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
 
-  if (isCheckingAuth && !authUser) {
+  useEffect(() => {
+    dispatch(fetchAllProducts({
+      category:"",
+      price:"0-100000",
+      search:"",
+      availability:"",
+      ratings:"",
+      page:1
+    }));
+  },[dispatch]);
+
+  const {products} = useSelector(state => state.product);
+
+
+  if ((isCheckingAuth && !authUser) || !products) {
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
