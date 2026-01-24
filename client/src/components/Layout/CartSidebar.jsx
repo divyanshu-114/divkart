@@ -44,7 +44,7 @@ const CartSidebar = () => {
               cart && cart.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">Your cart is empty.</p>
-                  <Link to={"/product"} onClick={()=> dispatch(toggleCart())} 
+                  <Link to={"/products"} onClick={()=> dispatch(toggleCart())} 
                   className="inline-block mt-4 px-6 py-2 gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth">Browse Products</Link>
                 </div>
               ) : (
@@ -55,7 +55,7 @@ const CartSidebar = () => {
                     cart && cart.map(item =>{
                       return(
                        <div key={item.product.id} className="glass-card p-4">
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-start space-x-4">
                           <img
                             src={item.product.images?.[0]?.url || item.product.images?.[0]}
                             alt={item.product.name}
