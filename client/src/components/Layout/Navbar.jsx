@@ -45,9 +45,17 @@ const Navbar = () => {
             </button>
 
             {/* cart */}
-            <button onClick={() => dispatch(toggleCart())} className="p-2 rounded-lg hover:bg-secondary transition-colors">
-              <ShoppingCart className=" relative w-5 h-5 text-foreground"/>
-              {cartItemsCount > 0 && <span className="absolute -top-1 -right-1 flex items-center justify-center bg-primary text-primary-foreground text-xs rounded-full w-5 h-5">{cartItemsCount}</span>}
+            <button
+              onClick={() => dispatch(toggleCart())}
+              className="relative p-2 rounded-lg hover:bg-secondary transition-colors"
+            >
+              <ShoppingCart className="w-5 h-5 text-foreground" />
+
+              {cartItemsCount > 0 && (
+                <span className="absolute -top-2 -right-2 w-5 h-5 bg-primary text-primary-foreground text-xs font-bold rounded-full flex items-center justify-center">
+                  {cartItemsCount}
+                </span>
+              )}
             </button>
           </div>
         </div>

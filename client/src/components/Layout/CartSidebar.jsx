@@ -21,7 +21,7 @@ const CartSidebar = () => {
 
   let total = 0;
   if(cart){
-    total = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+    total = cart.reduce((acc, item) => acc + Number(item.product.price) * item.quantity, 0);
   }
 
   if(!isCartOpen){
@@ -56,7 +56,11 @@ const CartSidebar = () => {
                       return(
                        <div key={item.product.id} className="glass-card p-4">
                         <div className="flex items-center space-x-4">
-                          <img src={item.product.image[0].url} alt={item.product.name} className="h-16 w-16 object-cover rounded-lg"/>
+                          <img
+                            src={item.product.images?.[0]?.url || item.product.images?.[0]}
+                            alt={item.product.name}
+                            className="h-16 w-16 object-cover rounded-lg"
+                          />
                           <div className="flex-1 min-w-0">
                             <h3 className="font-semibold text-foreground truncate">{item.product.name}</h3>
                             <p className="text-primary font-semibold">${item.product.price}</p>
