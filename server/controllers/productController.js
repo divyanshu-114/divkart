@@ -310,6 +310,8 @@ export  const deleteReview = catchAsyncErrors(async (req,res,next) =>{
 
 export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) => {
     const {userPrompt} = req.body;
+    // for test
+    // console.log(userPrompt)
 
     if(!userPrompt){
         return next(new ErrorHandler("User prompt is required", 400));

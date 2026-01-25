@@ -100,6 +100,8 @@ export const fetchProductWithAI = createAsyncThunk(
   "product/ai-search",
   async (userPrompt, thunkAPI) => {
     try {
+      // for test
+      // console.log(userPrompt)
       const res = await axiosInstance.post(`/product/ai-search`, {
         userPrompt,
       });
