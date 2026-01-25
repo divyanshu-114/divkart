@@ -85,7 +85,7 @@ const CartSidebar = () => {
                    <span className="text-lg font-semibold">Total : </span>
                    <span className="text-xl font-bold text-primary">${total.toFixed(2)}</span>
                   </div>
-                  <Link to={"/cart"} onClick={()=> dispatch(toggleCart())} className="w-full block text-center gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth">View Cart & Proceed to Checkout</Link>
+                  <Link to={"/cart"} onClick={()=> dispatch(toggleCart())} className="w-full block text-center gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth pt-3 pb-3 ">View Cart & Proceed to Checkout</Link>
                 </div>
                 </>
               )
