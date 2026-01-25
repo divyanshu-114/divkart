@@ -2,12 +2,19 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../lib/axios";
 import { toast } from "react-toastify";
 import { toggleAIModal } from "./popupSlice";
+// import { useSelector } from "react-redux";
 
-/* ================= FETCH ALL PRODUCTS ================= */
 export const fetchAllProducts = createAsyncThunk(
-  "/product/fetchAll",
+  "product/fetchAll",
   async (
-    { availability = "", price = "0-100000", category = "", ratings = "", search = "", page = 1 },
+    {
+      availability = "",
+      price = "0-10000",
+      category = "",
+      ratings = "",
+      search = "",
+      page = 1,
+    },
     thunkAPI
   ) => {
     try {
@@ -16,75 +23,81 @@ export const fetchAllProducts = createAsyncThunk(
       if (category) params.append("category", category);
       if (price) params.append("price", price);
       if (search) params.append("search", search);
-      if (availability) params.append("availability", availability);
       if (ratings) params.append("ratings", ratings);
+      if (availability) params.append("availability", availability);
       if (page) params.append("page", page);
 
       const res = await axiosInstance.get(`/product?${params.toString()}`);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error?.response?.data?.message || "Failed to fetch products"
+        error.response.data.message || "Failed to fetch products."
       );
     }
   }
 );
 
-/* ================= FETCH SINGLE PRODUCT ================= */
 export const fetchProductDetails = createAsyncThunk(
-  "/product/singleProduct",
+  "product/singleProduct",
   async (id, thunkAPI) => {
     try {
+      console.log("PRODUCT DETAILS FETCHING");
+      console.log(id);
       const res = await axiosInstance.get(`/product/singleProduct/${id}`);
+      console.log(res);
       return res.data.product;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error?.response?.data?.message || "Failed to fetch product details"
+        error.response.data.message || "Failed to fetch product details."
       );
     }
   }
 );
 
-/* ================= POST REVIEW ================= */
 export const postReview = createAsyncThunk(
-  "/product/post-review",
+  "product/post-new/review",
   async ({ productId, review }, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const authUser = state.auth.authUser;
     try {
       const res = await axiosInstance.put(
         `/product/post-new/review/${productId}`,
         review
       );
       toast.success(res.data.message);
-      return res.data.review;
+      return {
+        review: res.data.review,
+        authUser,
+      };
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to post review");
+      toast.error(error.response.data.message || "Failed to post review.");
       return thunkAPI.rejectWithValue(
-        error?.response?.data?.message || "Failed to post review"
+        error.response.data.message || "Failed to post review."
       );
     }
   }
 );
 
-/* ================= DELETE REVIEW ================= */
 export const deleteReview = createAsyncThunk(
-  "/product/delete-review",
-  async ({ productId }, thunkAPI) => {
+  "product/delete/review",
+  async ({ productId, reviewId }, thunkAPI) => {
     try {
-      const res = await axiosInstance.delete(`/product/delete/review/${productId}`);
+      const res = await axiosInstance.delete(
+        `/product/delete/review/${productId}`
+      );
       toast.success(res.data.message);
-      return res.data.review.id;
+      return reviewId;
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to delete review");
+      toast.error(error.response.data.message || "Failed to delete review.");
       return thunkAPI.rejectWithValue(
-        error?.response?.data?.message || "Failed to delete review"
+        error.response.data.message || "Failed to delete review."
       );
     }
   }
 );
 
-/* ================= AI SEARCH ================= */
 export const fetchProductWithAI = createAsyncThunk(
-  "/product/ai-search",
+  "product/ai-search",
   async (userPrompt, thunkAPI) => {
     try {
       const res = await axiosInstance.post(`/product/ai-search`, {
@@ -93,33 +106,32 @@ export const fetchProductWithAI = createAsyncThunk(
       thunkAPI.dispatch(toggleAIModal());
       return res.data;
     } catch (error) {
-      toast.error(error?.response?.data?.message || "AI search failed");
+      toast.error(error.response.data.message);
       return thunkAPI.rejectWithValue(
-        error?.response?.data?.message || "AI search failed"
+        error.response.data.message || "Failed to fetch AI Filtered products."
       );
     }
   }
 );
 
-/* ================= SLICE ================= */
+// const { authUser } = useSelector((state) => state.auth);
+
 const productSlice = createSlice({
   name: "product",
   initialState: {
     loading: false,
     products: [],
     productDetails: {},
-    productReviews: [],
     totalProducts: 0,
     topRatedProducts: [],
     newProducts: [],
     aiSearching: false,
     isReviewDeleting: false,
     isPostingReview: false,
+    productReviews: [],
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
-      /* FETCH ALL */
       .addCase(fetchAllProducts.pending, (state) => {
         state.loading = true;
       })
@@ -130,39 +142,54 @@ const productSlice = createSlice({
         state.topRatedProducts = action.payload.topRatedProducts;
         state.totalProducts = action.payload.totalProducts;
       })
-      .addCase(fetchAllProducts.rejected, (state, action) => {
+      .addCase(fetchAllProducts.rejected, (state) => {
         state.loading = false;
-        toast.error(action.payload);
       })
-
-      /* FETCH SINGLE */
       .addCase(fetchProductDetails.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchProductDetails.fulfilled, (state, action) => {
         state.loading = false;
         state.productDetails = action.payload;
-        state.productReviews = action.payload.reviews || [];
+        state.productReviews = action.payload.reviews;
       })
-      .addCase(fetchProductDetails.rejected, (state, action) => {
+      .addCase(fetchProductDetails.rejected, (state) => {
         state.loading = false;
-        toast.error(action.payload);
       })
-
-      /* POST REVIEW */
       .addCase(postReview.pending, (state) => {
         state.isPostingReview = true;
       })
       .addCase(postReview.fulfilled, (state, action) => {
         state.isPostingReview = false;
-        state.productReviews.unshift(action.payload);
-      })
-      .addCase(postReview.rejected, (state, action) => {
-        state.isPostingReview = false;
-        toast.error(action.payload);
-      })
+        const newReview = action.payload.review;
+        const authUser = action.payload.authUser;
 
-      /* DELETE REVIEW */
+        const existingReviewIndex = state.productReviews.findIndex(
+          (rev) => rev.reviewer?.id === newReview.user_id
+        );
+
+        if (existingReviewIndex !== -1) {
+          state.productReviews[existingReviewIndex].rating = Number(
+            newReview.rating
+          );
+          state.productReviews[existingReviewIndex].comment = newReview.comment;
+        } else {
+          state.productReviews = [
+            {
+              ...newReview,
+              reviewer: {
+                id: authUser?.id,
+                name: authUser?.name,
+                avatar: authUser?.avatar?.url,
+              },
+            },
+            ...state.productReviews,
+          ];
+        }
+      })
+      .addCase(postReview.rejected, (state) => {
+        state.isPostingReview = false;
+      })
       .addCase(deleteReview.pending, (state) => {
         state.isReviewDeleting = true;
       })
@@ -172,12 +199,9 @@ const productSlice = createSlice({
           (review) => review.review_id !== action.payload
         );
       })
-      .addCase(deleteReview.rejected, (state, action) => {
+      .addCase(deleteReview.rejected, (state) => {
         state.isReviewDeleting = false;
-        toast.error(action.payload);
       })
-
-      /* AI SEARCH */
       .addCase(fetchProductWithAI.pending, (state) => {
         state.aiSearching = true;
       })
@@ -186,9 +210,8 @@ const productSlice = createSlice({
         state.products = action.payload.products;
         state.totalProducts = action.payload.products.length;
       })
-      .addCase(fetchProductWithAI.rejected, (state, action) => {
+      .addCase(fetchProductWithAI.rejected, (state) => {
         state.aiSearching = false;
-        toast.error(action.payload);
       });
   },
 });
