@@ -18,12 +18,12 @@ const Payment = () => {
   const [stripePromise, setStripePromise] = useState(null);
   const [shippingDetails, setShippingDetails] = useState({
     fullName: "",
-    state: "Karachi",
+    state: "Delhi",
     phone: "",
     address: "",
     city: "",
     zipCode: "",
-    country: "Pakistan",
+    country: "India",
   });
 
     useEffect(() => {
@@ -192,21 +192,21 @@ const Payment = () => {
                           }}
                           className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground"
                         >
-                          <option value="Karachi">Karachi</option>
-                          <option value="Punjab">Punjab</option>
-                          <option value="Sindh">Sindh</option>
-                          <option value="Balochistan">Balochistan</option>
-                          <option value="Khyber PakhtunKhwa (KPK)">
-                            Khyber PakhtunKhwa (KPK)
+                          <option value="Delhi">Delhi</option>
+                          <option value="Delhi">Delhi</option>
+                          <option value="Delhi">Delhi</option>
+                          <option value="Delhi">Delhi</option>
+                          <option value="Delhi">
+                            Delhi
                           </option>
-                          <option value="Islamabad Capital Territory">
-                            Islamabad Capital Territory
+                          <option value="Delhi">
+                            Delhi
                           </option>
-                          <option value="Azad Jammu And Kashmir (AJK)">
-                            Azad Jammu And Kashmir (AJK)
+                          <option value="Delhi">
+                            Delhi
                           </option>
-                          <option value="Gilgit Baltistan (GB)">
-                            Gilgit Baltistan (GB)
+                          <option value="Delhi">
+                            Delhi
                           </option>
                         </select>
                       </div>
@@ -298,7 +298,7 @@ const Payment = () => {
                           }}
                           className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground"
                         >
-                          <option value="Pakistan">Pakistan</option>
+                          <option value="India">India</option>
                         </select>
                       </div>
                     </div>
