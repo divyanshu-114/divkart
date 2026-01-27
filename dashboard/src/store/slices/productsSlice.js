@@ -88,6 +88,7 @@ export const fetchAllProducts = (page) => async (dispatch) => {
     })
     .catch((error) => {
       dispatch(productSlice.actions.getAllProductsFailed());
+      toast.error(error.response?.data?.message);
     });
 };
 
