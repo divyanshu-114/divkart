@@ -1,7 +1,8 @@
 import ErrorHandler from "../middlewares/errorMiddleware.js";
 import { catchAsyncErrors } from "../middlewares/catchAsyncError.js";
 import pool from "../database/db.js";
-import { generatePaymentIntent } from "../utils/generatePaymentIntent.js";
+// import { generatePaymentIntent } from "../utils/generatePaymentIntent.js";
+import {generateRazorpayOrder} from "../utils/generateRazorpayOrder.js"
 
 export const placeNewOrder = catchAsyncErrors(async (req, res, next) => {
   const {
@@ -117,18 +118,28 @@ export const placeNewOrder = catchAsyncErrors(async (req, res, next) => {
     [orderId, full_name, state, city, country, address, pincode, phone]
   );
 
-  const paymentResponse = await generatePaymentIntent(orderId, total_price);
+  let razorpayOrder;
 
-  if (!paymentResponse.success) {
-    return next(new ErrorHandler("Payment failed. Try again.", 500));
-  }
+try {
+  razorpayOrder = await generateRazorpayOrder(orderId, total_price);
+} catch (err) {
+  // rollback: delete order (will cascade to order_items, shipping_info, payments)
+  await pool.query(`DELETE FROM orders WHERE id = $1`, [orderId]);
+  return next(new ErrorHandler("Payment setup failed. Please try again.", 500));
+}
 
-  res.status(200).json({
-    success: true,
-    message: "Order placed successfully. Please proceed to payment.",
-    paymentIntent: paymentResponse.clientSecret,
-    total_price,
-  });
+
+  const order = orderResult.rows[0];
+
+
+res.status(200).json({
+  success: true,
+  message: "Order placed successfully. Please proceed to payment.",
+  order,
+  total_price,
+  razorpayOrder,
+});
+
 });
 
 export const fetchSingleOrder = catchAsyncErrors(async (req, res, next) => {

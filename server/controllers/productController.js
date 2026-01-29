@@ -76,7 +76,7 @@ export const fetchAllproducts = catchAsyncErrors(async(req,res,next)=>{
     }
     // filter products ny ratings
     if(ratings){
-        conditions.push(`rating >= $${index}`)
+        conditions.push(`ratings >= $${index}`)
         values.push(ratings)
         index++;
     }

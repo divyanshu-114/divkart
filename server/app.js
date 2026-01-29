@@ -9,8 +9,9 @@ import authRouter from "./router/authRoutes.js";
 import productRouter from "./router/productRoutes.js";
 import adminRouter from "./router/adminRoutes.js";
 import orderRouter from "./router/orderRoutes.js";
-import Stripe from "stripe";
+// import Stripe from "stripe";
 import pool from "./database/db.js";
+import crypto from "crypto";
 
 const app = express();
 
@@ -25,70 +26,88 @@ app.use(
 );
 
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 app.post(
+  
   "/api/v1/payment/webhook",
-  express.raw({ type: "application/json" }),
+  express.raw({ type: "*/*" }),
   async (req, res) => {
-    const sig = req.headers["stripe-signature"];
-    let event;
-
     try {
-      event = stripe.webhooks.constructEvent(
-        req.body,
-        sig,
-        process.env.STRIPE_WEBHOOK_SECRET
-      );
-    } catch (error) {
-      return res.status(400).send(`Webhook Error: ${error.message}`);
-    }
 
-    if (event.type === "payment_intent.succeeded") {
-      const paymentIntentId = event.data.object.id;
+      const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+      if (!secret) {
+        throw new Error("RAZORPAY_WEBHOOK_SECRET is missing in .env");
+      }
+      const receivedSignature = req.headers["x-razorpay-signature"];
 
-      try {
-        const paymentUpdate = await pool.query(
-          `
-          UPDATE payments 
-          SET payment_status = 'Paid'
-          WHERE payment_intent_id = $1
-          RETURNING *
-          `,
-          [paymentIntentId]
-        );
+      const expectedSignature = crypto
+        .createHmac("sha256", secret)
+        .update(req.body)
+        .digest("hex");
 
-        if (paymentUpdate.rows.length === 0) {
-          throw new Error("Payment not found");
+      if (expectedSignature !== receivedSignature) {
+        return res.status(400).send("Invalid signature");
+      }
+
+      const event = JSON.parse(req.body.toString("utf8"));
+
+      if (event.event === "payment.captured") {
+        const payment = event?.payload?.payment?.entity;
+
+        // Usually this is Razorpay Order ID (order_xxx)
+        const razorpayOrderId = payment?.order_id;
+
+        if (!razorpayOrderId) {
+          // No order_id attached; don't break webhook
+          return res.status(200).json({ status: "ok" });
         }
 
-        const orderId = paymentUpdate.rows[0].order_id;
-
-        await pool.query(
-          `UPDATE orders SET paid_at = NOW() WHERE id = $1`,
-          [orderId]
+        // ✅ Idempotent update: only if Pending
+        const result = await pool.query(
+          `
+          UPDATE payments
+          SET payment_status = 'Paid'
+          WHERE payment_intent_id = $1 AND payment_status = 'Pending'
+          RETURNING order_id
+          `,
+          [razorpayOrderId]
         );
 
-        const { rows: orderedItems } = await pool.query(
+        // Already processed OR payment row not found
+        if (!result.rows.length) {
+          return res.status(200).json({ status: "ok" });
+        }
+
+        const orderId = result.rows[0].order_id;
+
+        await pool.query(`UPDATE orders SET paid_at = NOW() WHERE id = $1`, [
+          orderId,
+        ]);
+
+        const items = await pool.query(
           `SELECT product_id, quantity FROM order_items WHERE order_id = $1`,
           [orderId]
         );
 
-        for (const item of orderedItems) {
+        for (const item of items.rows) {
           await pool.query(
-            `UPDATE products SET stock = stock - $1 WHERE id = $2`,
+            `
+            UPDATE products
+            SET stock = stock - $1
+            WHERE id = $2 AND stock >= $1
+            `,
             [item.quantity, item.product_id]
           );
         }
-      } catch (err) {
-        console.error("Webhook DB Error:", err);
-        return res.status(500).send("Webhook processing failed");
       }
-    }
 
-    res.status(200).json({ received: true });
+      return res.status(200).json({ status: "ok" });
+    } catch (err) {
+      console.error("Razorpay Webhook Error:", err);
+      return res.status(200).json({ status: "ok" }); // always 200 so Razorpay doesn't retry forever
+    }
   }
 );
+
 
 
 app.use(cookieParser());

@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ArrowLeft, Check } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Elements } from "@stripe/react-stripe-js";
-import PaymentForm from "../components/PaymentForm";
-import { loadStripe } from "@stripe/stripe-js";
 import { placeOrder } from "../store/slices/orderSlice";
+import { toast } from "react-toastify";
 
 const Payment = () => {
   const navigateTo = useNavigate();
@@ -13,9 +11,8 @@ const Payment = () => {
 
   const { authUser } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
-  const { orderStep } = useSelector((state) => state.order);
+  const { orderStep, razorpayOrder } = useSelector((state) => state.order);
 
-  const [stripePromise, setStripePromise] = useState(null);
   const [shippingDetails, setShippingDetails] = useState({
     fullName: "",
     state: "Delhi",
@@ -26,18 +23,13 @@ const Payment = () => {
     country: "India",
   });
 
-    useEffect(() => {
-    loadStripe(
-      "pk_test_51SqeopJ99U4MufIr19ftZOOySBfKMGMYkkQ2hCoChQBUpZ6lk2LWlzQZpMj6kMoMnR3B7sm7cXGscYWKW5M2dhJU00GxBBe4qS"
-    )
-      .then((stripe) => setStripePromise(stripe))
-      .catch((err) => console.log(err));
-  }, []);
+  // ✅ Prevent Razorpay popup from opening twice (React StrictMode)
+  const paymentOpenedRef = useRef(false);
 
-  
   if (!authUser) return navigateTo("/products");
-  
-  
+  // if (cart.length === 0) return navigateTo("/cart");
+
+
   const total = cart.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0
@@ -51,6 +43,7 @@ const Payment = () => {
 
   const handlePlaceOrder = (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append("full_name", shippingDetails.fullName);
     formData.append("state", shippingDetails.state);
@@ -63,6 +56,76 @@ const Payment = () => {
 
     dispatch(placeOrder(formData));
   };
+
+  // ✅ Razorpay Checkout opens automatically when orderStep becomes 2
+  useEffect(() => {
+    if (orderStep !== 2 || !razorpayOrder) return;
+
+    // ✅ stop double open
+    if (paymentOpenedRef.current) return;
+
+    if (!window.Razorpay) {
+      toast.error(
+        "Razorpay SDK not loaded. Add the Razorpay script in index.html."
+      );
+      return;
+    }
+
+    // ✅ Backend returns orderId (confirmed)
+    const rpOrderId = razorpayOrder.orderId;
+
+    // ✅ Key either from backend (best) or env
+    const rpKey = razorpayOrder.key || import.meta.env.VITE_RAZORPAY_KEY_ID;
+
+    if (!rpOrderId || !rpKey) {
+      toast.error("Payment data missing. Please try placing the order again.");
+      return;
+    }
+
+    const options = {
+      key: rpKey,
+      amount: razorpayOrder.amount, // in paise
+      currency: razorpayOrder.currency || "INR",
+      name: "Your Store",
+      description: "Order Payment",
+      order_id: rpOrderId,
+
+      handler: function () {
+        // ✅ Webhook is source of truth
+        toast.success("Payment initiated. Verifying...");
+        navigateTo("/orders");
+      },
+
+      prefill: {
+        name: shippingDetails.fullName,
+        contact: shippingDetails.phone,
+      },
+
+      theme: {
+        color: "#6366f1",
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+
+    rzp.on("payment.failed", function (response) {
+      console.log("Razorpay Failed:", response?.error);
+      toast.error("Payment failed. Please try again.");
+
+      // Allow retry if payment failed
+      paymentOpenedRef.current = false;
+    });
+
+    // ✅ set true only when actually opening
+    paymentOpenedRef.current = true;
+    rzp.open();
+  }, [
+    orderStep,
+    razorpayOrder,
+    navigateTo,
+    shippingDetails.fullName,
+    shippingDetails.phone,
+  ]);
 
   if (cart.length === 0) {
     return (
@@ -196,18 +259,10 @@ const Payment = () => {
                           <option value="Delhi">Delhi</option>
                           <option value="Delhi">Delhi</option>
                           <option value="Delhi">Delhi</option>
-                          <option value="Delhi">
-                            Delhi
-                          </option>
-                          <option value="Delhi">
-                            Delhi
-                          </option>
-                          <option value="Delhi">
-                            Delhi
-                          </option>
-                          <option value="Delhi">
-                            Delhi
-                          </option>
+                          <option value="Delhi">Delhi</option>
+                          <option value="Delhi">Delhi</option>
+                          <option value="Delhi">Delhi</option>
+                          <option value="Delhi">Delhi</option>
                         </select>
                       </div>
                       <div>
@@ -311,11 +366,14 @@ const Payment = () => {
                     </button>
                   </form>
                 ) : (
-                  <>
-                    <Elements stripe={stripePromise}>
-                      <PaymentForm />
-                    </Elements>
-                  </>
+                  <div className="glass-panel text-center">
+                    <h2 className="text-xl font-semibold text-foreground mb-2">
+                      Opening Payment Gateway…
+                    </h2>
+                    <p className="text-muted-foreground">
+                      Please complete the payment in Razorpay popup.
+                    </p>
+                  </div>
                 )}
               </div>
 
@@ -379,6 +437,8 @@ const Payment = () => {
                   </div>
                 </div>
               </div>
+
+              {/* end grid */}
             </div>
           </div>
         </div>
@@ -388,6 +448,3 @@ const Payment = () => {
 };
 
 export default Payment;
-
-
-
