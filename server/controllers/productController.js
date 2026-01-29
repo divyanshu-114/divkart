@@ -311,7 +311,6 @@ export  const deleteReview = catchAsyncErrors(async (req,res,next) =>{
 export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) => {
     const {userPrompt} = req.body;
     // for test
-    // console.log(userPrompt)
 
     if(!userPrompt){
         return next(new ErrorHandler("User prompt is required", 400));
@@ -412,8 +411,9 @@ export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) =
     const keywords = filterKeywords(userPrompt);
 
     // step 1 : Basic sql fetching
+    
 
-    const result = await database.query(
+    const result = await pool.query(
         `select * from products
         where name ILIKE  ANY($1)
         or description ILIKE ANY($1)
@@ -431,7 +431,7 @@ export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) =
             products : []
         });
     }
-
+    // console.log(userPrompt)
     // step 2 : AI filtering 
     const {success,products} = await getAIRecommendation(req,res,userPrompt , filteredProducts);
 

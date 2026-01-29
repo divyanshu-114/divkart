@@ -29,18 +29,24 @@ export async function getAIRecommendation(req, res, userPrompt, products) {
                 ]
             })
         } )
-
+        
         const data = await response.json();
+
+        console.log(data)
 
         const aiResponseText = data?.candidates?.[0]?.content?.parts?.[0]?.text.trim() || "";
 
+
+        console.log("hjghghkgjkgjkg",aiResponseText)
+
+
         const cleanedText = aiResponseText.replace(/```json|```/g, '').trim();
         // replace me jo hai usse fromtend par json format pat recieve ho jayega
-
+        console.log(1)
         if(!cleanedText){
             return res.status(500).json({success: false, message: "Failed to get AI recommendation"});
         }
-
+        console.log(2)
         let parseProducts ;
 
         try{
@@ -57,3 +63,4 @@ export async function getAIRecommendation(req, res, userPrompt, products) {
     }
 }
 
+   
