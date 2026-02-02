@@ -15,10 +15,7 @@ const ReviewsContainer = ({ product, productReviews }) => {
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append("rating", rating);
-    data.append("comment", comment);
-    dispatch(postReview({ productId: product.id, review: data }));
+    dispatch(postReview({ productId: product.id, review: { rating, comment } }));
   };
 
   return (

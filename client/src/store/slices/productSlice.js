@@ -62,7 +62,8 @@ export const postReview = createAsyncThunk(
     try {
       const res = await axiosInstance.put(
         `/product/post-new/review/${productId}`,
-        review
+        review,
+        { headers: { "Content-Type": "application/json" } }
       );
       toast.success(res.data.message);
       return {
@@ -182,7 +183,7 @@ const productSlice = createSlice({
               reviewer: {
                 id: authUser?.id,
                 name: authUser?.name,
-                avatar: authUser?.avatar?.url,
+                avatar: authUser?.avatar,
               },
             },
             ...state.productReviews,

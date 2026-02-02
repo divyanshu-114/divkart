@@ -251,7 +251,7 @@ export const postProductReview = catchAsyncErrors(async(req,res,next)=>{
                            join payments p on p.order_id = o.id 
                            where o.buyer_id =$1 and
                            oi.product_id = $2 and
-                           p.payment_status = 'paid' 
+                           p.payment_status = 'Paid' 
                            limit 1`;
     const  {rows} = await pool.query(purchaseCheckQuery, [req.user.id, productId]);
     if(rows.length === 0){
@@ -311,7 +311,6 @@ export  const deleteReview = catchAsyncErrors(async (req,res,next) =>{
 export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) => {
     const {userPrompt} = req.body;
     // for test
-
     if(!userPrompt){
         return next(new ErrorHandler("User prompt is required", 400));
     }
@@ -411,7 +410,6 @@ export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) =
     const keywords = filterKeywords(userPrompt);
 
     // step 1 : Basic sql fetching
-    
 
     const result = await pool.query(
         `select * from products
@@ -423,7 +421,7 @@ export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) =
     )
 
     const filteredProducts = result.rows;
-
+    // console.log(filteredProducts)
     if(filteredProducts.length === 0) {
         return res.status(200).json({
             success: true,
@@ -431,7 +429,6 @@ export const fetchAIFilteredProducts = catchAsyncErrors(async (req, res, next) =
             products : []
         });
     }
-    // console.log(userPrompt)
     // step 2 : AI filtering 
     const {success,products} = await getAIRecommendation(req,res,userPrompt , filteredProducts);
 
