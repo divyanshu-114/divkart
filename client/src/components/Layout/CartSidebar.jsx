@@ -30,10 +30,10 @@ const CartSidebar = () => {
 
   return <>
     {/* overlay */}
-    <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" onClick={() => dispatch(toggleCart())}/>
+    <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-md animate-fade-in" onClick={() => dispatch(toggleCart())}/>
     
     {/* cart sidebar */}
-        <div className="fixed right-0 top-0 h-full w-96 z-50 glass-panel animate-slide-in-right overflow-y-auto">
+        <div className="fixed right-0 top-0 h-full w-96 z-50 glass-panel animate-slide-in-right overflow-y-auto rounded-l-2xl">
           <div className="flex items-center justify-between p-6 border-b border-[hsla(var(--glass-border))]">
             <h2 className="text-xl font-semibold text-primary">Shopping Cart</h2>
             <button onClick={()=> dispatch(toggleCart())} className="p-2 rounded-lg glass-card hover:glow-on-hover animate-smooth"><X className="w-5 h-5 text-primary"/></button>

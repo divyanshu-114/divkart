@@ -55,8 +55,11 @@ const App = () => {
 
   if ((isCheckingAuth && !authUser) || !products) {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+    <div className="flex items-center justify-center h-screen bg-background">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-14 h-14 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+        <p className="text-sm text-muted-foreground animate-pulse">Loading...</p>
+      </div>
     </div>
   );
 }
@@ -64,7 +67,7 @@ const App = () => {
   return (
     <ThemeProvider>
       <BrowserRouter>
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-background animate-fade-in">
           <Navbar />
           <Sidebar />
           <SearchOverlay />

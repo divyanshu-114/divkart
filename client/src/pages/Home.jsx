@@ -13,7 +13,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <HeroSlider />
-      <div className="container mx-auto px-4 pt-20">
+      <div className="container mx-auto px-4 pt-20 pb-8">
         <CategoryGrid />
         {newProducts.length > 0 && (
           <ProductSlider title="New Arrivals" products={newProducts} />

@@ -23,10 +23,10 @@ const SearchOverlay = () => {
   return <>
   <div className="fixed inset-0 z-50">
     {/* glass background */}
-    <div className="absolute inset-0 backdrop-blur-md  bg-[hsla(var(--glass-bg))]">
+    <div className="absolute inset-0 backdrop-blur-xl bg-black/60 animate-fade-in">
       {/* search container */}
       <div className="relative z-10 animate-slide-in-top">
-        <div className="glass-panel m-6 max-w-2xl mx-auto">
+        <div className="glass-panel m-6 max-w-2xl mx-auto rounded-2xl">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-primary">Search Products</h2>
             <button onClick={()=>dispatch(toggleSearchBar())} className="p-2 rounded-lg glass-card hover:glow-on-hover animate-smooth"><X className="w-5 h-5 text-black"/></button>
@@ -40,7 +40,7 @@ const SearchOverlay = () => {
             <input type='text' placeholder="search for products..." value={searchQuery} 
             onChange={(e) => setSearchQuery(e.target.value)} 
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="w-full pl-12 pr-4 py-4 bg-secondary border border-border rounded-lg focus:outline-none text-foreground placeholder-muted-foreground"
+            className="w-full pl-12 pr-4 py-4 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground placeholder-muted-foreground transition-all"
             autoFocus
             />
           </div>

@@ -75,11 +75,11 @@ const ProductDetail = () => {
 
   return (
     <>
-      <div className="min-h-screen pt-20">
+      <div className="min-h-screen pt-20 animate-fade-in">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
             <div>
-              <div className="glass-card p-4 mb-4">
+              <div className="glass-card p-4 mb-4 rounded-2xl">
                 {product.images ? (
                   <img
                     src={product.images[selectedImage]?.url}
@@ -243,10 +243,10 @@ const ProductDetail = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-6 py-4 font-medium capitalize transition-all ${
+                    className={`px-6 py-4 font-medium capitalize transition-all duration-300 rounded-t-lg ${
                       activeTab === tab
-                        ? "text-primary border-b-2 border-primary"
-                        : "text-muted-foreground hover:text-foreground"
+                        ? "text-primary border-b-2 border-primary bg-primary/5"
+                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                     }`}
                   >
                     {tab}

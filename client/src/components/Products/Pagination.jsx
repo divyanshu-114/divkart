@@ -39,7 +39,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     return pages;
   }
   return (<>
-  <div className="flex items-center justify-center space-x-2">
+  <div className="flex items-center justify-center space-x-2 flex-wrap gap-2">
     {/* previous button */}
     <button 
         disabled={currentPage === 1} 
@@ -55,7 +55,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                   key={index} 
                   disabled={page === '...'} 
                   onClick={() => typeof page === 'number' && onPageChange(page)} 
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
                         page===currentPage
                            ? 'gradient-primary text-primary-foreground' 
                            : page === '...' 

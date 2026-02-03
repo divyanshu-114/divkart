@@ -30,20 +30,20 @@ const ProductSlider = ({ title, products }) => {
     <div className="flex items-center justify-between mb-8">
       <h2 className="text-3xl font-bold text-foreground">{title}</h2>
       <div className="flex space-x-2">
-        <button onClick={()=> scroll("left")} className="p-2 glass-card hover:glow-on-hover animate-smooth">
+        <button onClick={()=> scroll("left")} className="p-2.5 glass-card hover:glow-on-hover rounded-xl active:scale-95 transition-all">
           <ChevronLeft className="text-primary w-6 h-6"/>
         </button>
-         <button onClick={()=> scroll("right")} className="p-2 glass-card hover:glow-on-hover animate-smooth">
+         <button onClick={()=> scroll("right")} className="p-2.5 glass-card hover:glow-on-hover rounded-xl active:scale-95 transition-all">
           <ChevronRight className="text-primary w-6 h-6"/>
         </button>
       </div>
     </div>
 
-    <div ref = {scrollRef} className="flex space-x-6 overflow-x-auto scrollbar-hide pb-4">
+    <div ref = {scrollRef} className="flex space-x-6 overflow-x-auto scrollbar-hide pb-4 scrollbar-styled">
       {
         products.map((product)=>{
           return(
-            <Link key={product.id} to={`/product/${product.id}`} className="flex-shrink-0 w-80 glass-card hover:glow-on-hover animate-smooth group" >
+            <Link key={product.id} to={`/product/${product.id}`} className="flex-shrink-0 w-80 glass-card hover:glow-on-hover group rounded-2xl overflow-hidden" >
               {/* product image */}
               <div className="relative overflow-hidden rounded-lg mb-4">
                 <img src={product.images[0]?.url || product.images[0]} alt={product.name} className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"/>

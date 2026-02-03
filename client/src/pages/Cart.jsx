@@ -32,7 +32,7 @@ const Cart = () => {
   if (cart.length === 0) {
     return (
       <div className="min-h-screen pt-20 flex items-center justify-center">
-        <div className="text-center glass-panel max-w-md">
+        <div className="text-center glass-panel max-w-md rounded-2xl animate-scale-in">
           <h1 className="text-3xl font-bold text-foreground mb-4">
             Your Cart is Empty.
           </h1>
@@ -68,7 +68,7 @@ const Cart = () => {
             <div className="lg:col-span-2 space-y-4">
               {cart.map((item) => {
                 return (
-                  <div key={item.product.id} className="glass-card p-6">
+                  <div key={item.product.id} className="glass-card p-6 rounded-2xl animate-fade-in-up">
                     <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6">
                       <Link
                         to={`/product/${item.product.id}`}

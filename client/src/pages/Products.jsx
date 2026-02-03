@@ -57,7 +57,7 @@ const Products = () => {
 
   return (
     <>
-      <div className="min-h-screen pt-20">
+      <div className="min-h-screen pt-20 animate-fade-in">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* MOBILE FILTER TOGGLE */}
@@ -221,7 +221,7 @@ const Products = () => {
                     placeholder="Search Products..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none text-foreground placeholder-muted-foreground"
+                    className="w-full pl-10 pr-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground placeholder-muted-foreground transition-all"
                   />
                 </div>
                 <button

@@ -6,9 +6,9 @@ const NewsletterSection = () => {
 
   return (
     <section className="py-16">
-      <div className="glass-panel text-center">
+      <div className="glass-panel text-center rounded-2xl border-2 border-primary/10">
         <div className="max-w-2xl mx-auto">
-          <div className="w-16 h-16 mx-auto mb-6 gradient-primary rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto mb-6 gradient-primary rounded-2xl flex items-center justify-center shadow-lg animate-float">
             <Mail className="w-8 h-8 text-primary-foreground" />
           </div>
 
@@ -28,13 +28,13 @@ const NewsletterSection = () => {
                 placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder-muted-foreground"
+                className="w-full pl-12 pr-4 py-4 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground placeholder-muted-foreground transition-all"
                 required
               />
             </div>
             <button
               type="submit"
-              className="px-8 py-4 gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth font-semibold flex items-center justify-center space-x-2"
+              className="px-8 py-4 gradient-primary text-primary-foreground rounded-xl hover:glow-on-hover font-semibold flex items-center justify-center space-x-2 shadow-lg hover:scale-[1.02] active:scale-100 transition-transform"
             >
               <Send className="w-5 h-5" />
               <span>Subscribe</span>

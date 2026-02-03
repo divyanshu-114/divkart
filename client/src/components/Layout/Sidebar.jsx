@@ -32,10 +32,10 @@ const Sidebar = () => {
   
   return <>
   {/* overlay */}
-  <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" onClick={() => dispatch(toggleSidebar())}/>
+  <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-md animate-fade-in" onClick={() => dispatch(toggleSidebar())}/>
 
       {/* sidebar */}
-      <div className="fixed left-0 top-0 h-full w-80 z-50 glass-panel animate-slide-in-left">
+      <div className="fixed left-0 top-0 h-full w-80 z-50 glass-panel animate-slide-in-left rounded-r-2xl">
         <div className="flex items-center justify-between p-6 border-b border-[hsla(var(--glass-border))]">
           <h2 className="text-xl font-semibold text-primary">Menu</h2>
           <button onClick={()=> dispatch(toggleSidebar())} className="p-2 rounded-lg glass-card hover:glow-on-hover animate-smooth"><X className="w-5 h-5 text-primary"/></button>
@@ -48,7 +48,7 @@ const Sidebar = () => {
               menuItems.filter(Boolean).map(item => {
                 return (
                 <li key={item.name }>
-                  <Link to={item.path} onClick={()=>dispatch(toggleSidebar())} className="flex items-center space-x-3 p-3 rounded-lg glass-card hover:glow-on-hover animate-smooth text-foreground hover:text-primary group">
+                  <Link to={item.path} onClick={()=>dispatch(toggleSidebar())} className="flex items-center space-x-3 p-3 rounded-xl glass-card hover:glow-on-hover text-foreground hover:text-primary group transition-all">
                     <item.icon className="w-5 h-5 group-hover-text-primary"/>
                     <span className="font-medium">{item.name}</span>
                   </Link>

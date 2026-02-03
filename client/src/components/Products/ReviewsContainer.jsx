@@ -21,7 +21,7 @@ const ReviewsContainer = ({ product, productReviews }) => {
   return (
     <>
       {authUser && (
-        <form onSubmit={handleReviewSubmit} className="mb-8 space-y-4">
+        <form onSubmit={handleReviewSubmit} className="mb-8 space-y-4 animate-fade-in-up">
           <h4 className="text-lg font-semibold">Leave a Review</h4>
           <div className="flex items-center space-x-2">
             {[...Array(5)].map((_, i) => {
@@ -44,7 +44,7 @@ const ReviewsContainer = ({ product, productReviews }) => {
             onChange={(e) => setComment(e.target.value)}
             rows={4}
             placeholder="Write your review..."
-            className="w-full p-3 rounded-md border-border bg-background text-foreground"
+            className="w-full p-3 rounded-xl border border-border bg-secondary/50 text-foreground focus:ring-2 focus:ring-primary/50 transition-all"
           />
           <button
             type="submit"
@@ -63,7 +63,7 @@ const ReviewsContainer = ({ product, productReviews }) => {
         <div className="space-y-6">
           {productReviews.map((review) => {
             return (
-              <div key={review.review_id} className="glass-card p-6">
+              <div key={review.review_id} className="glass-card p-6 rounded-2xl animate-fade-in-up">
                 <div className="flex items-center space-x-4">
                   <img
                     src={review.reviewer?.avatar?.url || "/avatar-holder.avif"}

@@ -14,22 +14,22 @@ const ProductCard = ({ product }) => {
       // dispatch(addToCart(product));
     }
   return <>
-  <Link key={product.id} to={`/product/${product.id}`} className=" glass-card hover:glow-on-hover animate-smooth group" >
+  <Link key={product.id} to={`/product/${product.id}`} className="glass-card hover:glow-on-hover group rounded-2xl overflow-hidden block" >
               {/* product image */}
-              <div className="relative overflow-hidden rounded-lg mb-4">
-                <img src={product.images[0]?.url || product.images[0]} alt={product.name} className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"/>
+              <div className="relative overflow-hidden rounded-xl mb-4">
+                <img src={product.images[0]?.url || product.images[0]} alt={product.name} className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500 ease-out"/>
                 {/* badges */}
                 <div className="absolute top-3 left-3 flex flex-col space-y-2">
                   {
                     new Date() - new Date(product.created_at) < 30 * 24 * 60 * 60 * 1000 && (
-                      <span className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-semibold">
+                      <span className="bg-primary/90 text-primary-foreground px-2 py-1 rounded-lg text-xs font-semibold shadow-md">
                         NEW
                       </span>
                     )
                   }
                   {
                     product.ratings >=  4.5 && (
-                      <span className="bg-primary text-primary-foreground px-2 py-1 bg-gradient-to-r from-yellow-400 to-rose-500 text-white rounded text-xs font-semibold">
+                      <span className="bg-gradient-to-r from-yellow-400 to-rose-500 text-white px-2 py-1 rounded-lg text-xs font-semibold shadow-md">
                         TOP RATED
                       </span>
                     )
@@ -40,7 +40,7 @@ const ProductCard = ({ product }) => {
                 {/* Quick add to cart */}
                 <button 
                   onClick={(e) => handleAddToCart(product, e)}
-                  className="absolute bottom-3 right-3 p-2 glass-card hover:glow-on-hover animate-smooth opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute bottom-3 right-3 p-2.5 glass-card hover:glow-on-hover opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl active:scale-95"
                   disabled={product.stock === 0}
                 >
                   <ShoppingCart className="text-primary w-5 h-5" />
@@ -49,7 +49,7 @@ const ProductCard = ({ product }) => {
 
               {/* product info */}
               <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">{product.name}</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-300 line-clamp-2">{product.name}</h3>
                 <div className="flex items-center space-x-2 mb-2">
                   <div className="flex items-center">
                     {

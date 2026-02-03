@@ -39,13 +39,13 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="glass border-t border-[hsla(var(--glass-border))] mt-16">
+    <footer className="glass border-t border-[hsla(var(--glass-border))] mt-16 backdrop-blur-xl">
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand & Contact */}
           <div className="lg:col-span-1">
-            <h2 className="text-2xl font-bold gradient-primary bg-clip-text text-transparent mb-4">
-              ShopMate
+            <h2 className="text-2xl font-bold gradient-primary bg-clip-text text-transparent mb-4 tracking-tight">
+              Divkart
             </h2>
             <p className="text-muted-foreground mb-6">
               Your trusted partner for online shopping. Discover amazing
@@ -77,7 +77,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1"
                   >
                     {link.name}
                   </Link>
@@ -96,7 +96,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1"
                   >
                     {link.name}
                   </Link>
@@ -115,7 +115,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1"
                   >
                     {link.name}
                   </Link>
@@ -158,7 +158,7 @@ const Footer = () => {
                 key={social.label}
                 href={social.href}
                 aria-label={social.label}
-                className="p-2 glass-card hover:glow-on-hover animate-smooth"
+                className="p-2.5 glass-card hover:glow-on-hover rounded-xl transition-all hover:scale-110 active:scale-95"
               >
                 <social.icon className="w-5 h-5 text-primary" />
               </a>
@@ -166,12 +166,8 @@ const Footer = () => {
           </div>
 
           <div className="text-center md:text-right">
-            <p className="text-muted-foreground text-sm">
-              © 2024 ShopMate. All rights reserved.
-            </p>
-            <p className="text-muted-foreground text-xs mt-1">
-              Developed By CodeWithZeeshu
-            </p>
+            <p className="text-muted-foreground text-sm">© 2024 Divkart. All rights reserved.</p>
+            <p className="text-muted-foreground text-xs mt-1">Developed By Divyanshu Singh</p>
           </div>
         </div>
       </div>

@@ -93,11 +93,11 @@ const LoginModal = () => {
     isLoggingIn || isSigningUp || isRequestingForToken || isUpdatingPassword;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* overlay */}
-      <div className="absolute inset-0 backdrop-blur-md bg-black/50" />
+      <div className="absolute inset-0 backdrop-blur-xl bg-black/60 animate-fade-in" />
 
-      <div className="relative z-10 glass-panel w-full max-w-md mx-4 p-6">
+      <div className="relative z-10 glass-panel w-full max-w-md mx-4 p-6 animate-scale-in rounded-2xl">
         {/* header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-primary">
@@ -124,7 +124,7 @@ const LoginModal = () => {
             <input
               type="text"
               placeholder="Full Name"
-              className="w-full p-2 bg-transparent border border-border rounded"
+              className="w-full p-3 bg-secondary/50 border border-border rounded-xl transition-all focus:ring-2 focus:ring-primary/50"
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
@@ -137,7 +137,7 @@ const LoginModal = () => {
             <input
               type="email"
               placeholder="Email"
-              className="w-full p-2 bg-transparent border border-border rounded"
+              className="w-full p-3 bg-secondary/50 border border-border rounded-xl transition-all focus:ring-2 focus:ring-primary/50"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
@@ -150,7 +150,7 @@ const LoginModal = () => {
             <input
               type="password"
               placeholder="Password"
-              className="w-full p-2 bg-transparent border border-border rounded"
+              className="w-full p-3 bg-secondary/50 border border-border rounded-xl transition-all focus:ring-2 focus:ring-primary/50"
               value={formData.password}
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
@@ -163,7 +163,7 @@ const LoginModal = () => {
             <input
               type="password"
               placeholder="Confirm Password"
-              className="w-full p-2 bg-transparent border border-border rounded"
+              className="w-full p-3 bg-secondary/50 border border-border rounded-xl transition-all focus:ring-2 focus:ring-primary/50"
               value={formData.confirmPassword}
               onChange={(e) =>
                 setFormData({
@@ -188,7 +188,7 @@ const LoginModal = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-2 rounded-lg gradient-primary"
+            className="w-full py-3 rounded-xl gradient-primary font-semibold hover:shadow-lg hover:scale-[1.02] active:scale-100 transition-transform disabled:opacity-70 disabled:scale-100"
           >
             {isLoading
               ? "Processing..."
