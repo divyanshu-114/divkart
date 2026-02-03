@@ -60,7 +60,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                            ? 'gradient-primary text-primary-foreground' 
                            : page === '...' 
                            ? 'cursor-default text-muted-foreground' 
-                           : 'glass-card hover:glow-on-hover text-foreground hover:text-primary' }`}
+                           : 'glass-card hover:glow-on-hover text-foreground' }`}
                            >{page}
                 </button>
         )

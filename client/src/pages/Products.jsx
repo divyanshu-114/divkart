@@ -120,7 +120,7 @@ const Products = () => {
                           }
                           className={`flex items-center space-x-2 w-full p-2 rounded ${
                             selectedRating === rating
-                              ? "bg-primary/20"
+                              ? "bg-neutral-200 dark:bg-white/10"
                               : "hover:bg-secondary"
                           }`}
                         >
@@ -130,8 +130,8 @@ const Products = () => {
                                 key={i}
                                 className={`w-4 h-4 ${
                                   i < rating
-                                    ? "text-yellow-400 fill-current"
-                                    : "text-gray-300"
+                                    ? "text-amber-400 fill-amber-400"
+                                    : "text-neutral-500"
                                 }`}
                               />
                             );
@@ -159,7 +159,7 @@ const Products = () => {
                           }
                           className={`w-full p-2 text-left rounded ${
                             availability === status
-                              ? "bg-primary/20"
+                              ? "bg-neutral-200 dark:bg-white/10"
                               : "hover:bg-secondary"
                           }`}
                         >
@@ -184,7 +184,7 @@ const Products = () => {
                       onClick={() => setSelectedCategory("")}
                       className={`w-full p-2 text-left rounded ${
                         !selectedCategory
-                          ? "bg-primary/20"
+                          ? "bg-neutral-200 dark:bg-white/10"
                           : "hover:bg-secondary"
                       }`}
                     >
@@ -197,7 +197,7 @@ const Products = () => {
                           onClick={() => setSelectedCategory(category.name)}
                           className={`w-full p-2 text-left rounded ${
                             selectedCategory === category.name
-                              ? "bg-primary/20"
+                              ? "bg-neutral-200 dark:bg-white/10"
                               : "hover:bg-secondary"
                           }`}
                         >
@@ -227,16 +227,14 @@ const Products = () => {
                 <button
                   className="relative inline-flex items-center justify-center p-0.5 
                 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group 
-                bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 
-                group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 
-                focus:outline-none focus:ring-purple-200 
-                dark:focus:ring-purple-800 max-[440px]:min-w-full min-w-[132px]"
+                bg-neutral-800 text-white hover:bg-neutral-700 dark:bg-neutral-700 dark:hover:bg-neutral-600 
+                focus:ring-4 focus:outline-none focus:ring-neutral-500 max-[440px]:min-w-full min-w-[132px]"
                   onClick={() => dispatch(toggleAIModal())}
                 >
                   <span
                     className="relative w-full px-5 py-3 transition-all ease-in duration-75 
-                bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent 
-                group-hover:dark:bg-transparent flex justify-center items-center gap-2"
+                bg-white dark:bg-neutral-800 rounded-md group-hover:bg-transparent 
+                group-hover:dark:bg-transparent flex justify-center items-center gap-2 text-foreground"
                   >
                     <Sparkles className="w-5 h-5" />
                     <span>AI Search</span>

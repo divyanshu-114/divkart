@@ -25,7 +25,7 @@ const Navbar = () => {
           </button>
           {/* center logo */}
             <div className="flex-1 flex justify-center">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent tracking-tight">Divkart</h1>
+              <h1 className="text-2xl font-bold text-foreground tracking-tight">Divkart</h1>
             </div>
             {/* right side icons*/}
           <div className="flex items-center space-x-1">
@@ -52,7 +52,7 @@ const Navbar = () => {
               <ShoppingCart className="w-5 h-5 text-foreground" />
 
               {cartItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 bg-primary text-primary-foreground text-xs font-bold rounded-full flex items-center justify-center animate-scale-in shadow-md">
+                <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 bg-foreground text-background text-xs font-bold rounded-full flex items-center justify-center animate-scale-in shadow-md">
                   {cartItemsCount}
                 </span>
               )}

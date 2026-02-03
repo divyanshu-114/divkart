@@ -28,14 +28,14 @@ const SearchOverlay = () => {
       <div className="relative z-10 animate-slide-in-top">
         <div className="glass-panel m-6 max-w-2xl mx-auto rounded-2xl">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-primary">Search Products</h2>
+            <h2 className="text-xl font-semibold text-foreground">Search Products</h2>
             <button onClick={()=>dispatch(toggleSearchBar())} className="p-2 rounded-lg glass-card hover:glow-on-hover animate-smooth"><X className="w-5 h-5 text-black"/></button>
           </div>
 
           <div className="relative">
             {/* dsearch icon button */}
             <button onClick={handleSearch} className="absolute top-1/2 left-4 transform -translate-y-1/2 w-5 h-5 text-muted-foreground">
-               <Search className="w-5 h-5 text-primary" />
+               <Search className="w-5 h-5 text-foreground" />
             </button>
             <input type='text' placeholder="search for products..." value={searchQuery} 
             onChange={(e) => setSearchQuery(e.target.value)} 

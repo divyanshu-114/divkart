@@ -49,7 +49,7 @@ const ReviewsContainer = ({ product, productReviews }) => {
           <button
             type="submit"
             disabled={isPostingReview}
-            className="px-6 py-2 rounded-lg bg-primary text-primary-foreground font-semibold  hover:glow-on-hover animate-smooth disabled:opacity-50"
+            className="px-6 py-2 rounded-lg gradient-primary text-primary-foreground font-semibold hover:glow-on-hover animate-smooth disabled:opacity-50"
           >
             {isPostingReview ? "Submitting..." : "Submit Review"}
           </button>
@@ -82,8 +82,8 @@ const ReviewsContainer = ({ product, productReviews }) => {
                               key={i}
                               className={`w-4 h-4 ${
                                 i < Math.floor(review.rating)
-                                  ? "text-yellow-400 fill-current"
-                                  : "text-gray-300"
+                                  ? "text-amber-400 fill-amber-400"
+                                  : "text-neutral-500"
                               }`}
                             />
                           );

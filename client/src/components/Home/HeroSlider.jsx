@@ -54,28 +54,28 @@ const HeroSlider = () => {
   const slide = slides[currentSlide];
 
   return (
-    <div className="relative h-[70vh] overflow-hidden rounded-2xl mx-4 mt-4 shadow-2xl shadow-primary/10">
+    <div className="relative h-[70vh] overflow-hidden rounded-2xl mx-4 mt-4 shadow-2xl shadow-black/30">
       {/* Single Active Slide */}
       <div className="relative h-full">
         <div className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out"
           style={{ backgroundImage: `url(${slide.image})` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-        <div className="absolute inset-0 glass" />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30" />
         <div className="relative h-full flex items-center justify-center text-center px-6">
           <div className="max-w-3xl animate-fade-in-up">
-            <h3 className="text-lg font-medium text-primary mb-2 tracking-wide uppercase">
+            <h3 className="text-lg font-medium text-white/90 mb-2 tracking-wide uppercase drop-shadow-md">
               {slide.subtitle}
             </h3>
-            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 drop-shadow-lg">
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
               {slide.title}
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-md">
               {slide.description}
             </p>
             <Link
               to={slide.url}
-              className="inline-block px-8 py-4 gradient-primary text-primary-foreground rounded-xl hover:glow-on-hover animate-smooth font-semibold text-lg shadow-lg hover:scale-105 active:scale-100 transition-transform"
+              className="inline-block px-8 py-4 bg-white text-black rounded-xl hover:bg-white/90 font-semibold text-lg shadow-xl hover:scale-105 active:scale-100 transition-all"
             >
               {slide.cta}
             </Link>
@@ -86,27 +86,27 @@ const HeroSlider = () => {
       {/* Arrows */}
       <button
         onClick={prevSlide}
-        className="hidden sm:flex absolute left-6 top-1/2 transform -translate-y-1/2 p-3 glass-card hover:glow-on-hover animate-smooth rounded-xl active:scale-95"
+        className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-black/50 hover:bg-black/70 rounded-xl active:scale-95 transition-colors backdrop-blur-sm border border-white/20"
       >
-        <ChevronLeft className="w-6 h-6 text-primary" />
+        <ChevronLeft className="w-6 h-6 text-white" />
       </button>
       <button
         onClick={nextSlide}
-        className="hidden sm:flex absolute right-6 top-1/2 transform -translate-y-1/2 p-3 glass-card hover:glow-on-hover animate-smooth rounded-xl active:scale-95"
+        className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-black/50 hover:bg-black/70 rounded-xl active:scale-95 transition-colors backdrop-blur-sm border border-white/20"
       >
-        <ChevronRight className="w-6 h-6 text-primary" />
+        <ChevronRight className="w-6 h-6 text-white" />
       </button>
 
       {/* Dots */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
             className={`rounded-full transition-all duration-300 ${
               index === currentSlide
-                ? "w-8 h-3 bg-primary shadow-lg shadow-primary/50"
-                : "w-3 h-3 bg-white/40 hover:bg-white/60 hover:scale-110"
+                ? "w-8 h-3 bg-white shadow-lg"
+                : "w-3 h-3 bg-white/50 hover:bg-white/80 hover:scale-110"
             }`}
           />
         ))}

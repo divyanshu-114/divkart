@@ -31,8 +31,8 @@ const Contact = () => {
           {/* Contact Info */}
           <div className="space-y-8">
             <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                <Mail className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center">
+                <Mail className="w-6 h-6 text-foreground" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Email</h3>
@@ -41,8 +41,8 @@ const Contact = () => {
             </div>
 
             <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                <Phone className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center">
+                <Phone className="w-6 h-6 text-foreground" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Phone</h3>
@@ -51,8 +51,8 @@ const Contact = () => {
             </div>
 
             <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                <MapPin className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center">
+                <MapPin className="w-6 h-6 text-foreground" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Address</h3>
@@ -113,7 +113,7 @@ const Contact = () => {
 
               <button
                 type="submit"
-                className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2"
+                className="w-full gradient-primary text-primary-foreground py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
               >
                 <Send className="w-5 h-5" />
                 <span>Send Message</span>

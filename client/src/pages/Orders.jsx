@@ -22,7 +22,7 @@ const Orders = () => {
         return <Package className="w-5 h-5 text-yellow-500" />;
         // break;
       case "Shipped":
-        return <Truck className="w-5 h-5 text-blue-500" />;
+        return <Truck className="w-5 h-5 text-neutral-500" />;
         // break;
       case "Delivered":
         return <CheckCircle className="w-5 h-5 text-green-500" />;
@@ -42,7 +42,7 @@ const Orders = () => {
         return "bg-yellow-500/20 text-yellow-400";
         // break;
       case "Shipped":
-        return "bg-blue-500/20 text-blue-400";
+        return "bg-neutral-500/20 text-neutral-600 dark:text-neutral-400";
         // break;
       case "Delivered":
         return "bg-green-500/20 text-green-400";
@@ -151,7 +151,7 @@ const Orders = () => {
 
                         <div className="text-right">
                           <p className="text-sm text-muted-foreground">Total</p>
-                          <p className="text-xl font-bold text-primary">
+                          <p className="text-xl font-bold text-foreground">
                             ${order.total_price}
                           </p>
                         </div>

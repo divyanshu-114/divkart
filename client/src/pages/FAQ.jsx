@@ -43,7 +43,7 @@ const FAQ = () => {
             <div key={index} className="bg-secondary rounded-xl overflow-hidden">
               <button
                 onClick={() => toggleItem(index)}
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-primary/10 transition-colors"
+                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-secondary transition-colors"
               >
                 <h3 className="font-semibold text-foreground">{faq.question}</h3>
                 {openItems[index] ? (

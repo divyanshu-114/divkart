@@ -36,8 +36,7 @@ const AISearchModal = () => {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-3">
             <div
-              className="w-10 h-10 bg-gradient-to-br from-purple-500 
-            to-blue-500 rounded-full flex items-center justify-center"
+              className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center"
             >
               <Sparkles className="w-5 h-5 text-white" />
             </div>
@@ -69,7 +68,7 @@ const AISearchModal = () => {
               value={userPrompt}
               onChange={(e) => setUserPrompt(e.target.value)}
               className="w-full pl-12 pr-4 py-4 bg-secondary border border-border rounded-lg focus:outline-none 
-              focus:ring-2 focus:ring-primary text-foreground placeholder-muted-foreground"
+              focus:ring-2 focus:ring-foreground/50 text-foreground placeholder-muted-foreground"
               required
               autoFocus
             />
@@ -78,8 +77,8 @@ const AISearchModal = () => {
           <button
             type="submit"
             disabled={aiSearching || !userPrompt.trim()}
-            className={`w-full py-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg 
-              font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed 
+            className={`w-full py-4 bg-neutral-800 text-white rounded-lg 
+              font-semibold hover:bg-neutral-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed 
               flex items-center justify-center space-x-2 ${
               aiSearching && "animate-pulse"
             }`}
@@ -111,7 +110,7 @@ const AISearchModal = () => {
                 key={example}
                 onClick={() => setUserPrompt(example)}
                 className="px-3 py-1 bg-secondary text-foreground rounded-full 
-                text-sm hover:bg-primary hover:text-primary-foreground transition-colors"
+                text-sm hover:bg-secondary transition-colors"
               >
                 {example}
               </button>

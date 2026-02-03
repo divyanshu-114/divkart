@@ -44,7 +44,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand & Contact */}
           <div className="lg:col-span-1">
-            <h2 className="text-2xl font-bold gradient-primary bg-clip-text text-transparent mb-4 tracking-tight">
+            <h2 className="text-2xl font-bold text-foreground mb-4 tracking-tight">
               Divkart
             </h2>
             <p className="text-muted-foreground mb-6">
@@ -53,15 +53,15 @@ const Footer = () => {
             </p>
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-muted-foreground">
-                <Mail className="w-5 h-5 text-primary" />
+                <Mail className="w-5 h-5 text-foreground" />
                 <span>support@shopmate.com</span>
               </div>
               <div className="flex items-center space-x-3 text-muted-foreground">
-                <Phone className="w-5 h-5 text-primary" />
+                <Phone className="w-5 h-5 text-foreground" />
                 <span>+1 (555) 123-4567</span>
               </div>
               <div className="flex items-center space-x-3 text-muted-foreground">
-                <MapPin className="w-5 h-5 text-primary" />
+                <MapPin className="w-5 h-5 text-foreground" />
                 <span>San Francisco, CA</span>
               </div>
             </div>
@@ -77,7 +77,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1"
+                    className="text-muted-foreground hover:text-foreground transition-colors inline-block hover:translate-x-1"
                   >
                     {link.name}
                   </Link>
@@ -96,7 +96,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1"
+                    className="text-muted-foreground hover:text-foreground transition-colors inline-block hover:translate-x-1"
                   >
                     {link.name}
                   </Link>
@@ -115,7 +115,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-muted-foreground hover:text-primary transition-colors inline-block hover:translate-x-1"
+                    className="text-muted-foreground hover:text-foreground transition-colors inline-block hover:translate-x-1"
                   >
                     {link.name}
                   </Link>
@@ -160,7 +160,7 @@ const Footer = () => {
                 aria-label={social.label}
                 className="p-2.5 glass-card hover:glow-on-hover rounded-xl transition-all hover:scale-110 active:scale-95"
               >
-                <social.icon className="w-5 h-5 text-primary" />
+                <social.icon className="w-5 h-5 text-foreground" />
               </a>
             ))}
           </div>

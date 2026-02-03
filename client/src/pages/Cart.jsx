@@ -84,7 +84,7 @@ const Cart = () => {
                       <div className="flex-1 min-w-0">
                         <Link
                           to={`/product/${item.product.id}`}
-                          className="block hover:text-primary transition-colors"
+                          className="block hover:text-foreground transition-colors"
                         >
                           <h3 className="text-lg font-semibold text-foreground mb-1">
                             {item.product.name}
@@ -94,7 +94,7 @@ const Cart = () => {
                           Category: {item.product.category}
                         </p>
                         <div className="flex items-center space-x-2">
-                          <span className="text-xl font-bold text-primary">
+                          <span className="text-xl font-bold text-foreground">
                             ${item.product.price}
                           </span>
                         </div>

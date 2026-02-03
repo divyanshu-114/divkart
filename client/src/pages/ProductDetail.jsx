@@ -99,7 +99,7 @@ const ProductDetail = () => {
                         onClick={() => setSelectedImage(index)}
                         className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                           selectedImage === index
-                            ? "border-primary"
+                            ? "border-foreground"
                             : "border-transparent"
                         }`}
                       >
@@ -119,7 +119,7 @@ const ProductDetail = () => {
                 <div className="flex space-x-2 mb-4">
                   {new Date() - new Date(product.created_at) <
                     30 * 24 * 60 * 60 * 1000 && (
-                    <span className="px-2 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded">
+                    <span className="px-2 py-1 bg-neutral-200 text-neutral-800 dark:bg-white/20 dark:text-white border border-neutral-300 dark:border-white/30 text-xs font-semibold rounded-lg">
                       NEW
                     </span>
                   )}
@@ -140,8 +140,8 @@ const ProductDetail = () => {
                           key={i}
                           className={`w-4 h-4 ${
                             i < Math.floor(product.ratings)
-                              ? "text-yellow-400 fill-current"
-                              : "text-gray-300"
+                              ? "text-amber-400 fill-amber-400"
+                              : "text-neutral-500"
                           }`}
                         />
                       );
@@ -155,7 +155,7 @@ const ProductDetail = () => {
                   </span>
                 </div>
                 <div className="flex items-center space-x-4 mb-6">
-                  <span className="text-2xl font-bold text-primary">
+                  <span className="text-2xl font-bold text-foreground">
                     ${product.price}
                   </span>
                 </div>
@@ -219,13 +219,13 @@ const ProductDetail = () => {
                     </button>
                   </div>
                   <div className="flex items-center space-x-4 mt-4">
-                    <button className="flex items-center space-x-2 text-muted-foreground hover:text-primary animate-smooth">
+                    <button className="flex items-center space-x-2 text-muted-foreground hover:text-foreground animate-smooth">
                       <Heart className="w-5 h-5" />
                       <span>Add to Wishlist</span>
                     </button>
                     <button
                       onClick={handleCopyURL}
-                      className="flex items-center space-x-2 text-muted-foreground hover:text-primary animate-smooth"
+                      className="flex items-center space-x-2 text-muted-foreground hover:text-foreground animate-smooth"
                     >
                       <Share2 className="w-5 h-5" />
                       <span>Share</span>
@@ -245,7 +245,7 @@ const ProductDetail = () => {
                     onClick={() => setActiveTab(tab)}
                     className={`px-6 py-4 font-medium capitalize transition-all duration-300 rounded-t-lg ${
                       activeTab === tab
-                        ? "text-primary border-b-2 border-primary bg-primary/5"
+                        ? "text-foreground border-b-2 border-foreground bg-secondary"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                     }`}
                   >

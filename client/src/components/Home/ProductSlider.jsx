@@ -31,10 +31,10 @@ const ProductSlider = ({ title, products }) => {
       <h2 className="text-3xl font-bold text-foreground">{title}</h2>
       <div className="flex space-x-2">
         <button onClick={()=> scroll("left")} className="p-2.5 glass-card hover:glow-on-hover rounded-xl active:scale-95 transition-all">
-          <ChevronLeft className="text-primary w-6 h-6"/>
+          <ChevronLeft className="text-foreground w-6 h-6"/>
         </button>
          <button onClick={()=> scroll("right")} className="p-2.5 glass-card hover:glow-on-hover rounded-xl active:scale-95 transition-all">
-          <ChevronRight className="text-primary w-6 h-6"/>
+          <ChevronRight className="text-foreground w-6 h-6"/>
         </button>
       </div>
     </div>
@@ -51,14 +51,14 @@ const ProductSlider = ({ title, products }) => {
                 <div className="absolute top-3 left-3 flex flex-col space-y-2">
                   {
                     new Date() - new Date(product.created_at) < 30 * 24 * 60 * 60 * 1000 && (
-                      <span className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-semibold">
+                      <span className="bg-neutral-200 text-neutral-800 border border-neutral-300 dark:bg-white/20 dark:text-white dark:border-white/30 px-2 py-1 rounded-lg text-xs font-semibold">
                         NEW
                       </span>
                     )
                   }
                   {
                     product.ratings >=  4.5 && (
-                      <span className="bg-primary text-primary-foreground px-2 py-1 bg-gradient-to-r from-yellow-400 to-rose-500 text-white rounded text-xs font-semibold">
+                      <span className="bg-amber-500/90 text-white px-2 py-1 rounded-lg text-xs font-semibold shadow-md">
                         TOP RATED
                       </span>
                     )
@@ -72,19 +72,19 @@ const ProductSlider = ({ title, products }) => {
                   className="absolute bottom-3 right-3 p-2 glass-card hover:glow-on-hover animate-smooth opacity-0 group-hover:opacity-100 transition-opacity"
                   disabled={product.stock === 0}
                 >
-                  <ShoppingCart className="text-primary w-5 h-5" />
+                  <ShoppingCart className="text-foreground w-5 h-5" />
                 </button>
               </div>
 
               {/* product info */}
               <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">{product.name}</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-foreground transition-colors">{product.name}</h3>
                 <div className="flex items-center space-x-2 mb-2">
                   <div className="flex items-center">
                     {
     
                       [...Array(5)].map((_, i) => {
-                        return <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.ratings) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}/>
+                        return <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.ratings) ? 'text-amber-400 fill-amber-400' : 'text-neutral-500'}`}/>
                       })
                     }
                   </div>
@@ -92,10 +92,10 @@ const ProductSlider = ({ title, products }) => {
                   </div>    
                   {/* product price */}
                   <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-primary">₹{product.price}</span>
+                    <span className="text-xl font-bold text-foreground">₹{product.price}</span>
                   </div>
                   <div>
-                    <span className={`text-xs px-2 py-1 rounded ${product.stock > 5 ? 'bg-green-500/20 text-green-400' : product.stock > 0 ? "bg-yellow-500/20 text-yellow-400" : "bg-red-500/20 text-red-400"}`}>{product.stock > 5 ? 'In Stock' : product.stock > 0 ?  "Limited Stock" : "Out of Stock"}</span>
+                    <span className={`text-xs px-2 py-1 rounded-lg ${product.stock > 5 ? 'bg-green-500/20 text-green-500' : product.stock > 0 ? "bg-amber-500/20 text-amber-600" : "bg-red-500/20 text-red-500"}`}>{product.stock > 5 ? 'In Stock' : product.stock > 0 ?  "Limited Stock" : "Out of Stock"}</span>
                   </div>
                  
               </div>

@@ -35,8 +35,8 @@ const CartSidebar = () => {
     {/* cart sidebar */}
         <div className="fixed right-0 top-0 h-full w-96 z-50 glass-panel animate-slide-in-right overflow-y-auto rounded-l-2xl">
           <div className="flex items-center justify-between p-6 border-b border-[hsla(var(--glass-border))]">
-            <h2 className="text-xl font-semibold text-primary">Shopping Cart</h2>
-            <button onClick={()=> dispatch(toggleCart())} className="p-2 rounded-lg glass-card hover:glow-on-hover animate-smooth"><X className="w-5 h-5 text-primary"/></button>
+            <h2 className="text-xl font-semibold text-foreground">Shopping Cart</h2>
+            <button onClick={()=> dispatch(toggleCart())} className="p-2 rounded-lg glass-card hover:glow-on-hover animate-smooth"><X className="w-5 h-5 text-foreground"/></button>
           </div>
 
           <div className="p-6">
@@ -63,12 +63,12 @@ const CartSidebar = () => {
                           />
                           <div className="flex-1 min-w-0">
                             <h3 className="font-semibold text-foreground truncate">{item.product.name}</h3>
-                            <p className="text-primary font-semibold">${item.product.price}</p>
+                            <p className="text-foreground font-semibold">${item.product.price}</p>
                             {/* quantity control */}
                             <div className="flex items-center space-x-2 mt-2">
-                              <button onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="p-1 rounded glass-card hover:glow-on-hover animate-smooth"><Minus className="w-4 h-4 text-primary"/></button>
+                              <button onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="p-1 rounded glass-card hover:glow-on-hover animate-smooth"><Minus className="w-4 h-4 text-foreground"/></button>
                               <span className="w-8 text-center font-semibold">{item.quantity}</span>
-                              <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)} className="p-1 rounded glass-card hover:glow-on-hover animate-smooth"><Plus className="w-4 h-4 text-primary"/></button>
+                              <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)} className="p-1 rounded glass-card hover:glow-on-hover animate-smooth"><Plus className="w-4 h-4 text-foreground"/></button>
                               <button onClick={() => dispatch(removeFromCart(item.product.id))} className="p-1 rounded glass-card hover:glow-on-hover animate-smooth ml-2 text-destructive"><Trash2 className="w-4 h-4 text-destructive-foreground"/></button>
                             </div>
                           </div>
@@ -83,7 +83,7 @@ const CartSidebar = () => {
                 <div className="border-t border-[hsla(var(--glass-border))] pt-4">
                   <div className="flex justify-between items-center mb-4">
                    <span className="text-lg font-semibold">Total : </span>
-                   <span className="text-xl font-bold text-primary">${total.toFixed(2)}</span>
+                   <span className="text-xl font-bold text-foreground">${total.toFixed(2)}</span>
                   </div>
                   <Link to={"/cart"} onClick={()=> dispatch(toggleCart())} className="w-full block text-center gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth pt-3 pb-3 ">View Cart & Proceed to Checkout</Link>
                 </div>

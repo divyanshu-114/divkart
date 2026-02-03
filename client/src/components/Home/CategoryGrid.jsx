@@ -28,7 +28,7 @@ const CategoryGrid = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+            <h3 className="text-lg font-semibold text-foreground group-hover:text-foreground transition-colors duration-300">
               {category.name}
             </h3>
           </Link>

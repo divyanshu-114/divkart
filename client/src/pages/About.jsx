@@ -37,8 +37,8 @@ const About = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           {values.map((value, index) => (
             <div key={index} className="bg-secondary rounded-xl p-6 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
-                <value.icon className="w-8 h-8 text-primary" />
+              <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center border border-border">
+                <value.icon className="w-8 h-8 text-foreground" />
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-2">{value.title}</h3>
               <p className="text-muted-foreground">{value.description}</p>

@@ -100,7 +100,7 @@ const LoginModal = () => {
       <div className="relative z-10 glass-panel w-full max-w-md mx-4 p-6 animate-scale-in rounded-2xl">
         {/* header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-primary">
+          <h2 className="text-xl font-bold text-foreground">
             {mode === "signup"
               ? "Create Account"
               : mode === "forgot"
@@ -179,7 +179,7 @@ const LoginModal = () => {
             <button
               type="button"
               onClick={() => setMode("forgot")}
-              className="text-sm text-primary text-right block w-full"
+              className="text-sm text-foreground font-medium text-right block w-full hover:underline"
             >
               Forgot password?
             </button>
@@ -209,7 +209,7 @@ const LoginModal = () => {
               onClick={() =>
                 setMode((prev) => (prev === "signin" ? "signup" : "signin"))
               }
-              className="text-primary"
+              className="text-foreground font-medium hover:underline"
             >
               {mode === "signin"
                 ? "Don't have an account? Sign Up"
