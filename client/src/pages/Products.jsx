@@ -227,7 +227,7 @@ const Products = () => {
                 <button
                   className="relative inline-flex items-center justify-center p-0.5 
                 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group 
-                bg-neutral-800 text-white hover:bg-neutral-700 dark:bg-neutral-700 dark:hover:bg-neutral-600 
+                bg-neutral-800 hover:bg-neutral-700 dark:bg-neutral-700 dark:hover:bg-neutral-600 
                 focus:ring-4 focus:outline-none focus:ring-neutral-500 max-[440px]:min-w-full min-w-[132px]"
                   onClick={() => dispatch(toggleAIModal())}
                 >
