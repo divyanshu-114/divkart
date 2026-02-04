@@ -142,7 +142,7 @@ export const forgotPassword = (email) => async (dispatch) => {
   dispatch(authSlice.actions.forgotPasswordRequest());
   try {
     await axiosInstance
-      .post("/auth/password/forgot?frontendUrl=http://localhost:5174", email)
+      .post(`/auth/password/forgot?frontendUrl=${import.meta.env.VITE_FRONTEND_URL}`, email)
       .then((res) => {
         dispatch(authSlice.actions.forgotPasswordSuccess());
         toast.success(res.data.message);
