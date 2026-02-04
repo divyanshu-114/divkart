@@ -31,7 +31,7 @@ import { useSelector } from "react-redux";
 import { fetchAllProducts } from "./store/slices/productSlice";
 
 const App = () => {
-  const {authUser,isCheckingAuth} = useSelector((state) => state.auth);
+  const {isCheckingAuth} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   
@@ -50,19 +50,18 @@ const App = () => {
     }));
   },[dispatch]);
 
-  const {products} = useSelector(state => state.product);
 
-
-  if ((isCheckingAuth && !authUser) || !products) {
-  return (
-    <div className="flex items-center justify-center h-screen bg-background">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-14 h-14 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-        <p className="text-sm text-muted-foreground animate-pulse">Loading...</p>
+  // Only wait for auth check to complete, products can load in background
+  if (isCheckingAuth) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-14 h-14 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+          <p className="text-sm text-muted-foreground animate-pulse">Loading...</p>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <ThemeProvider>
