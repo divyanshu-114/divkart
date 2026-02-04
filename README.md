@@ -1,11 +1,11 @@
 🛍️ divkart – AI Powered Ecommerce Store
 
-An advanced full-stack ecommerce platform built with Node.js, React, PostgreSQL, Stripe, Cloudinary, and Gemini AI for intelligent product search and recommendations.
+An advanced full-stack ecommerce platform built with Node.js, React, PostgreSQL, Razorpay, Cloudinary, and Gemini AI for intelligent product search and recommendations.
 
 ✔️ Secure Auth (JWT + Cookies)
 ✔️ AI-powered product search
 ✔️ Admin Dashboard
-✔️ Stripe Webhooks + Payment Intents
+✔️ Razorpay Webhooks + Payment Intents
 ✔️ Fully relational PostgreSQL schema
 ✔️ Modern, animated UI built with React + Tailwind + Redux Toolkit
 
@@ -32,7 +32,7 @@ Cloudinary uploader
 
 Nodemailer (Email OTP & Password Reset)
 
-Stripe Payments
+Razorpay Payments
 
 Gemini AI Search (AI product filtering)
 
@@ -127,7 +127,7 @@ Change order status
 
 Dashboard analytics
 
-💳 Stripe Payment Workflow
+💳 Razorpay Payment Workflow
 
 Create Payment Intent
 
