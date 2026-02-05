@@ -1,3 +1,4 @@
+import { secureHeapUsed } from "crypto";
 import jwt from "jsonwebtoken";
 
 export const sendToken = (user, statusCode, message, res) => {
@@ -11,7 +12,8 @@ export const sendToken = (user, statusCode, message, res) => {
     res.status(statusCode).cookie("token", token, {
         expires: new Date(Date.now() + cookieMaxAge ),
         httpOnly: true,
-        sameSite: "lax",
+        secure : true,
+        sameSite: "none",
     }).json({
         success: true,
         user,
