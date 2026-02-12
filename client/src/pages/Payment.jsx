@@ -3,6 +3,7 @@ import { ArrowLeft, Check } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { placeOrder } from "../store/slices/orderSlice";
+import { clearCartAPI } from "../store/slices/cartSlice";
 import { toast } from "react-toastify";
 
 const Payment = () => {
@@ -93,6 +94,7 @@ const Payment = () => {
       handler: function () {
         // ✅ Webhook is source of truth
         toast.success("Payment initiated. Verifying...");
+        dispatch(clearCartAPI());
         navigateTo("/orders");
       },
 
@@ -168,16 +170,14 @@ const Payment = () => {
               <div className="flex items-center space-x-4">
                 {/* STEP 1 */}
                 <div
-                  className={`flex items-center space-x-2 ${
-                    orderStep >= 1 ? "text-primary" : "text-muted-foreground"
-                  }`}
+                  className={`flex items-center space-x-2 ${orderStep >= 1 ? "text-primary" : "text-muted-foreground"
+                    }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      orderStep >= 1
-                        ? "gradient-primary text-primary-foreground"
-                        : "bg-secondary"
-                    }`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${orderStep >= 1
+                      ? "gradient-primary text-primary-foreground"
+                      : "bg-secondary"
+                      }`}
                   >
                     {orderStep > 1 ? <Check className="w-5 h-5" /> : "1"}
                   </div>
@@ -185,23 +185,20 @@ const Payment = () => {
                 </div>
 
                 <div
-                  className={`w-12 h-0 ${
-                    orderStep >= 2 ? "bg-primary" : "bg-border"
-                  }`}
+                  className={`w-12 h-0 ${orderStep >= 2 ? "bg-primary" : "bg-border"
+                    }`}
                 />
 
                 {/* STEP 2 */}
                 <div
-                  className={`flex items-center space-x-2 ${
-                    orderStep >= 2 ? "text-primary" : "text-muted-foreground"
-                  }`}
+                  className={`flex items-center space-x-2 ${orderStep >= 2 ? "text-primary" : "text-muted-foreground"
+                    }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      orderStep >= 2
-                        ? "gradient-primary text-primary-foreground"
-                        : "bg-secondary"
-                    }`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${orderStep >= 2
+                      ? "gradient-primary text-primary-foreground"
+                      : "bg-secondary"
+                      }`}
                   >
                     2
                   </div>

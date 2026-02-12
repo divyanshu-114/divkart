@@ -1,111 +1,155 @@
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight, Star, ShoppingCart } from "lucide-react";
-import { Link } from "react-router-dom";
-// import { addToCart } from "../../store/slices/cartSlice";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../store/slices/cartSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCartAPI } from "../../store/slices/cartSlice";
+import { toast } from "react-toastify";
 
 const ProductSlider = ({ title, products }) => {
   const scrollRef = useRef(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { authUser } = useSelector((state) => state.auth);
 
-  const scroll = (direction) =>{
-    if(scrollRef.current){
+  const scroll = (direction) => {
+    if (scrollRef.current) {
       const scrollAmount = 320;
       scrollRef.current.scrollBy({
-        left : direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior : 'smooth'
-      })
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
     }
-  }
-  const dispatch = useDispatch();
-  const handleAddToCart = (product , e)=>{
+  };
+
+  const handleAddToCart = (product, e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("jgvjgv", product)
-    dispatch(addToCart({product, quantity:1 }));
-    // dispatch(addToCart(product));
-  }
-  return <>
-  <section className="py-16">
-    <div className="flex items-center justify-between mb-8">
-      <h2 className="text-3xl font-bold text-foreground">{title}</h2>
-      <div className="flex space-x-2">
-        <button onClick={()=> scroll("left")} className="p-2.5 glass-card hover:glow-on-hover rounded-xl active:scale-95 transition-all">
-          <ChevronLeft className="text-foreground w-6 h-6"/>
-        </button>
-         <button onClick={()=> scroll("right")} className="p-2.5 glass-card hover:glow-on-hover rounded-xl active:scale-95 transition-all">
-          <ChevronRight className="text-foreground w-6 h-6"/>
-        </button>
-      </div>
-    </div>
 
-    <div ref = {scrollRef} className="flex space-x-6 overflow-x-auto scrollbar-hide pb-4 scrollbar-styled">
-      {
-        products.map((product)=>{
-          return(
-            <Link key={product.id} to={`/product/${product.id}`} className="flex-shrink-0 w-80 glass-card hover:glow-on-hover group rounded-2xl overflow-hidden" >
-              {/* product image */}
-              <div className="relative overflow-hidden rounded-lg mb-4">
-                <img src={product.images[0]?.url || product.images[0]} alt={product.name} className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"/>
-                {/* badges */}
-                <div className="absolute top-3 left-3 flex flex-col space-y-2">
-                  {
-                    new Date() - new Date(product.created_at) < 30 * 24 * 60 * 60 * 1000 && (
-                      <span className="bg-neutral-200 text-neutral-800 border border-neutral-300 dark:bg-white/20 dark:text-white dark:border-white/30 px-2 py-1 rounded-lg text-xs font-semibold">
-                        NEW
-                      </span>
-                    )
-                  }
-                  {
-                    product.ratings >=  4.5 && (
+    if (!authUser) {
+      toast.error("Please login to add items to cart");
+      navigate("/login");
+      return;
+    }
+    dispatch(addToCartAPI({ product, quantity: 1 }));
+  };
+
+  return (
+    <>
+      <section className="py-16">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-3xl font-bold text-foreground">{title}</h2>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => scroll("left")}
+              className="p-2.5 glass-card hover:glow-on-hover rounded-xl active:scale-95 transition-all"
+            >
+              <ChevronLeft className="text-foreground w-6 h-6" />
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              className="p-2.5 glass-card hover:glow-on-hover rounded-xl active:scale-95 transition-all"
+            >
+              <ChevronRight className="text-foreground w-6 h-6" />
+            </button>
+          </div>
+        </div>
+
+        <div
+          ref={scrollRef}
+          className="flex space-x-6 overflow-x-auto scrollbar-hide pb-4 scrollbar-styled"
+        >
+          {products.map((product) => {
+            return (
+              <Link
+                key={product.id}
+                to={`/product/${product.id}`}
+                className="flex-shrink-0 w-80 glass-card hover:glow-on-hover group rounded-2xl overflow-hidden"
+              >
+                {/* product image */}
+                <div className="relative overflow-hidden rounded-lg mb-4">
+                  <img
+                    src={product.images[0]?.url || product.images[0]}
+                    alt={product.name}
+                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  {/* badges */}
+                  <div className="absolute top-3 left-3 flex flex-col space-y-2">
+                    {new Date() - new Date(product.created_at) <
+                      30 * 24 * 60 * 60 * 1000 && (
+                        <span className="bg-neutral-200 text-neutral-800 border border-neutral-300 dark:bg-white/20 dark:text-white dark:border-white/30 px-2 py-1 rounded-lg text-xs font-semibold">
+                          NEW
+                        </span>
+                      )}
+                    {product.ratings >= 4.5 && (
                       <span className="bg-amber-500/90 text-white px-2 py-1 rounded-lg text-xs font-semibold shadow-md">
                         TOP RATED
                       </span>
-                    )
-                  }
+                    )}
+                  </div>
 
+                  {/* Quick add to cart */}
+                  <button
+                    onClick={(e) => handleAddToCart(product, e)}
+                    className="absolute bottom-3 right-3 p-2 glass-card hover:glow-on-hover animate-smooth opacity-0 group-hover:opacity-100 transition-opacity"
+                    disabled={product.stock === 0}
+                  >
+                    <ShoppingCart className="text-foreground w-5 h-5" />
+                  </button>
                 </div>
 
-                {/* Quick add to cart */}
-                <button 
-                  onClick={(e) => handleAddToCart(product, e)}
-                  className="absolute bottom-3 right-3 p-2 glass-card hover:glow-on-hover animate-smooth opacity-0 group-hover:opacity-100 transition-opacity"
-                  disabled={product.stock === 0}
-                >
-                  <ShoppingCart className="text-foreground w-5 h-5" />
-                </button>
-              </div>
-
-              {/* product info */}
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-foreground transition-colors">{product.name}</h3>
-                <div className="flex items-center space-x-2 mb-2">
-                  <div className="flex items-center">
-                    {
-    
-                      [...Array(5)].map((_, i) => {
-                        return <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.ratings) ? 'text-amber-400 fill-amber-400' : 'text-neutral-500'}`}/>
-                      })
-                    }
+                {/* product info */}
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-foreground transition-colors">
+                    {product.name}
+                  </h3>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => {
+                        return (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 ${i < Math.floor(product.ratings)
+                                ? "text-amber-400 fill-amber-400"
+                                : "text-neutral-500"
+                              }`}
+                          />
+                        );
+                      })}
+                    </div>
+                    <span className="text-sm text-muted-foreground ">
+                      ({product.review_count})
+                    </span>
                   </div>
-                  <span className="text-sm text-muted-foreground ">({product.review_count})</span>
-                  </div>    
                   {/* product price */}
                   <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-foreground">₹{product.price}</span>
+                    <span className="text-xl font-bold text-foreground">
+                      ₹{product.price}
+                    </span>
                   </div>
                   <div>
-                    <span className={`text-xs px-2 py-1 rounded-lg ${product.stock > 5 ? 'bg-green-500/20 text-green-500' : product.stock > 0 ? "bg-amber-500/20 text-amber-600" : "bg-red-500/20 text-red-500"}`}>{product.stock > 5 ? 'In Stock' : product.stock > 0 ?  "Limited Stock" : "Out of Stock"}</span>
+                    <span
+                      className={`text-xs px-2 py-1 rounded-lg ${product.stock > 5
+                          ? "bg-green-500/20 text-green-500"
+                          : product.stock > 0
+                            ? "bg-amber-500/20 text-amber-600"
+                            : "bg-red-500/20 text-red-500"
+                        }`}
+                    >
+                      {product.stock > 5
+                        ? "In Stock"
+                        : product.stock > 0
+                          ? "Limited Stock"
+                          : "Out of Stock"}
+                    </span>
                   </div>
-                 
-              </div>
-            </Link>
-          )
-        })
-      }
-    </div>
-  </section>
-  </>;
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+    </>
+  );
 };
 
 export default ProductSlider;

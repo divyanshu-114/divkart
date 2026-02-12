@@ -29,26 +29,33 @@ import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import { useSelector } from "react-redux";
 import { fetchAllProducts } from "./store/slices/productSlice";
+import { fetchCart } from "./store/slices/cartSlice";
 
 const App = () => {
-  const {isCheckingAuth} = useSelector((state) => state.auth);
+  const { isCheckingAuth, authUser } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  
+
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchAllProducts({
-      category:"",
-      price:"0-100000",
-      search:"",
-      availability:"",
-      ratings:"",
-      page:1
+      category: "",
+      price: "0-100000",
+      search: "",
+      availability: "",
+      ratings: "",
+      page: 1
     }));
-  },[dispatch]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (authUser) {
+      dispatch(fetchCart());
+    }
+  }, [authUser, dispatch]);
 
 
   // Only wait for auth check to complete, products can load in background

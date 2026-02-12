@@ -1,78 +1,120 @@
 import React from "react";
 import { Star, ShoppingCart } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../store/slices/cartSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCartAPI } from "../../store/slices/cartSlice";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
-    const handleAddToCart = (product , e)=>{
-      e.preventDefault();
-      e.stopPropagation();
-      console.log("jgvjgv", product)
-      dispatch(addToCart({product, quantity:1 }));
-      // dispatch(addToCart(product));
+  const navigate = useNavigate();
+  const { authUser } = useSelector((state) => state.auth);
+
+  const handleAddToCart = (product, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!authUser) {
+      toast.error("Please login to add items to cart");
+      navigate("/login");
+      return;
     }
-  return <>
-  <Link key={product.id} to={`/product/${product.id}`} className="glass-card hover:glow-on-hover group rounded-2xl overflow-hidden block" >
-              {/* product image */}
-              <div className="relative overflow-hidden rounded-xl mb-4">
-                <img src={product.images[0]?.url || product.images[0]} alt={product.name} className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500 ease-out"/>
-                {/* badges */}
-                <div className="absolute top-3 left-3 flex flex-col space-y-2">
-                  {
-                    new Date() - new Date(product.created_at) < 30 * 24 * 60 * 60 * 1000 && (
-                      <span className="bg-neutral-200 text-neutral-800 border border-neutral-300 dark:bg-white/20 dark:text-white dark:border-white/30 px-2 py-1 rounded-lg text-xs font-semibold">
-                        NEW
-                      </span>
-                    )
-                  }
-                  {
-                    product.ratings >=  4.5 && (
-                      <span className="bg-amber-500/90 text-white px-2 py-1 rounded-lg text-xs font-semibold shadow-md">
-                        TOP RATED
-                      </span>
-                    )
-                  }
 
-                </div>
+    dispatch(addToCartAPI({ product, quantity: 1 }));
+  };
 
-                {/* Quick add to cart */}
-                <button 
-                  onClick={(e) => handleAddToCart(product, e)}
-                  className="absolute bottom-3 right-3 p-2.5 glass-card hover:glow-on-hover opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl active:scale-95"
-                  disabled={product.stock === 0}
-                >
-                  <ShoppingCart className="text-foreground w-5 h-5" />
-                </button>
-              </div>
+  return (
+    <>
+      <Link
+        key={product.id}
+        to={`/product/${product.id}`}
+        className="glass-card hover:glow-on-hover group rounded-2xl overflow-hidden block"
+      >
+        {/* product image */}
+        <div className="relative overflow-hidden rounded-xl mb-4">
+          {product.images.length > 0 ? (
+            <img
+              src={product.images[0]?.url || product.images[0]}
+              alt={product.name}
+              className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+            />
+          ) : (
+            <div className="w-full h-48 bg-gray-200 animate-pulse" />
+          )}
+          {/* badges */}
+          <div className="absolute top-3 left-3 flex flex-col space-y-2">
+            {new Date() - new Date(product.created_at) <
+              30 * 24 * 60 * 60 * 1000 && (
+                <span className="bg-neutral-200 text-neutral-800 border border-neutral-300 dark:bg-white/20 dark:text-white dark:border-white/30 px-2 py-1 rounded-lg text-xs font-semibold">
+                  NEW
+                </span>
+              )}
+            {product.ratings >= 4.5 && (
+              <span className="bg-amber-500/90 text-white px-2 py-1 rounded-lg text-xs font-semibold shadow-md">
+                TOP RATED
+              </span>
+            )}
+          </div>
 
-              {/* product info */}
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-foreground transition-colors duration-300 line-clamp-2">{product.name}</h3>
-                <div className="flex items-center space-x-2 mb-2">
-                  <div className="flex items-center">
-                    {
-    
-                      [...Array(5)].map((_, i) => {
-                        return <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.ratings) ? 'text-amber-400 fill-amber-400' : 'text-neutral-500'}`}/>
-                      })
-                    }
-                  </div>
-                  <span className="text-sm text-muted-foreground ">({product.review_count})</span>
-                  </div>    
-                  {/* product price */}
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-foreground">₹{product.price}</span>
-                  </div>
-                  <div>
-                    <span className={`text-xs px-2 py-1 rounded-lg ${product.stock > 5 ? 'bg-green-500/20 text-green-500' : product.stock > 0 ? "bg-amber-500/20 text-amber-600" : "bg-red-500/20 text-red-500"}`}>{product.stock > 5 ? 'In Stock' : product.stock > 0 ?  "Limited Stock" : "Out of Stock"}</span>
-                  </div>
-                 
-              </div>
-            </Link>
-  
-  </>;
+          {/* Quick add to cart */}
+          <button
+            onClick={(e) => handleAddToCart(product, e)}
+            className="absolute bottom-3 right-3 p-2.5 glass-card hover:glow-on-hover opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl active:scale-95"
+            disabled={product.stock === 0}
+          >
+            <ShoppingCart className="text-foreground w-5 h-5" />
+          </button>
+        </div>
+
+        {/* product info */}
+        <div>
+          <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-foreground transition-colors duration-300 line-clamp-2">
+            {product.name}
+          </h3>
+          <div className="flex items-center space-x-2 mb-2">
+            <div className="flex items-center">
+              {[...Array(5)].map((_, i) => {
+                return (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${i < Math.floor(product.ratings)
+                        ? "text-amber-400 fill-amber-400"
+                        : "text-neutral-500"
+                      }`}
+                  />
+                );
+              })}
+            </div>
+            <span className="text-sm text-muted-foreground ">
+              ({product.review_count})
+            </span>
+          </div>
+          {/* product price */}
+          <div className="flex items-center space-x-2">
+            <span className="text-xl font-bold text-foreground">
+              ₹{product.price}
+            </span>
+          </div>
+          <div>
+            <span
+              className={`text-xs px-2 py-1 rounded-lg ${product.stock > 5
+                  ? "bg-green-500/20 text-green-500"
+                  : product.stock > 0
+                    ? "bg-amber-500/20 text-amber-600"
+                    : "bg-red-500/20 text-red-500"
+                }`}
+            >
+              {product.stock > 5
+                ? "In Stock"
+                : product.stock > 0
+                  ? "Limited Stock"
+                  : "Out of Stock"}
+            </span>
+          </div>
+        </div>
+      </Link>
+    </>
+  );
 };
 
 export default ProductCard;

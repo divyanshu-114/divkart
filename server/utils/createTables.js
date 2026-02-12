@@ -6,6 +6,7 @@ import { createProductReviewsTable } from "../models/productReviewsTable.js";
 import { createShippingInfoTable } from "../models/shippinginfoTable.js";
 import { createPaymentsTable } from "../models/paymentsTable.js";
 import { createUserTable } from "../models/userTable.js";
+import { createCartTable } from "../models/cartTable.js";
 
 export const createTables = async () => {
   try {
@@ -21,6 +22,7 @@ export const createTables = async () => {
     await createProductReviewsTable();  // reviews depend on products & users
     await createShippingInfoTable();    // shipping info (usually depends on orders)
     await createPaymentsTable();        // payments (depends on orders)
+    await createCartTable();            // carts (depends on users & products)
 
     console.log("✅ All tables created successfully");
   } catch (error) {

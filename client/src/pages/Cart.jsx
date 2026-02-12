@@ -1,26 +1,60 @@
 import { Plus, Minus, Trash2, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart, updateCartQuantity } from "../store/slices/cartSlice";
+import {
+  fetchCart,
+  removeFromCartAPI,
+  updateCartQuantityAPI,
+} from "../store/slices/cartSlice";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const { cart } = useSelector((state) => state.cart);
+  const navigate = useNavigate();
+  const { cart, loading } = useSelector((state) => state.cart);
   const { authUser } = useSelector((state) => state.auth);
-  const updateQuantity = (id, quantity) => {
-    console.log(quantity);
-    if (quantity <= 0) {
-      dispatch(removeFromCart(id));
-    } else {
-      dispatch(updateCartQuantity({ id, quantity }));
+
+  useEffect(() => {
+    if (authUser) {
+      dispatch(fetchCart());
     }
+  }, [dispatch, authUser]);
+
+  const updateQuantity = (id, quantity) => {
+    if (quantity <= 0) {
+      dispatch(removeFromCartAPI(id));
+    } else {
+      dispatch(updateCartQuantityAPI({ id, quantity }));
+    }
+  };
+
+  const handleRemove = (id) => {
+    dispatch(removeFromCartAPI(id));
   };
 
   let total = 0;
   if (cart) {
     total = cart.reduce(
-      (sum, item) => sum + item.product.price * item.quantity,
+      (sum, item) => sum + (item.product?.price || 0) * item.quantity,
       0
+    );
+  }
+
+  if (!authUser) {
+    return (
+      <div className="min-h-screen pt-20 flex items-center justify-center">
+        <div className="text-center glass-panel max-w-md rounded-2xl animate-scale-in p-8">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Please Login</h1>
+          <p className="text-muted-foreground mb-6">You need to be logged in to view your cart.</p>
+          <Link
+            to={"/login"}
+            className="inline-flex items-center space-x-2 px-6 py-3 rounded-lg text-primary-foreground gradient-primary hover:glow-on-hover animate-smooth font-semibold"
+          >
+            <span>Login Now</span>
+          </Link>
+        </div>
+      </div>
     );
   }
 
@@ -29,10 +63,14 @@ const Cart = () => {
     cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
   }
 
-  if (cart.length === 0) {
+  if (loading) {
+    return <div className="min-h-screen pt-20 flex items-center justify-center">Loading...</div>
+  }
+
+  if (!cart || cart.length === 0) {
     return (
       <div className="min-h-screen pt-20 flex items-center justify-center">
-        <div className="text-center glass-panel max-w-md rounded-2xl animate-scale-in">
+        <div className="text-center glass-panel max-w-md rounded-2xl animate-scale-in p-8">
           <h1 className="text-3xl font-bold text-foreground mb-4">
             Your Cart is Empty.
           </h1>
@@ -67,35 +105,38 @@ const Cart = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-4">
               {cart.map((item) => {
+                const product = item.product || {};
                 return (
-                  <div key={item.product.id} className="glass-card p-6 rounded-2xl animate-fade-in-up">
+                  <div key={item.id} className="glass-card p-6 rounded-2xl animate-fade-in-up">
                     <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6">
                       <Link
-                        to={`/product/${item.product.id}`}
+                        to={`/product/${product.id}`}
                         className="flex-shrink-0"
                       >
-                        <img
-                          src={item.product.images[0].url}
-                          alt={item.product.name}
-                          className="w-24 h-24 object-cover rounded-lg hover:scale-105 transition-transform"
-                        />
+                        {product.images && product.images.length > 0 ?
+                          <img
+                            src={product.images[0].url}
+                            alt={product.name}
+                            className="w-24 h-24 object-cover rounded-lg hover:scale-105 transition-transform"
+                          /> : <div className="w-24 h-24 bg-gray-200 rounded-lg" />
+                        }
                       </Link>
 
                       <div className="flex-1 min-w-0">
                         <Link
-                          to={`/product/${item.product.id}`}
+                          to={`/product/${product.id}`}
                           className="block hover:text-foreground transition-colors"
                         >
                           <h3 className="text-lg font-semibold text-foreground mb-1">
-                            {item.product.name}
+                            {product.name}
                           </h3>
                         </Link>
                         <p className="text-muted-foreground text-sm mb-2">
-                          Category: {item.product.category}
+                          Category: {product.category}
                         </p>
                         <div className="flex items-center space-x-2">
                           <span className="text-xl font-bold text-foreground">
-                            ${item.product.price}
+                            ${product.price}
                           </span>
                         </div>
                       </div>
@@ -105,7 +146,7 @@ const Cart = () => {
                           <button
                             disabled={item.quantity === 1}
                             onClick={() =>
-                              updateQuantity(item.product.id, item.quantity - 1)
+                              updateQuantity(item.id, item.quantity - 1)
                             }
                             className="p-2 glass-card hover:glow-on-hover animate-smooth"
                           >
@@ -116,7 +157,7 @@ const Cart = () => {
                           </span>
                           <button
                             onClick={() =>
-                              updateQuantity(item.product.id, item.quantity + 1)
+                              updateQuantity(item.id, item.quantity + 1)
                             }
                             className="p-2 glass-card hover:glow-on-hover animate-smooth"
                           >
@@ -126,7 +167,7 @@ const Cart = () => {
 
                         <button
                           onClick={() =>
-                            dispatch(removeFromCart(item.product.id))
+                            handleRemove(item.id)
                           }
                           className="p-2 glass-card hover:glow-on-hover animate-smooth text-destructive"
                         >
@@ -136,7 +177,7 @@ const Cart = () => {
 
                       <div className="text-right">
                         <p className="text-lg font-bold text-foreground">
-                          ${(item.product.price * item.quantity).toFixed(2)}
+                          ${(product.price * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -180,14 +221,12 @@ const Cart = () => {
                   </div>
                 </div>
 
-                {authUser && (
-                  <Link
-                    to={"/payment"}
-                    className="w-full block text-center py-4 gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth font-semibold mb-4"
-                  >
-                    Proceed to Checkout
-                  </Link>
-                )}
+                <Link
+                  to={"/payment"}
+                  className="w-full block text-center py-4 gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth font-semibold mb-4"
+                >
+                  Proceed to Checkout
+                </Link>
 
                 <Link
                   to={"/products"}

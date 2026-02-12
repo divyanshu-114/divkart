@@ -1,88 +1,137 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { axiosInstance } from "../../lib/axios";
+import { toast } from "react-toastify";
 
-/* ================= LOCAL STORAGE HELPERS ================= */
+/* ================= ASYNC THUNKS ================= */
 
-const loadCartFromStorage = () => {
-  try {
-    const storedCart = localStorage.getItem("cart");
-    return storedCart ? JSON.parse(storedCart) : [];
-  } catch (error) {
-    console.error("Failed to load cart from localStorage", error);
-    return [];
+export const fetchCart = createAsyncThunk(
+  "cart/fetchCart",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get("/cart");
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch cart");
+    }
   }
-};
+);
 
-const saveCartToStorage = (cart) => {
-  try {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  } catch (error) {
-    console.error("Failed to save cart to localStorage", error);
+export const addToCartAPI = createAsyncThunk(
+  "cart/addToCart",
+  async ({ product, quantity }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post("/cart/add", { productId: product.id, quantity });
+      toast.success("Added to cart");
+      return { ...res.data, product }; // Combine backend response with product details for store
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to add to cart");
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
   }
-};
+);
+
+export const updateCartQuantityAPI = createAsyncThunk(
+  "cart/updateCartQuantity",
+  async ({ id, quantity }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.put(`/cart/update/${id}`, { quantity });
+      return res.data;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update quantity");
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+  }
+);
+
+export const removeFromCartAPI = createAsyncThunk(
+  "cart/removeFromCart",
+  async (id, thunkAPI) => {
+    try {
+      await axiosInstance.delete(`/cart/remove/${id}`);
+      return id;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to remove item");
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+  }
+);
+
+export const clearCartAPI = createAsyncThunk(
+    "cart/clearCart",
+    async (_, thunkAPI) => {
+      try {
+        await axiosInstance.delete("/cart/clear");
+        return;
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Failed to clear cart");
+        return thunkAPI.rejectWithValue(error.response?.data?.message);
+      }
+    }
+  );
 
 /* ================= SLICE ================= */
 
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    cart: loadCartFromStorage(), // ✅ load cart on app start
+    cart: [],
+    loading: false,
+    error: null,
   },
   reducers: {
-    /* ADD TO CART */
-    addToCart: (state, action) => {
-      const { product, quantity } = action.payload;
-
-      const existingItem = state.cart.find(
-        (item) => item.product.id === product.id
-      );
-
-      if (existingItem) {
-        existingItem.quantity += quantity;
-      } else {
-        state.cart.push({ product, quantity });
-      }
-
-      saveCartToStorage(state.cart);
-    },
-
-    /* REMOVE FROM CART */
-    removeFromCart: (state, action) => {
-      state.cart = state.cart.filter(
-        (item) => item.product.id !== action.payload
-      );
-
-      saveCartToStorage(state.cart);
-    },
-
-    /* UPDATE QUANTITY */
-    updateCartQuantity: (state, action) => {
-      const { id, quantity } = action.payload;
-
-      const existingItem = state.cart.find(
-        (item) => item.product.id === id
-      );
-
-      if (existingItem) {
-        existingItem.quantity = quantity;
-        saveCartToStorage(state.cart);
-      }
-    },
-
-    /* CLEAR CART */
-    clearCart: (state) => {
+    clearCartState: (state) => {
       state.cart = [];
-      saveCartToStorage([]);
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      /* Fetch Cart */
+      .addCase(fetchCart.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cart = action.payload;
+      })
+      .addCase(fetchCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      /* Add to Cart */
+      .addCase(addToCartAPI.fulfilled, (state, action) => {
+        const item = action.payload;
+        // Verify if we need to merge or if backend handles it.
+        // Since we fetch the whole cart usually, or strict updates.
+        // For optimisitc UI or simple state update:
+        const existingItem = state.cart.find((i) => i.id === item.id);
+        if (existingItem) {
+            existingItem.quantity = item.quantity;
+        } else {
+            state.cart.push(item);
+        }
+      })
+
+      /* Update Quantity */
+      .addCase(updateCartQuantityAPI.fulfilled, (state, action) => {
+        const { id, quantity } = action.payload;
+        const item = state.cart.find((i) => i.id === id);
+        if (item) {
+          item.quantity = quantity;
+        }
+      })
+
+      /* Remove from Cart */
+      .addCase(removeFromCartAPI.fulfilled, (state, action) => {
+        state.cart = state.cart.filter((item) => item.id !== action.payload);
+      })
+
+      /* Clear Cart */
+      .addCase(clearCartAPI.fulfilled, (state) => {
+        state.cart = [];
+      });
   },
 });
 
-/* ================= EXPORTS ================= */
-
-export const {
-  addToCart,
-  removeFromCart,
-  updateCartQuantity,
-  clearCart,
-} = cartSlice.actions;
-
+export const { clearCartState } = cartSlice.actions;
 export default cartSlice.reducer;

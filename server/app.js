@@ -9,6 +9,7 @@ import authRouter from "./router/authRoutes.js";
 import productRouter from "./router/productRoutes.js";
 import adminRouter from "./router/adminRoutes.js";
 import orderRouter from "./router/orderRoutes.js";
+import cartRouter from "./router/cartRoutes.js";
 // import Stripe from "stripe";
 import pool from "./database/db.js";
 import crypto from "crypto";
@@ -97,9 +98,14 @@ app.post(
 
         const orderId = result.rows[0].order_id;
 
-        await pool.query(`UPDATE orders SET paid_at = NOW() WHERE id = $1`, [
+        const updateOrder = await pool.query(`UPDATE orders SET paid_at = NOW() WHERE id = $1 RETURNING buyer_id`, [
           orderId,
         ]);
+
+        if (updateOrder.rows.length > 0) {
+            const buyerId = updateOrder.rows[0].buyer_id;
+            await pool.query(`DELETE FROM carts WHERE user_id = $1`, [buyerId]);
+        }
 
         const items = await pool.query(
           `SELECT product_id, quantity FROM order_items WHERE order_id = $1`,
@@ -143,6 +149,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/order", orderRouter);
+app.use("/api/v1/cart", cartRouter);
 
 createTables();
 

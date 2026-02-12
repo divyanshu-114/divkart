@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import ReviewsContainer from "../components/Products/ReviewsContainer";
-import { addToCart } from "../store/slices/cartSlice";
+import { addToCartAPI } from "../store/slices/cartSlice";
 import { fetchProductDetails } from "../store/slices/productSlice";
 import { toast } from "react-toastify";
 
@@ -21,12 +21,19 @@ const ProductDetail = () => {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.product?.productDetails);
   const { loading, productReviews } = useSelector((state) => state.product);
+  const { authUser } = useSelector((state) => state.auth);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
+  const navigateTo = useNavigate();
 
   const handleAddToCart = () => {
-    dispatch(addToCart({ product, quantity }));
+    if (!authUser) {
+      toast.error("Please login to add items to cart");
+      navigateTo("/login");
+      return;
+    }
+    dispatch(addToCartAPI({ product, quantity }));
   };
 
   const handleCopyURL = () => {
@@ -40,9 +47,14 @@ const ProductDetail = () => {
         console.error("Failed to copy:", err);
       });
   };
-  const navigateTo = useNavigate();
+
   const handleBuyNow = () => {
-    dispatch(addToCart({ product, quantity }));
+    if (!authUser) {
+      toast.error("Please login to buy items");
+      navigateTo("/login");
+      return;
+    }
+    dispatch(addToCartAPI({ product, quantity }));
     navigateTo("/payment");
   };
 
@@ -97,11 +109,10 @@ const ProductDetail = () => {
                       <button
                         key={index}
                         onClick={() => setSelectedImage(index)}
-                        className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                          selectedImage === index
+                        className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${selectedImage === index
                             ? "border-foreground"
                             : "border-transparent"
-                        }`}
+                          }`}
                       >
                         <img
                           src={image?.url}
@@ -119,10 +130,10 @@ const ProductDetail = () => {
                 <div className="flex space-x-2 mb-4">
                   {new Date() - new Date(product.created_at) <
                     30 * 24 * 60 * 60 * 1000 && (
-                    <span className="px-2 py-1 bg-neutral-200 text-neutral-800 dark:bg-white/20 dark:text-white border border-neutral-300 dark:border-white/30 text-xs font-semibold rounded-lg">
-                      NEW
-                    </span>
-                  )}
+                      <span className="px-2 py-1 bg-neutral-200 text-neutral-800 dark:bg-white/20 dark:text-white border border-neutral-300 dark:border-white/30 text-xs font-semibold rounded-lg">
+                        NEW
+                      </span>
+                    )}
                   {product.ratings >= 4.5 && (
                     <span className="px-2 py-1 bg-gradient-to-r from-yellow-400 to-rose-500 text-white  bg-primary text-primary-foreground text-xs font-semibold rounded">
                       TOP RATED
@@ -138,11 +149,10 @@ const ProductDetail = () => {
                       return (
                         <Star
                           key={i}
-                          className={`w-4 h-4 ${
-                            i < Math.floor(product.ratings)
+                          className={`w-4 h-4 ${i < Math.floor(product.ratings)
                               ? "text-amber-400 fill-amber-400"
                               : "text-neutral-500"
-                          }`}
+                            }`}
                         />
                       );
                     })}
@@ -164,19 +174,18 @@ const ProductDetail = () => {
                     Category: {product.category}
                   </span>
                   <span
-                    className={`px-3 py-1 rounded text-sm ${
-                      product.stock > 5
+                    className={`px-3 py-1 rounded text-sm ${product.stock > 5
                         ? "bg-green-500/20 text-green-400"
                         : product.stock > 0
-                        ? "bg-yellow-500/20 text-yellow-400"
-                        : "bg-red-500/20 text-red-400"
-                    }`}
+                          ? "bg-yellow-500/20 text-yellow-400"
+                          : "bg-red-500/20 text-red-400"
+                      }`}
                   >
                     {product.stock > 5
                       ? "In Stock"
                       : product.stock > 0
-                      ? "Limited Stock"
-                      : "Out of Stock"}
+                        ? "Limited Stock"
+                        : "Out of Stock"}
                   </span>
                 </div>
                 <div className="glass-card p-6 mb-6">
@@ -243,11 +252,10 @@ const ProductDetail = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-6 py-4 font-medium capitalize transition-all duration-300 rounded-t-lg ${
-                      activeTab === tab
+                    className={`px-6 py-4 font-medium capitalize transition-all duration-300 rounded-t-lg ${activeTab === tab
                         ? "text-foreground border-b-2 border-foreground bg-secondary"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                    }`}
+                      }`}
                   >
                     {tab}
                   </button>
