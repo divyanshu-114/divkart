@@ -32,6 +32,11 @@ const Products = () => {
 
   const dispatch = useDispatch();
 
+  // Reset to page 1 whenever any filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, priceRange, searchQuery, selectedRating, availability]);
+
   useEffect(() => {
     dispatch(
       fetchAllProducts({
@@ -71,9 +76,8 @@ const Products = () => {
 
             {/* SIDEBAR FILTERS */}
             <div
-              className={`lg:block ${
-                isMobileFilterOpen ? "block" : "hidden"
-              } w-full lg:w-80 space-y-6`}
+              className={`lg:block ${isMobileFilterOpen ? "block" : "hidden"
+                } w-full lg:w-80 space-y-6`}
             >
               <div className="glass-panel">
                 <h2 className="text-xl font-semibold text-foreground  mb-6">
@@ -118,21 +122,19 @@ const Products = () => {
                               selectedRating === rating ? 0 : rating
                             )
                           }
-                          className={`flex items-center space-x-2 w-full p-2 rounded ${
-                            selectedRating === rating
+                          className={`flex items-center space-x-2 w-full p-2 rounded ${selectedRating === rating
                               ? "bg-neutral-200 dark:bg-white/10"
                               : "hover:bg-secondary"
-                          }`}
+                            }`}
                         >
                           {[...Array(5)].map((_, i) => {
                             return (
                               <Star
                                 key={i}
-                                className={`w-4 h-4 ${
-                                  i < rating
+                                className={`w-4 h-4 ${i < rating
                                     ? "text-amber-400 fill-amber-400"
                                     : "text-neutral-500"
-                                }`}
+                                  }`}
                               />
                             );
                           })}
@@ -157,17 +159,16 @@ const Products = () => {
                               availability === status ? "" : status
                             )
                           }
-                          className={`w-full p-2 text-left rounded ${
-                            availability === status
+                          className={`w-full p-2 text-left rounded ${availability === status
                               ? "bg-neutral-200 dark:bg-white/10"
                               : "hover:bg-secondary"
-                          }`}
+                            }`}
                         >
                           {status === "in-stock"
                             ? "In Stock"
                             : status === "limited"
-                            ? "Limited Stock"
-                            : "Out of Stock"}
+                              ? "Limited Stock"
+                              : "Out of Stock"}
                         </button>
                       );
                     })}
@@ -182,11 +183,10 @@ const Products = () => {
                   <div className="space-y-2">
                     <button
                       onClick={() => setSelectedCategory("")}
-                      className={`w-full p-2 text-left rounded ${
-                        !selectedCategory
+                      className={`w-full p-2 text-left rounded ${!selectedCategory
                           ? "bg-neutral-200 dark:bg-white/10"
                           : "hover:bg-secondary"
-                      }`}
+                        }`}
                     >
                       All Categories
                     </button>
@@ -195,11 +195,10 @@ const Products = () => {
                         <button
                           key={category.id}
                           onClick={() => setSelectedCategory(category.name)}
-                          className={`w-full p-2 text-left rounded ${
-                            selectedCategory === category.name
+                          className={`w-full p-2 text-left rounded ${selectedCategory === category.name
                               ? "bg-neutral-200 dark:bg-white/10"
                               : "hover:bg-secondary"
-                          }`}
+                            }`}
                         >
                           {category.name}
                         </button>

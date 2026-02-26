@@ -12,7 +12,7 @@ const Navbar = () => {
 
   let cartItemsCount = 0;
 
-  if(cart){
+  if (cart) {
     cartItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   }
   return <>
@@ -21,27 +21,27 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* left hamburger menu */}
           <button onClick={() => dispatch(toggleSidebar())} className="p-2.5 rounded-xl hover:bg-secondary/80 active:scale-95 transition-all duration-200">
-            <Menu className="w-6 h-6 text-foreground"/>
+            <Menu className="w-6 h-6 text-foreground" />
           </button>
           {/* center logo */}
-            <div className="flex-1 flex justify-center">
-              <h1 className="text-2xl font-bold text-foreground tracking-tight">Divkart</h1>
-            </div>
-            {/* right side icons*/}
+          <div className="flex-1 flex justify-center">
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Divkart</h1>
+          </div>
+          {/* right side icons*/}
           <div className="flex items-center space-x-1">
             {/* toggle theme */}
             <button onClick={toggleTheme} className="p-2.5 rounded-xl hover:bg-secondary/80 active:scale-95 transition-all duration-200">
-              {theme === "dark" ? (<Sun className="w-5 h-5 text-foreground"/>) : (<Moon className="w-5 h-5 text-foreground"/>)}
+              {theme === "dark" ? (<Sun className="w-5 h-5 text-foreground" />) : (<Moon className="w-5 h-5 text-foreground" />)}
             </button>
 
             {/* search overlay */}
             <button onClick={() => dispatch(toggleSearchBar())} className="p-2.5 rounded-xl hover:bg-secondary/80 active:scale-95 transition-all duration-200">
-              <Search className="w-5 h-5 text-foreground"/>
+              <Search className="w-5 h-5 text-foreground" />
             </button>
 
             {/* user profile */}
-             <button onClick={() => dispatch(toggleAuthPopup())} className="p-2.5 rounded-xl hover:bg-secondary/80 active:scale-95 transition-all duration-200">
-              <User className="w-5 h-5 text-foreground"/>
+            <button onClick={() => dispatch(toggleAuthPopup())} className="p-2.5 rounded-xl hover:bg-secondary/80 active:scale-95 transition-all duration-200">
+              <User className="w-5 h-5 text-foreground" />
             </button>
 
             {/* cart */}
@@ -61,8 +61,8 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
-  
-  
+
+
   </>;
 };
 
