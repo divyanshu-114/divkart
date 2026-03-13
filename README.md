@@ -1,5 +1,5 @@
 - 🌐 **Live Website:** https://divkart.vercel.app/
-- 📊 **Admin Dashboard:** divkart-4a9m.vercel.app  ( Use divyanshu.singh.1879@gmail.com as email and 12345678 as password )
+- 📊 **Admin Dashboard:** https://divkart-4a9m.vercel.app  ( Use divyanshu.singh.1879@gmail.com as email and 12345678 as password )
 
 
 
