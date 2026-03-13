@@ -1,3 +1,10 @@
+- 🌐 **Live Website:** https://divkart.vercel.app/
+- 📊 **Admin Dashboard:** https://divkart-4a9m.vercel.app/login  ( Use divyanshu.singh.1879@gmail.com as email and 12345678 as password )
+
+
+
+
+
 🛍️ divkart – AI Powered Ecommerce Store
 
 An advanced full-stack ecommerce platform built with Node.js, React, PostgreSQL, Razorpay, Cloudinary, and Gemini AI for intelligent product search and recommendations.
