@@ -14,15 +14,25 @@ const Payment = () => {
   const { cart } = useSelector((state) => state.cart);
   const { orderStep, razorpayOrder } = useSelector((state) => state.order);
 
-  const [shippingDetails, setShippingDetails] = useState({
-    fullName: "",
-    state: "Delhi",
-    phone: "",
-    address: "",
-    city: "",
-    zipCode: "",
-    country: "India",
+  const [shippingDetails, setShippingDetails] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem("checkout_shipping_details");
+      if (saved) return JSON.parse(saved);
+    } catch(e) {}
+    return {
+      fullName: "",
+      state: "Delhi",
+      phone: "",
+      address: "",
+      city: "",
+      zipCode: "",
+      country: "India",
+    };
   });
+
+  useEffect(() => {
+    sessionStorage.setItem("checkout_shipping_details", JSON.stringify(shippingDetails));
+  }, [shippingDetails]);
 
   // ✅ Prevent Razorpay popup from opening twice (React StrictMode)
   const paymentOpenedRef = useRef(false);
@@ -106,6 +116,12 @@ const Payment = () => {
       theme: {
         color: "#6366f1",
       },
+      modal: {
+        ondismiss: function () {
+          toast.info("Payment window closed.");
+          paymentOpenedRef.current = false;
+        }
+      }
     };
 
     const rzp = new window.Razorpay(options);
@@ -367,8 +383,30 @@ const Payment = () => {
                     <h2 className="text-xl font-semibold text-foreground mb-2">
                       Opening Payment Gateway…
                     </h2>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground mb-4">
                       Please complete the payment in Razorpay popup.
+                    </p>
+                    <button
+                      onClick={() => {
+                        paymentOpenedRef.current = false;
+                        dispatch(placeOrder(new FormData())); // Or a simpler retry mechanism, better yet, just trigger the effect again by resetting ref and setting orderStep to 2
+                      }}
+                      className="hidden"
+                    ></button>
+                    <button
+                      onClick={() => {
+                         if (window.Razorpay) {
+                            paymentOpenedRef.current = false;
+                            // small hack: we force re-render by doing nothing and letting the component re-read the already available states
+                            setShippingDetails({ ...shippingDetails });
+                         }
+                      }}
+                      className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-all font-semibold"
+                    >
+                      Retry Payment
+                    </button>
+                    <p className="mt-4 text-sm text-muted-foreground">
+                      Want to change details? <button onClick={() => dispatch({ type: 'order/resetOrderStep' })} className="text-primary underline">Go back</button>
                     </p>
                   </div>
                 )}

@@ -68,10 +68,12 @@ export const updateCartItem = async (req, res) => {
     const { id } = req.params;
     const { quantity } = req.body;
 
+    const userId = req.user.id;
+
     try {
         const result = await pool.query(
-            "UPDATE carts SET quantity = $1 WHERE id = $2 RETURNING *",
-            [quantity, id]
+            "UPDATE carts SET quantity = $1 WHERE id = $2 AND user_id = $3 RETURNING *",
+            [quantity, id, userId]
         );
 
         if (result.rows.length === 0) {
@@ -87,10 +89,12 @@ export const updateCartItem = async (req, res) => {
 export const removeFromCart = async (req, res) => {
     const { id } = req.params;
 
+    const userId = req.user.id;
+
     try {
         const result = await pool.query(
-            "DELETE FROM carts WHERE id = $1 RETURNING *",
-            [id]
+            "DELETE FROM carts WHERE id = $1 AND user_id = $2 RETURNING *",
+            [id, userId]
         );
 
          if (result.rows.length === 0) {

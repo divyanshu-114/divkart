@@ -177,10 +177,19 @@ GROUP BY o.id, s.id;
     [orderId]
   );
 
+  const order = result.rows[0];
+  if (!order) {
+    return next(new ErrorHandler("Order not found.", 404));
+  }
+
+  if (order.buyer_id !== req.user.id && req.user.role !== "Admin") {
+    return next(new ErrorHandler("Not authorized to view this order.", 403));
+  }
+
   res.status(200).json({
     success: true,
     message: "Order fetched.",
-    orders: result.rows[0],
+    orders: order,
   });
 });
 

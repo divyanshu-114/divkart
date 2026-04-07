@@ -18,6 +18,7 @@ const Cart = () => {
   useEffect(() => {
     if (authUser) {
       dispatch(fetchCart());
+      dispatch({ type: 'order/resetOrderStep' });
     }
   }, [dispatch, authUser]);
 

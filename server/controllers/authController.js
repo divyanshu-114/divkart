@@ -81,7 +81,7 @@ export const logout = catchAsyncErrors(async(req, res, next) => {
 
 export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const { email } = req.body;
-  const { frontendUrl } = req.query;
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
   let userResult = await pool.query(
     `SELECT * FROM users WHERE email = $1`,
     [email]
@@ -199,6 +199,17 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   if (name.trim().length === 0 || email.trim().length === 0) {
     return next(new ErrorHandler("Name and email cannot be empty.", 400));
   }
+
+  if (email !== req.user.email) {
+    const isEmailTaken = await pool.query(
+      "SELECT id FROM users WHERE email = $1",
+      [email]
+    );
+    if (isEmailTaken.rows.length > 0) {
+      return next(new ErrorHandler("Email is already in use by another account.", 400));
+    }
+  }
+
   let avatarData = {};
   if (req.files && req.files.avatar) {
     const { avatar } = req.files;

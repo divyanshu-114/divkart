@@ -15,6 +15,11 @@ export const isAuthenticated = catchAsyncErrors(async(req, res, next) => {
     }
 
     const user = await pool.query(`select * from users where id = $1 LIMIT 1`, [decoded.id]);
+    
+    if (user.rows.length === 0) {
+        return next(new ErrorHandler("User not found or token invalid", 401));
+    }
+
     req.user = user.rows[0];
     next();
 });
