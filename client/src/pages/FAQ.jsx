@@ -31,30 +31,30 @@ const FAQ = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pt-20">
+    <div className="min-h-screen bg-background pt-24">
       <div className="max-w-3xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Frequently Asked Questions</h1>
-          <p className="text-xl text-muted-foreground">Find answers to common questions</p>
+        <div className="text-center mb-16">
+          <h1 className="text-2xl font-bold uppercase tracking-[0.2em] text-foreground mb-6">Frequently Asked Questions</h1>
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Find answers to common questions</p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {faqs.map((faq, index) => (
-            <div key={index} className="bg-secondary rounded-xl overflow-hidden">
+            <div key={index} className="border border-border">
               <button
                 onClick={() => toggleItem(index)}
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-secondary transition-colors"
+                className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-secondary/50 transition-colors"
               >
-                <h3 className="font-semibold text-foreground">{faq.question}</h3>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-foreground">{faq.question}</h3>
                 {openItems[index] ? (
-                  <ChevronUp className="w-5 h-5 text-foreground" />
+                  <ChevronUp className="w-4 h-4 text-foreground ml-4 shrink-0" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-foreground" />
+                  <ChevronDown className="w-4 h-4 text-foreground ml-4 shrink-0" />
                 )}
               </button>
               {openItems[index] && (
-                <div className="px-6 pb-4">
-                  <p className="text-muted-foreground">{faq.answer}</p>
+                <div className="px-8 pb-6 border-t border-border pt-6 bg-secondary/20">
+                  <p className="text-sm text-foreground/80 leading-relaxed">{faq.answer}</p>
                 </div>
               )}
             </div>

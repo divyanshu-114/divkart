@@ -62,34 +62,34 @@ const Products = () => {
 
   return (
     <>
-      <div className="min-h-screen pt-20 animate-fade-in">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col lg:flex-row gap-8">
+      <div className="min-h-screen pt-24 animate-fade-in bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row gap-12">
             {/* MOBILE FILTER TOGGLE */}
             <button
               onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
-              className="lg:hidden mb-4 p-3 glass-card hover:glow-on-hover animate-smooth flex items-center space-x-2"
+              className="lg:hidden mb-4 p-4 border border-border flex items-center justify-center space-x-2 text-xs font-bold uppercase tracking-widest text-foreground hover:bg-secondary transition-colors"
             >
-              <Filter className="w-5 h-5" />
+              <Filter className="w-4 h-4" strokeWidth={1.5} />
               <span>Filters</span>
             </button>
 
             {/* SIDEBAR FILTERS */}
             <div
               className={`lg:block ${isMobileFilterOpen ? "block" : "hidden"
-                } w-full lg:w-80 space-y-6`}
+                } w-full lg:w-72 space-y-10`}
             >
-              <div className="glass-panel">
-                <h2 className="text-xl font-semibold text-foreground  mb-6">
+              <div className="border-r border-transparent lg:border-border lg:pr-8">
+                <h2 className="text-sm font-bold text-foreground mb-8 uppercase tracking-[0.2em] border-b border-border pb-4">
                   Filters
                 </h2>
 
                 {/* PRICE RANGE */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-medium text-foreground mb-3">
+                <div className="mb-10">
+                  <h3 className="text-xs font-bold text-foreground/70 mb-4 uppercase tracking-widest">
                     Price Range
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-4">
                     <input
                       type="range"
                       min="0"
@@ -98,9 +98,9 @@ const Products = () => {
                       onChange={(e) =>
                         setPriceRange([priceRange[0], parseInt(e.target.value)])
                       }
-                      className="w-full"
+                      className="w-full accent-foreground"
                     />
-                    <div className="flex justify-between text-sm text-muted-foreground">
+                    <div className="flex justify-between text-xs font-bold tracking-widest text-foreground">
                       <span>${priceRange[0]}</span>
                       <span>${priceRange[1]}</span>
                     </div>
@@ -108,11 +108,11 @@ const Products = () => {
                 </div>
 
                 {/* RATING */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-medium text-foreground mb-3">
+                <div className="mb-10">
+                  <h3 className="text-xs font-bold text-foreground/70 mb-4 uppercase tracking-widest">
                     Rating
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {[4, 3, 2, 1].map((rating) => {
                       return (
                         <button
@@ -122,18 +122,18 @@ const Products = () => {
                               selectedRating === rating ? 0 : rating
                             )
                           }
-                          className={`flex items-center space-x-2 w-full p-2 rounded ${selectedRating === rating
-                              ? "bg-neutral-200 dark:bg-white/10"
-                              : "hover:bg-secondary"
+                          className={`flex items-center space-x-2 w-full p-2 transition-colors ${selectedRating === rating
+                              ? "bg-foreground/5 text-foreground"
+                              : "hover:bg-secondary text-foreground/70"
                             }`}
                         >
                           {[...Array(5)].map((_, i) => {
                             return (
                               <Star
                                 key={i}
-                                className={`w-4 h-4 ${i < rating
-                                    ? "text-amber-400 fill-amber-400"
-                                    : "text-neutral-500"
+                                className={`w-3.5 h-3.5 ${i < rating
+                                    ? "text-foreground fill-foreground"
+                                    : "text-neutral-300"
                                   }`}
                               />
                             );
@@ -145,11 +145,11 @@ const Products = () => {
                 </div>
 
                 {/* AVAILABILITY */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-medium text-foreground mb-3">
+                <div className="mb-10">
+                  <h3 className="text-xs font-bold text-foreground/70 mb-4 uppercase tracking-widest">
                     Availability
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {["in-stock", "limited", "out-of-stock"].map((status) => {
                       return (
                         <button
@@ -159,16 +159,12 @@ const Products = () => {
                               availability === status ? "" : status
                             )
                           }
-                          className={`w-full p-2 text-left rounded ${availability === status
-                              ? "bg-neutral-200 dark:bg-white/10"
-                              : "hover:bg-secondary"
+                          className={`w-full p-2 text-left text-xs uppercase tracking-widest font-semibold transition-colors ${availability === status
+                              ? "bg-foreground/5 text-foreground"
+                              : "hover:bg-secondary text-foreground/70"
                             }`}
                         >
-                          {status === "in-stock"
-                            ? "In Stock"
-                            : status === "limited"
-                              ? "Limited Stock"
-                              : "Out of Stock"}
+                          {status.replace("-", " ")}
                         </button>
                       );
                     })}
@@ -176,16 +172,16 @@ const Products = () => {
                 </div>
 
                 {/* CATEGORY */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-medium text-foreground mb-3">
+                <div className="mb-10">
+                  <h3 className="text-xs font-bold text-foreground/70 mb-4 uppercase tracking-widest">
                     Category
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <button
                       onClick={() => setSelectedCategory("")}
-                      className={`w-full p-2 text-left rounded ${!selectedCategory
-                          ? "bg-neutral-200 dark:bg-white/10"
-                          : "hover:bg-secondary"
+                      className={`w-full p-2 text-left text-xs uppercase tracking-widest font-semibold transition-colors ${!selectedCategory
+                          ? "bg-foreground/5 text-foreground"
+                          : "hover:bg-secondary text-foreground/70"
                         }`}
                     >
                       All Categories
@@ -195,12 +191,12 @@ const Products = () => {
                         <button
                           key={category.id}
                           onClick={() => setSelectedCategory(category.name)}
-                          className={`w-full p-2 text-left rounded ${selectedCategory === category.name
-                              ? "bg-neutral-200 dark:bg-white/10"
-                              : "hover:bg-secondary"
+                          className={`w-full p-2 text-left text-xs uppercase tracking-widest font-semibold transition-colors truncate gap-2 ${selectedCategory === category.name
+                              ? "bg-foreground/5 text-foreground"
+                              : "hover:bg-secondary text-foreground/70"
                             }`}
                         >
-                          {category.name}
+                           {category.name}
                         </button>
                       );
                     })}
@@ -212,37 +208,27 @@ const Products = () => {
             {/* MAIN CONTENT */}
             <div className="flex-1">
               {/* SEARCH BAR */}
-              <div className="mb-8 flex max-[440px]:flex-col  items-center gap-2">
-                <div className="relative w-[-webkit-fill-available]">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <div className="mb-10 flex max-[440px]:flex-col items-center gap-4 border-b border-border pb-6">
+                <div className="relative w-full">
                   <input
                     type="text"
-                    placeholder="Search Products..."
+                    placeholder="SEARCH COLLECTION"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground placeholder-muted-foreground transition-all"
+                    className="w-full bg-transparent border-none focus:outline-none focus:ring-0 text-foreground placeholder-foreground/40 text-xl tracking-[0.1em] transition-all font-light"
                   />
                 </div>
                 <button
-                  className="relative inline-flex items-center justify-center p-0.5 
-                overflow-hidden text-sm font-medium text-gray-900 rounded-lg group 
-                bg-neutral-800 hover:bg-neutral-700 dark:bg-neutral-700 dark:hover:bg-neutral-600 
-                focus:ring-4 focus:outline-none focus:ring-neutral-500 max-[440px]:min-w-full min-w-[132px]"
+                  className="flex items-center justify-center p-3 px-6 whitespace-nowrap bg-foreground text-background text-xs font-bold uppercase tracking-widest hover:opacity-80 transition-opacity"
                   onClick={() => dispatch(toggleAIModal())}
                 >
-                  <span
-                    className="relative w-full px-5 py-3 transition-all ease-in duration-75 
-                bg-white dark:bg-neutral-800 rounded-md group-hover:bg-transparent 
-                group-hover:dark:bg-transparent flex justify-center items-center gap-2 text-foreground"
-                  >
-                    <Sparkles className="w-5 h-5" />
-                    <span>AI Search</span>
-                  </span>
+                  <Sparkles className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                  <span>AI Search</span>
                 </button>
               </div>
 
               {/* PRODUCTS GRID */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mb-12">
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -250,17 +236,19 @@ const Products = () => {
 
               {/* PAGINATION */}
               {totalPages > 1 && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                />
+                <div className="border-t border-border pt-8 mt-12 pb-12">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                  />
+                </div>
               )}
 
               {/* No Results */}
               {products.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground text-lg">
+                <div className="text-center py-24 border border-border border-dashed">
+                  <p className="text-foreground text-sm uppercase tracking-[0.2em] font-medium">
                     No products found matching your criteria.
                   </p>
                 </div>

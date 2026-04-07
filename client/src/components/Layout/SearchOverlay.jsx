@@ -22,38 +22,38 @@ const SearchOverlay = () => {
 
   return <>
   <div className="fixed inset-0 z-50">
-    {/* glass background */}
-    <div className="absolute inset-0 backdrop-blur-xl bg-black/60 animate-fade-in">
-      {/* search container */}
-      <div className="relative z-10 animate-slide-in-top">
-        <div className="glass-panel m-6 max-w-2xl mx-auto rounded-2xl">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-foreground">Search Products</h2>
-            <button onClick={()=>dispatch(toggleSearchBar())} className="p-2 rounded-lg glass-card hover:glow-on-hover animate-smooth"><X className="w-5 h-5 text-black"/></button>
-          </div>
+    <div className="absolute inset-0 bg-background/90 backdrop-blur-sm animate-fade-in" onClick={()=>dispatch(toggleSearchBar())}></div>
+    
+    <div className="relative z-10 w-full bg-background border-b border-border shadow-2xl animate-slide-in-top">
+      <div className="max-w-4xl mx-auto p-6 md:p-12">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground">Search Collection</h2>
+          <button onClick={()=>dispatch(toggleSearchBar())} className="p-2 text-foreground hover:opacity-60 transition-opacity flex items-center justify-center">
+            <X className="w-6 h-6" strokeWidth={1} />
+          </button>
+        </div>
 
-          <div className="relative">
-            {/* dsearch icon button */}
-            <button onClick={handleSearch} className="absolute top-1/2 left-4 transform -translate-y-1/2 w-5 h-5 text-muted-foreground">
-               <Search className="w-5 h-5 text-foreground" />
-            </button>
-            <input type='text' placeholder="search for products..." value={searchQuery} 
+        <div className="relative border-b-2 border-foreground mb-8">
+          <button onClick={handleSearch} className="absolute right-0 top-1/2 transform -translate-y-1/2 p-2 text-foreground hover:opacity-60 transition-opacity">
+            <Search className="w-6 h-6" strokeWidth={1} />
+          </button>
+          <input 
+            type='text' 
+            placeholder="WHAT ARE YOU LOOKING FOR?" 
+            value={searchQuery} 
             onChange={(e) => setSearchQuery(e.target.value)} 
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="w-full pl-12 pr-4 py-4 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground placeholder-muted-foreground transition-all"
+            className="w-full pr-12 py-4 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground placeholder-foreground/40 text-xl tracking-widest font-light uppercase transition-all"
             autoFocus
-            />
-          </div>
+          />
+        </div>
 
-          <div className="mt-6 text-center text-yellow">
-            <p>Start typing to search for products...</p>
-          </div>
-
+        <div className="text-center">
+          <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Start typing to explore products</p>
         </div>
       </div>
     </div>
   </div>
-  
   </>;
 };
 

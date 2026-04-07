@@ -44,13 +44,13 @@ const Cart = () => {
 
   if (!authUser) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center">
-        <div className="text-center glass-panel max-w-md rounded-2xl animate-scale-in p-8">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Please Login</h1>
-          <p className="text-muted-foreground mb-6">You need to be logged in to view your cart.</p>
+      <div className="min-h-screen pt-32 pb-20 flex items-center justify-center bg-background">
+        <div className="text-center w-full max-w-xl mx-auto p-12 border border-border">
+          <h1 className="text-lg font-bold uppercase tracking-[0.2em] text-foreground mb-6">Please Login</h1>
+          <p className="text-xs tracking-widest uppercase font-semibold text-muted-foreground mb-10">You need to be logged in to view your cart.</p>
           <Link
             to={"/login"}
-            className="inline-flex items-center space-x-2 px-6 py-3 rounded-lg text-primary-foreground gradient-primary hover:glow-on-hover animate-smooth font-semibold"
+            className="inline-flex justify-center w-full px-8 py-4 bg-foreground text-background font-bold text-xs tracking-widest uppercase transition-opacity hover:opacity-80"
           >
             <span>Login Now</span>
           </Link>
@@ -65,24 +65,24 @@ const Cart = () => {
   }
 
   if (loading) {
-    return <div className="min-h-screen pt-20 flex items-center justify-center">Loading...</div>
+    return <div className="min-h-screen pt-32 flex justify-center text-xs tracking-widest uppercase font-bold text-muted-foreground">Loading...</div>
   }
 
   if (!cart || cart.length === 0) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center">
-        <div className="text-center glass-panel max-w-md rounded-2xl animate-scale-in p-8">
-          <h1 className="text-3xl font-bold text-foreground mb-4">
+      <div className="min-h-screen pt-32 pb-20 flex items-center justify-center bg-background">
+        <div className="text-center w-full max-w-xl mx-auto p-12 border border-border">
+          <h1 className="text-lg font-bold uppercase tracking-[0.2em] text-foreground mb-6">
             Your Cart is Empty.
           </h1>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-xs tracking-widest uppercase font-semibold text-muted-foreground mb-10">
             Looks like you have not added any items to your cart yet.
           </p>
           <Link
             to={"/products"}
-            className="inline-flex items-center space-x-2 px-6 py-3 rounded-lg text-primary-foreground gradient-primary hover:glow-on-hover animate-smooth font-semibold"
+            className="inline-flex items-center justify-center w-full space-x-3 px-8 py-4 bg-foreground text-background font-bold text-xs tracking-widest uppercase transition-opacity hover:opacity-80"
           >
-            <span>Continue Shopping</span> <ArrowRight className="w-5 h-5" />
+            <span>Continue Shopping</span> <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
@@ -91,95 +91,93 @@ const Cart = () => {
 
   return (
     <>
-      <div className="min-h-screen pt-20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">
+      <div className="min-h-screen pt-24 pb-20 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="mb-12 border-b border-border pb-6 flex items-baseline justify-between">
+            <h1 className="text-2xl font-bold uppercase tracking-[0.2em] text-foreground">
               Shopping Cart
             </h1>
-            <p className="text-muted-foreground">
-              {cartItemsCount} item{cartItemsCount !== 1 ? "s" : ""} in your
-              cart
+            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              {cartItemsCount} item{cartItemsCount !== 1 ? "s" : ""}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+            <div className="lg:col-span-2 space-y-0">
               {cart.map((item) => {
                 const product = item.product || {};
                 return (
-                  <div key={item.id} className="glass-card p-6 rounded-2xl animate-fade-in-up">
-                    <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6">
+                  <div key={item.id} className="border-b border-border pb-8 mb-8 animate-fade-in-up">
+                    <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-8">
                       <Link
                         to={`/product/${product.id}`}
                         className="flex-shrink-0"
                       >
                         {product.images && product.images.length > 0 ?
                           <img
-                            src={product.images[0].url}
-                            alt={product.name}
-                            className="w-24 h-24 object-cover rounded-lg hover:scale-105 transition-transform"
-                          /> : <div className="w-24 h-24 bg-gray-200 rounded-lg" />
+                          src={product?.images?.[0]?.url || product?.images?.[0] || "/placeholder.jpg"}
+                          alt={product.name}
+                            className="w-32 h-40 object-cover"
+                          /> : <div className="w-32 h-40 bg-secondary" />
                         }
                       </Link>
 
-                      <div className="flex-1 min-w-0">
-                        <Link
-                          to={`/product/${product.id}`}
-                          className="block hover:text-foreground transition-colors"
-                        >
-                          <h3 className="text-lg font-semibold text-foreground mb-1">
-                            {product.name}
-                          </h3>
-                        </Link>
-                        <p className="text-muted-foreground text-sm mb-2">
-                          Category: {product.category}
-                        </p>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-xl font-bold text-foreground">
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div>
+                          <Link
+                            to={`/product/${product.id}`}
+                            className="block hover:opacity-70 transition-opacity"
+                          >
+                            <h3 className="text-sm font-bold uppercase tracking-widest text-foreground mb-2 leading-relaxed">
+                              {product.name}
+                            </h3>
+                          </Link>
+                          <p className="text-muted-foreground text-xs font-semibold tracking-widest uppercase mb-4">
+                            {product.category}
+                          </p>
+                          <p className="text-sm font-bold text-foreground mb-4">
                             ${product.price}
-                          </span>
+                          </p>
                         </div>
-                      </div>
+                        
+                        <div className="flex items-center justify-between mt-auto">
+                          <div className="flex items-center border border-border">
+                            <button
+                              disabled={item.quantity === 1}
+                              onClick={() =>
+                                updateQuantity(item.id, item.quantity - 1)
+                              }
+                              className="p-3 hover:bg-secondary transition-colors"
+                            >
+                              <Minus className="w-3 h-3 text-foreground" />
+                            </button>
+                            <span className="w-10 text-center font-bold text-xs">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() =>
+                                updateQuantity(item.id, item.quantity + 1)
+                              }
+                              className="p-3 hover:bg-secondary transition-colors"
+                            >
+                              <Plus className="w-3 h-3 text-foreground" />
+                            </button>
+                          </div>
 
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <button
-                            disabled={item.quantity === 1}
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity - 1)
-                            }
-                            className="p-2 glass-card hover:glow-on-hover animate-smooth"
-                          >
-                            <Minus className="w-4 h-4" />
-                          </button>
-                          <span className="w-12 text-center font-semibold text-lg">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity + 1)
-                            }
-                            className="p-2 glass-card hover:glow-on-hover animate-smooth"
-                          >
-                            <Plus className="w-4 h-4" />
-                          </button>
+                          <div className="flex items-center space-x-6">
+                            <button
+                              onClick={() =>
+                                handleRemove(item.id)
+                              }
+                              className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                              Remove
+                            </button>
+                            <p className="text-base font-bold text-foreground">
+                              ${(product.price * item.quantity).toFixed(2)}
+                            </p>
+                          </div>
                         </div>
-
-                        <button
-                          onClick={() =>
-                            handleRemove(item.id)
-                          }
-                          className="p-2 glass-card hover:glow-on-hover animate-smooth text-destructive"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-
-                      <div className="text-right">
-                        <p className="text-lg font-bold text-foreground">
-                          ${(product.price * item.quantity).toFixed(2)}
-                        </p>
                       </div>
                     </div>
                   </div>
@@ -188,50 +186,51 @@ const Cart = () => {
             </div>
 
             <div className="lg:col-span-1">
-              <div className="glass-panel sticky top-24">
-                <h2 className="text-xl font-semibold text-foreground mb-6">
+              <div className="bg-background border border-border p-8 py-10 sticky top-32">
+                <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-foreground mb-8 border-b border-border pb-4">
                   Order Summary
                 </h2>
 
-                <div className="space-y-4 mb-6">
+                <div className="space-y-4 mb-8 text-xs font-bold uppercase tracking-widest">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">
-                      Subtotal ({cartItemsCount} items)
+                      Subtotal ({cartItemsCount})
                     </span>
-                    <span className="font-semibold">${total.toFixed(2)}</span>
+                    <span className="text-foreground">${total.toFixed(2)}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Shipping</span>
-                    <span className="font-semibold text-green-500">
+                    <span className="text-foreground">
                       {total >= 50 ? "Free" : "$2"}
                     </span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Tax</span>
-                    <span className="font-semibold">
+                    <span className="text-foreground">
                       ${(total * 0.18).toFixed(2)}
                     </span>
                   </div>
-                  <div className="border-t border-[hsla(var(--glass-border))] pt-4">
-                    <div className="flex justify-between">
-                      <span className="text-lg font-semibold">Total</span>
-                      <span>${(total + total * 0.18).toFixed(2)}</span>
+                  
+                  <div className="border-t border-border pt-6 mt-6">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-bold">Total</span>
+                      <span className="text-lg font-bold">${(total + total * 0.18).toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
 
                 <Link
                   to={"/payment"}
-                  className="w-full block text-center py-4 gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth font-semibold mb-4"
+                  className="w-full block text-center py-4 bg-foreground text-background font-bold text-xs tracking-widest uppercase transition-opacity hover:opacity-80 mb-4"
                 >
                   Proceed to Checkout
                 </Link>
 
                 <Link
                   to={"/products"}
-                  className="w-full block text-center py-4 bg-secondary text-foreground  rounded-lg animate-smooth font-semibold mb-4 border-border hover:bg-accent"
+                  className="w-full block text-center py-4 bg-transparent border border-border text-foreground font-bold text-xs tracking-widest uppercase transition-colors hover:bg-secondary"
                 >
                   Continue Shopping
                 </Link>

@@ -32,9 +32,9 @@ const ProductCard = ({ product }) => {
       >
         {/* product image */}
         <div className="relative overflow-hidden rounded-xl mb-4">
-          {product.images.length > 0 ? (
+          {product?.images?.length > 0 ? (
             <img
-              src={product.images[0]?.url || product.images[0]}
+              src={product?.images?.[0]?.url || product?.images?.[0]}
               alt={product.name}
               className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
             />

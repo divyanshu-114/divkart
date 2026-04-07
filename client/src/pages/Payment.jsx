@@ -182,80 +182,78 @@ const Payment = () => {
             </div>
 
             {/* PROGRESS STEPS */}
-            <div className="flex items-center justify-center mb-12">
-              <div className="flex items-center space-x-4">
+            <div className="flex items-center justify-center mb-16 border-b border-border pb-8">
+              <div className="flex items-center space-x-8 uppercase tracking-widest text-xs font-bold">
                 {/* STEP 1 */}
                 <div
-                  className={`flex items-center space-x-2 ${orderStep >= 1 ? "text-primary" : "text-muted-foreground"
+                  className={`flex items-center space-x-3 ${orderStep >= 1 ? "text-foreground" : "text-muted-foreground"
                     }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${orderStep >= 1
-                      ? "gradient-primary text-primary-foreground"
-                      : "bg-secondary"
+                    className={`w-8 h-8 flex items-center justify-center border font-bold ${orderStep >= 1
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-transparent text-muted-foreground border-muted-foreground"
                       }`}
                   >
-                    {orderStep > 1 ? <Check className="w-5 h-5" /> : "1"}
+                    {orderStep > 1 ? <Check className="w-4 h-4" /> : "1"}
                   </div>
-                  <span className="font-medium">Details</span>
+                  <span>Details</span>
                 </div>
 
                 <div
-                  className={`w-12 h-0 ${orderStep >= 2 ? "bg-primary" : "bg-border"
+                  className={`w-16 border-t ${orderStep >= 2 ? "border-foreground" : "border-border"
                     }`}
                 />
 
                 {/* STEP 2 */}
                 <div
-                  className={`flex items-center space-x-2 ${orderStep >= 2 ? "text-primary" : "text-muted-foreground"
+                  className={`flex items-center space-x-3 ${orderStep >= 2 ? "text-foreground" : "text-muted-foreground"
                     }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${orderStep >= 2
-                      ? "gradient-primary text-primary-foreground"
-                      : "bg-secondary"
+                    className={`w-8 h-8 flex items-center justify-center border font-bold ${orderStep >= 2
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-transparent text-muted-foreground border-muted-foreground"
                       }`}
                   >
                     2
                   </div>
-                  <span className="font-medium">Payment</span>
+                  <span>Payment</span>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
               {/* FORM SECTION */}
               <div className="lg:col-span-2">
                 {orderStep === 1 ? (
                   /* STEP 1: USER DETAILS */
-                  <form onSubmit={handlePlaceOrder} className="glass-panel">
-                    <h2 className="text-xl font-semibold text-foreground mb-6">
+                  <form onSubmit={handlePlaceOrder} className="space-y-6">
+                    <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-foreground mb-8">
                       Shipping Information
                     </h2>
 
-                    <div className="mb-6">
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Full Name *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={shippingDetails.fullName}
-                          onChange={(e) => {
-                            setShippingDetails({
-                              ...shippingDetails,
-                              fullName: e.target.value,
-                            });
-                          }}
-                          className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70 mb-2">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={shippingDetails.fullName}
+                        onChange={(e) => {
+                          setShippingDetails({
+                            ...shippingDetails,
+                            fullName: e.target.value,
+                          });
+                        }}
+                        className="w-full px-4 py-3 bg-secondary border border-transparent focus:border-foreground transition-colors font-semibold uppercase tracking-widest text-xs focus:outline-none"
+                      />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70 mb-2">
                           State *
                         </label>
                         <select
@@ -266,20 +264,13 @@ const Payment = () => {
                               state: e.target.value,
                             });
                           }}
-                          className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground"
+                          className="w-full px-4 py-3 bg-secondary border border-transparent focus:border-foreground transition-colors font-semibold uppercase tracking-widest text-xs focus:outline-none appearance-none"
                         >
-                          <option value="Delhi">Delhi</option>
-                          <option value="Delhi">Delhi</option>
-                          <option value="Delhi">Delhi</option>
-                          <option value="Delhi">Delhi</option>
-                          <option value="Delhi">Delhi</option>
-                          <option value="Delhi">Delhi</option>
-                          <option value="Delhi">Delhi</option>
                           <option value="Delhi">Delhi</option>
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70 mb-2">
                           Phone *
                         </label>
                         <input
@@ -292,34 +283,32 @@ const Payment = () => {
                               phone: e.target.value,
                             });
                           }}
-                          className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground"
+                          className="w-full px-4 py-3 bg-secondary border border-transparent focus:border-foreground transition-colors font-semibold uppercase tracking-widest text-xs focus:outline-none"
                         />
                       </div>
                     </div>
 
-                    <div className="mb-4">
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Address *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={shippingDetails.address}
-                          onChange={(e) => {
-                            setShippingDetails({
-                              ...shippingDetails,
-                              address: e.target.value,
-                            });
-                          }}
-                          className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70 mb-2">
+                        Address *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={shippingDetails.address}
+                        onChange={(e) => {
+                          setShippingDetails({
+                            ...shippingDetails,
+                            address: e.target.value,
+                          });
+                        }}
+                        className="w-full px-4 py-3 bg-secondary border border-transparent focus:border-foreground transition-colors font-semibold uppercase tracking-widest text-xs focus:outline-none"
+                      />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70 mb-2">
                           City *
                         </label>
                         <input
@@ -332,11 +321,11 @@ const Payment = () => {
                               city: e.target.value,
                             });
                           }}
-                          className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground"
+                          className="w-full px-4 py-3 bg-secondary border border-transparent focus:border-foreground transition-colors font-semibold uppercase tracking-widest text-xs focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70 mb-2">
                           ZIP Code *
                         </label>
                         <input
@@ -349,11 +338,11 @@ const Payment = () => {
                               zipCode: e.target.value,
                             });
                           }}
-                          className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground"
+                          className="w-full px-4 py-3 bg-secondary border border-transparent focus:border-foreground transition-colors font-semibold uppercase tracking-widest text-xs focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70 mb-2">
                           Country *
                         </label>
                         <select
@@ -364,7 +353,7 @@ const Payment = () => {
                               country: e.target.value,
                             });
                           }}
-                          className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground"
+                          className="w-full px-4 py-3 bg-secondary border border-transparent focus:border-foreground transition-colors font-semibold uppercase tracking-widest text-xs focus:outline-none appearance-none"
                         >
                           <option value="India">India</option>
                         </select>
@@ -373,23 +362,23 @@ const Payment = () => {
 
                     <button
                       type="submit"
-                      className="w-full py-3 gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth font-semibold"
+                      className="w-full py-4 bg-foreground text-background font-bold text-xs tracking-widest uppercase transition-opacity hover:opacity-80 mt-8 block text-center"
                     >
                       Continue to Payment
                     </button>
                   </form>
                 ) : (
-                  <div className="glass-panel text-center">
-                    <h2 className="text-xl font-semibold text-foreground mb-2">
+                  <div className="border border-border p-12 text-center">
+                    <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-foreground mb-4">
                       Opening Payment Gateway…
                     </h2>
-                    <p className="text-muted-foreground mb-4">
+                    <p className="text-xs uppercase tracking-widest font-medium text-muted-foreground mb-8">
                       Please complete the payment in Razorpay popup.
                     </p>
                     <button
                       onClick={() => {
                         paymentOpenedRef.current = false;
-                        dispatch(placeOrder(new FormData())); // Or a simpler retry mechanism, better yet, just trigger the effect again by resetting ref and setting orderStep to 2
+                        dispatch(placeOrder(new FormData()));
                       }}
                       className="hidden"
                     ></button>
@@ -397,16 +386,15 @@ const Payment = () => {
                       onClick={() => {
                          if (window.Razorpay) {
                             paymentOpenedRef.current = false;
-                            // small hack: we force re-render by doing nothing and letting the component re-read the already available states
                             setShippingDetails({ ...shippingDetails });
                          }
                       }}
-                      className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-all font-semibold"
+                      className="px-8 py-4 bg-foreground text-background font-bold text-xs tracking-widest uppercase transition-opacity hover:opacity-80"
                     >
                       Retry Payment
                     </button>
-                    <p className="mt-4 text-sm text-muted-foreground">
-                      Want to change details? <button onClick={() => dispatch({ type: 'order/resetOrderStep' })} className="text-primary underline">Go back</button>
+                    <p className="mt-8 text-[10px] uppercase tracking-widest font-bold text-muted-foreground">
+                      Want to change details? <button onClick={() => dispatch({ type: 'order/resetOrderStep' })} className="border-b border-muted-foreground ml-1 hover:text-foreground">Go back</button>
                     </p>
                   </div>
                 )}
@@ -414,58 +402,58 @@ const Payment = () => {
 
               {/* ORDER SUMMARY */}
               <div className="lg:col-span-1">
-                <div className="glass-panel sticky top-24">
-                  <h2 className="text-xl font-semibold text-foreground">
+                <div className="bg-background border border-border p-8 py-10 sticky top-32">
+                  <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-foreground mb-8 border-b border-border pb-4">
                     Order Summary
                   </h2>
 
-                  <div className="space-y-4 mb-6">
+                  <div className="space-y-6 mb-8 border-b border-border pb-6">
                     {cart.map((item) => {
                       return (
                         <div
                           key={item.product.id}
-                          className="flex items-center space-x-3"
+                          className="flex items-center space-x-4"
                         >
                           <img
-                            src={item.product.images[0].url}
+                            src={item.product?.images?.[0]?.url || item.product?.images?.[0] || "/placeholder.jpg"}
                             alt={item.product.name}
-                            className="w-12 h-12 object-cover rounded"
+                            className="w-16 h-20 object-cover border border-border"
                           />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
+                          <div className="flex-1 min-w-0 flex flex-col pt-1">
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-foreground line-clamp-2 leading-relaxed mb-2">
                               {item.product.name}
                             </p>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-[10px] font-semibold text-muted-foreground tracking-widest uppercase mb-1">
                               Qty: {item.quantity}
                             </p>
+                            <p className="text-xs font-bold">
+                              ${Number(item.product.price) * item.quantity}
+                            </p>
                           </div>
-                          <p className="text-sm font-semibold">
-                            ${Number(item.product.price) * item.quantity}
-                          </p>
                         </div>
                       );
                     })}
                   </div>
 
-                  <div className="space-y-2 border-t border-[hsla(var(--glass-border))] pt-4">
+                  <div className="space-y-4 text-xs font-bold uppercase tracking-widest">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Subtotal</span>
                       <span>${total.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Shipping</span>
-                      <span className="text-green-500">
+                      <span className="text-foreground">
                         {totalWithTax >= 50 ? "Free" : "$2"}
                       </span>
                     </div>
 
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Tax</span>
-                      <span>{(total * 0.18).toFixed(2)}</span>
+                      <span>${(total * 0.18).toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between font-semibold text-lg pt-2 border-t border-[hsla(var(--glass-border))]">
+                    <div className="pt-6 mt-6 border-t border-border flex justify-between items-center text-sm font-bold">
                       <span>Total</span>
-                      <span className="text-primary">
+                      <span>
                         ${totalWithTax.toFixed(2)}
                       </span>
                     </div>

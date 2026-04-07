@@ -25,17 +25,15 @@ const FeatureSection = () => {
   ];
 
   return (
-    <section className="py-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <section className="py-20 border-t border-b border-border my-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-center">
         {features.map((feature, index) => (
-          <div key={index} className="glass-card p-6 text-center hover:glow-on-hover rounded-2xl group">
-            <div className="w-16 h-16 mx-auto mb-4 gradient-primary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-              <feature.icon className="w-8 h-8 text-primary-foreground" />
-            </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">
+          <div key={index} className="flex flex-col items-center">
+            <feature.icon className="w-8 h-8 text-foreground mb-6" strokeWidth={1} />
+            <h3 className="text-sm font-bold text-foreground mb-3 tracking-widest uppercase">
               {feature.title}
             </h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            <p className="text-muted-foreground text-sm font-light leading-relaxed max-w-[200px] mx-auto">
               {feature.description}
             </p>
           </div>

@@ -16,44 +16,49 @@ const Navbar = () => {
     cartItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   }
   return <>
-    <nav className="fixed left-0 w-full top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border shadow-lg shadow-black/5">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* left hamburger menu */}
-          <button onClick={() => dispatch(toggleSidebar())} className="p-2.5 rounded-xl hover:bg-secondary/80 active:scale-95 transition-all duration-200">
-            <Menu className="w-6 h-6 text-foreground" />
-          </button>
-          {/* center logo */}
-          <div className="flex-1 flex justify-center">
-            <h1 className="text-2xl font-bold text-foreground tracking-tight">Divkart</h1>
+    <div className="bg-foreground text-background text-[10px] sm:text-xs font-bold tracking-[0.2em] text-center py-2 uppercase w-full">
+      Free global shipping on orders over $150
+    </div>
+    <nav className="sticky top-0 left-0 w-full z-50 bg-background border-b border-border transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          {/* left side */}
+          <div className="flex items-center space-x-4 flex-1">
+            <button onClick={() => dispatch(toggleSidebar())} className="p-2 text-foreground hover:opacity-60 transition-opacity duration-300">
+              <Menu className="w-5 h-5" strokeWidth={1.5} />
+            </button>
+            <button onClick={() => dispatch(toggleSearchBar())} className="p-2 text-foreground hover:opacity-60 transition-opacity duration-300 hidden md:block">
+              <Search className="w-5 h-5" strokeWidth={1.5} />
+            </button>
           </div>
+          
+          {/* center logo */}
+          <div className="flex-1 flex justify-center items-center">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-[0.25em] uppercase">Divkart</h1>
+          </div>
+          
           {/* right side icons*/}
-          <div className="flex items-center space-x-1">
-            {/* toggle theme */}
-            <button onClick={toggleTheme} className="p-2.5 rounded-xl hover:bg-secondary/80 active:scale-95 transition-all duration-200">
-              {theme === "dark" ? (<Sun className="w-5 h-5 text-foreground" />) : (<Moon className="w-5 h-5 text-foreground" />)}
+          <div className="flex items-center justify-end space-x-2 sm:space-x-4 flex-1">
+            <button onClick={toggleTheme} className="p-2 text-foreground hover:opacity-60 transition-opacity duration-300">
+              {theme === "dark" ? (<Sun className="w-5 h-5" strokeWidth={1.5} />) : (<Moon className="w-5 h-5" strokeWidth={1.5} />)}
             </button>
 
-            {/* search overlay */}
-            <button onClick={() => dispatch(toggleSearchBar())} className="p-2.5 rounded-xl hover:bg-secondary/80 active:scale-95 transition-all duration-200">
-              <Search className="w-5 h-5 text-foreground" />
+            <button onClick={() => dispatch(toggleSearchBar())} className="p-2 text-foreground hover:opacity-60 transition-opacity duration-300 md:hidden">
+              <Search className="w-5 h-5" strokeWidth={1.5} />
             </button>
 
-            {/* user profile */}
-            <button onClick={() => dispatch(toggleAuthPopup())} className="p-2.5 rounded-xl hover:bg-secondary/80 active:scale-95 transition-all duration-200">
-              <User className="w-5 h-5 text-foreground" />
+            <button onClick={() => dispatch(toggleAuthPopup())} className="p-2 text-foreground hover:opacity-60 transition-opacity duration-300">
+              <User className="w-5 h-5" strokeWidth={1.5} />
             </button>
 
-            {/* cart */}
             <button
               onClick={() => dispatch(toggleCart())}
-              className="relative p-2.5 rounded-xl hover:bg-secondary/80 active:scale-95 transition-all duration-200"
+              className="relative p-2 text-foreground hover:opacity-60 transition-opacity duration-300 flex items-center"
             >
-              <ShoppingCart className="w-5 h-5 text-foreground" />
-
+              <ShoppingCart className="w-5 h-5" strokeWidth={1.5} />
               {cartItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 bg-foreground text-background text-xs font-bold rounded-full flex items-center justify-center animate-scale-in shadow-md">
-                  {cartItemsCount}
+                <span className="ml-1.5 text-xs font-semibold tracking-wider">
+                  ({cartItemsCount})
                 </span>
               )}
             </button>
@@ -61,8 +66,6 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
-
-
   </>;
 };
 

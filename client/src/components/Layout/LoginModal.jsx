@@ -95,36 +95,36 @@ const LoginModal = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* overlay */}
-      <div className="absolute inset-0 backdrop-blur-xl bg-black/60 animate-fade-in" />
+      <div className="absolute inset-0 backdrop-blur-sm bg-background/80 animate-fade-in" onClick={() => dispatch(toggleAuthPopup())} />
 
-      <div className="relative z-10 glass-panel w-full max-w-md mx-4 p-6 animate-scale-in rounded-2xl">
+      <div className="relative z-10 bg-background border border-border w-full max-w-md mx-4 p-8 animate-fade-in">
         {/* header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-foreground">
+        <div className="flex items-center justify-between mb-8 pb-6 border-b border-border">
+          <h2 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground">
             {mode === "signup"
               ? "Create Account"
               : mode === "forgot"
               ? "Forgot Password"
               : mode === "reset"
               ? "Reset Password"
-              : "Welcome Back"}
+              : "Sign In"}
           </h2>
 
           <button
             onClick={() => dispatch(toggleAuthPopup())}
-            className="p-2 rounded-lg glass-card"
+            className="p-2 text-foreground hover:opacity-60 transition-opacity"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {mode === "signup" && (
             <input
               type="text"
-              placeholder="Full Name"
-              className="w-full p-3 bg-secondary/50 border border-border rounded-xl transition-all focus:ring-2 focus:ring-primary/50"
+              placeholder="FULL NAME"
+              className="w-full p-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-xs uppercase tracking-widest font-semibold transition-colors placeholder:text-muted-foreground"
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
@@ -136,8 +136,8 @@ const LoginModal = () => {
           {mode !== "reset" && (
             <input
               type="email"
-              placeholder="Email"
-              className="w-full p-3 bg-secondary/50 border border-border rounded-xl transition-all focus:ring-2 focus:ring-primary/50"
+              placeholder="EMAIL ADDRESS"
+              className="w-full p-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-xs uppercase tracking-widest font-semibold transition-colors placeholder:text-muted-foreground"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
@@ -149,8 +149,8 @@ const LoginModal = () => {
           {mode !== "forgot" && (
             <input
               type="password"
-              placeholder="Password"
-              className="w-full p-3 bg-secondary/50 border border-border rounded-xl transition-all focus:ring-2 focus:ring-primary/50"
+              placeholder="PASSWORD"
+              className="w-full p-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-xs uppercase tracking-widest font-semibold transition-colors placeholder:text-muted-foreground"
               value={formData.password}
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
@@ -162,8 +162,8 @@ const LoginModal = () => {
           {mode === "reset" && (
             <input
               type="password"
-              placeholder="Confirm Password"
-              className="w-full p-3 bg-secondary/50 border border-border rounded-xl transition-all focus:ring-2 focus:ring-primary/50"
+              placeholder="CONFIRM PASSWORD"
+              className="w-full p-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-xs uppercase tracking-widest font-semibold transition-colors placeholder:text-muted-foreground"
               value={formData.confirmPassword}
               onChange={(e) =>
                 setFormData({
@@ -179,7 +179,7 @@ const LoginModal = () => {
             <button
               type="button"
               onClick={() => setMode("forgot")}
-              className="text-sm text-foreground font-medium text-right block w-full hover:underline"
+              className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold text-right w-full hover:text-foreground transition-colors pt-2"
             >
               Forgot password?
             </button>
@@ -188,32 +188,32 @@ const LoginModal = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 rounded-xl gradient-primary font-semibold hover:shadow-lg hover:scale-[1.02] active:scale-100 transition-transform disabled:opacity-70 disabled:scale-100"
+            className="w-full py-4 bg-foreground text-background font-bold text-xs uppercase tracking-widest hover:opacity-80 transition-opacity disabled:opacity-50 mt-4"
           >
             {isLoading
-              ? "Processing..."
+              ? "PROCESSING..."
               : mode === "signup"
-              ? "Create Account"
+              ? "CREATE ACCOUNT"
               : mode === "forgot"
-              ? "Send Reset Link"
+              ? "SEND RESET LINK"
               : mode === "reset"
-              ? "Reset Password"
-              : "Sign In"}
+              ? "RESET PASSWORD"
+              : "SIGN IN"}
           </button>
         </form>
 
         {(mode === "signin" || mode === "signup") && (
-          <div className="mt-4 text-center">
+          <div className="mt-8 pt-6 border-t border-border text-center">
             <button
               type="button"
               onClick={() =>
                 setMode((prev) => (prev === "signin" ? "signup" : "signin"))
               }
-              className="text-foreground font-medium hover:underline"
+              className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground hover:text-foreground transition-colors"
             >
               {mode === "signin"
-                ? "Don't have an account? Sign Up"
-                : "Already have an account? Sign In"}
+                ? "DON'T HAVE AN ACCOUNT? SIGN UP"
+                : "ALREADY HAVE AN ACCOUNT? SIGN IN"}
             </button>
           </div>
         )}

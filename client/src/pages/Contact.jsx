@@ -16,57 +16,57 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pt-20">
+    <div className="min-h-screen bg-background pt-24">
       <div className="max-w-6xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
+        <div className="text-center mb-16">
+          <h1 className="text-2xl font-bold uppercase tracking-[0.2em] text-foreground mb-6">
             Contact Us
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
             Get in touch with our team
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Contact Info */}
-          <div className="space-y-8">
-            <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center">
-                <Mail className="w-6 h-6 text-foreground" />
+          <div className="space-y-12 border border-border p-12">
+            <div className="flex items-start space-x-6">
+              <div className="w-12 h-12 bg-secondary border border-border flex items-center justify-center">
+                <Mail className="w-5 h-5 text-foreground" strokeWidth={1.5} />
               </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-1">Email</h3>
-                <p className="text-muted-foreground">hello@shopmate.com</p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center">
-                <Phone className="w-6 h-6 text-foreground" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-1">Phone</h3>
-                <p className="text-muted-foreground">+1 (555) 123-4567</p>
+              <div className="pt-2">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-foreground mb-2">Email</h3>
+                <p className="text-sm text-muted-foreground">support@divkart.com</p>
               </div>
             </div>
 
-            <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center">
-                <MapPin className="w-6 h-6 text-foreground" />
+            <div className="flex items-start space-x-6">
+              <div className="w-12 h-12 bg-secondary border border-border flex items-center justify-center">
+                <Phone className="w-5 h-5 text-foreground" strokeWidth={1.5} />
               </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-1">Address</h3>
-                <p className="text-muted-foreground">
-                  123 Shop Street, City, ST 12345
+              <div className="pt-2">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-foreground mb-2">Phone</h3>
+                <p className="text-sm text-muted-foreground">+1 (555) 123-4567</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-6">
+              <div className="w-12 h-12 bg-secondary border border-border flex items-center justify-center">
+                <MapPin className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+              </div>
+              <div className="pt-2">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-foreground mb-2">Address</h3>
+                <p className="text-sm text-muted-foreground">
+                  123 DivKart Street, City, ST 12345
                 </p>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-secondary rounded-xl p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="border border-border p-12">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <input
                   type="text"
                   placeholder="Your Name"
@@ -74,7 +74,7 @@ const Contact = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-foreground"
+                  className="px-4 py-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-foreground text-xs uppercase tracking-widest font-semibold transition-colors"
                   required
                 />
                 <input
@@ -84,7 +84,7 @@ const Contact = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  className="px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-foreground"
+                  className="px-4 py-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-foreground text-xs uppercase tracking-widest font-semibold transition-colors"
                   required
                 />
               </div>
@@ -96,26 +96,26 @@ const Contact = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, subject: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-foreground"
+                className="w-full px-4 py-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-foreground text-xs uppercase tracking-widest font-semibold transition-colors"
                 required
               />
 
               <textarea
                 rows="6"
-                placeholder="Your Message"
+                placeholder="Your Message..."
                 value={formData.message}
                 onChange={(e) =>
                   setFormData({ ...formData, message: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-foreground resize-none"
+                className="w-full px-4 py-4 bg-transparent border border-border focus:outline-none focus:border-foreground text-foreground text-xs uppercase tracking-widest font-semibold resize-none transition-colors"
                 required
               />
 
               <button
                 type="submit"
-                className="w-full gradient-primary text-primary-foreground py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
+                className="w-full bg-foreground text-background py-4 text-xs font-bold uppercase tracking-widest hover:opacity-80 transition-opacity flex items-center justify-center space-x-3"
               >
-                <Send className="w-5 h-5" />
+                <Send className="w-4 h-4" />
                 <span>Send Message</span>
               </button>
             </form>

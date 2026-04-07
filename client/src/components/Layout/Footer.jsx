@@ -39,135 +39,89 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="glass border-t border-[hsla(var(--glass-border))] mt-16 backdrop-blur-xl">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+    <footer className="bg-background border-t border-border mt-0 pt-20 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row justify-between mb-16 gap-12">
           {/* Brand & Contact */}
-          <div className="lg:col-span-1">
-            <h2 className="text-2xl font-bold text-foreground mb-4 tracking-tight">
+          <div className="md:w-1/3">
+            <h2 className="text-2xl font-bold text-foreground mb-6 tracking-[0.25em] uppercase">
               Divkart
             </h2>
-            <p className="text-muted-foreground mb-6">
-              Your trusted partner for online shopping. Discover amazing
-              products with exceptional quality and service.
-            </p>
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="flex items-center space-x-3 text-muted-foreground">
-                <Mail className="w-5 h-5 text-foreground" />
-                <span>support@shopmate.com</span>
+                <Mail className="w-4 h-4 text-foreground" strokeWidth={1.5} />
+                <span className="text-xs uppercase tracking-widest font-medium">support@shopmate.com</span>
               </div>
               <div className="flex items-center space-x-3 text-muted-foreground">
-                <Phone className="w-5 h-5 text-foreground" />
-                <span>+1 (555) 123-4567</span>
+                <Phone className="w-4 h-4 text-foreground" strokeWidth={1.5} />
+                <span className="text-xs uppercase tracking-widest font-medium">+1 (555) 123-4567</span>
               </div>
               <div className="flex items-center space-x-3 text-muted-foreground">
-                <MapPin className="w-5 h-5 text-foreground" />
-                <span>San Francisco, CA</span>
+                <MapPin className="w-4 h-4 text-foreground" strokeWidth={1.5} />
+                <span className="text-xs uppercase tracking-widest font-medium">San Francisco, CA</span>
               </div>
             </div>
           </div>
 
-          {/* Company Links */}
-          <div>
-            <h3 className="text-lg font-semibold text-foreground mb-4">
-              Company
-            </h3>
-            <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.path}
-                    className="text-muted-foreground hover:text-foreground transition-colors inline-block hover:translate-x-1"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <div className="flex gap-12 md:gap-24">
+            {/* Company Links */}
+            <div>
+              <h3 className="text-sm font-bold text-foreground mb-6 uppercase tracking-widest">
+                Company
+              </h3>
+              <ul className="space-y-4">
+                {footerLinks.company.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      to={link.path}
+                      className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-block uppercase tracking-widest font-medium"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Customer Service */}
-          <div>
-            <h3 className="text-lg font-semibold text-foreground mb-4">
-              Customer Service
-            </h3>
-            <ul className="space-y-2">
-              {footerLinks.customer.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.path}
-                    className="text-muted-foreground hover:text-foreground transition-colors inline-block hover:translate-x-1"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {/* Customer Service */}
+            <div>
+              <h3 className="text-sm font-bold text-foreground mb-6 uppercase tracking-widest">
+                Customer Care
+              </h3>
+              <ul className="space-y-4">
+                {footerLinks.customer.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      to={link.path}
+                      className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-block uppercase tracking-widest font-medium"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-
-          {/* Legal */}
-          <div>
-            <h3 className="text-lg font-semibold text-foreground mb-4">
-              Legal
-            </h3>
-            <ul className="space-y-2">
-              {footerLinks.legal.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.path}
-                    className="text-muted-foreground hover:text-foreground transition-colors inline-block hover:translate-x-1"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Newsletter Signup */}
-        <div className="glass-panel mb-12">
-          <div className="text-center mb-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2">
-              Stay Connected
-            </h3>
-            <p className="text-muted-foreground">
-              Subscribe to our newsletter for exclusive offers and updates
-            </p>
-          </div>
-          <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder-muted-foreground"
-            />
-            <button
-              type="submit"
-              className="px-6 py-3 gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth font-semibold"
-            >
-              Subscribe
-            </button>
-          </form>
         </div>
 
         {/* Social Links & Copyright */}
-        <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-[hsla(var(--glass-border))]">
-          <div className="flex items-center space-x-4 mb-4 md:mb-0">
+        <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-border">
+          <div className="flex items-center space-x-6 mb-4 md:mb-0">
             {socialLinks.map((social) => (
               <a
                 key={social.label}
                 href={social.href}
                 aria-label={social.label}
-                className="p-2.5 glass-card hover:glow-on-hover rounded-xl transition-all hover:scale-110 active:scale-95"
+                className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <social.icon className="w-5 h-5 text-foreground" />
+                <social.icon className="w-4 h-4" strokeWidth={1.5} />
               </a>
             ))}
           </div>
 
           <div className="text-center md:text-right">
-            <p className="text-muted-foreground text-sm">© 2024 Divkart. All rights reserved.</p>
-            <p className="text-muted-foreground text-xs mt-1">Developed By Divyanshu Singh</p>
+            <p className="text-muted-foreground text-[10px] uppercase tracking-widest font-medium">© 2024 Divkart. All rights reserved.</p>
+            <p className="text-muted-foreground text-[10px] uppercase tracking-widest font-medium mt-1">Developed By Divyanshu Singh</p>
           </div>
         </div>
       </div>

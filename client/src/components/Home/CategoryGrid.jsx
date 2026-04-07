@@ -2,33 +2,33 @@ import { Link } from "react-router-dom";
 import { categories } from "../../data/products";
 const CategoryGrid = () => {
   return (
-    <section className="py-16">
-      <div className="text-center mb-12 animate-fade-in-up">
-        <h2 className="text-4xl font-bold text-foreground mb-4">
+    <section className="py-24">
+      <div className="text-center mb-16 animate-fade-in-up">
+        <h2 className="text-3xl font-bold text-foreground mb-4 tracking-wide uppercase">
           Shop by Category
         </h2>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <div className="w-12 h-[1px] bg-foreground mx-auto mb-6"></div>
+        <p className="text-muted-foreground max-w-2xl mx-auto">
           Discover our wide range of products across different categories
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
         {categories.map((category, i) => (
           <Link
             key={category.id}
             to={`/products?category=${category.name}`}
-            className="group glass-card p-6 text-center hover:glow-on-hover rounded-2xl overflow-hidden"
+            className="group flex flex-col items-center text-center"
             style={{ animationDelay: `${i * 50}ms` }}
           >
-            <div className="relative overflow-hidden rounded-xl mb-4">
+            <div className="w-full aspect-square relative overflow-hidden mb-6 bg-secondary">
               <img
                 src={category.image}
                 alt={category.name}
-                className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground group-hover:text-foreground transition-colors duration-300">
+            <h3 className="text-sm font-semibold text-foreground tracking-widest uppercase">
               {category.name}
             </h3>
           </Link>

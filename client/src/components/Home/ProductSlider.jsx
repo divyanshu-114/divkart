@@ -35,53 +35,55 @@ const ProductSlider = ({ title, products }) => {
 
   return (
     <>
-      <section className="py-16">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-foreground">{title}</h2>
-          <div className="flex space-x-2">
+      <section className="py-24 border-t border-border mt-12">
+        <div className="flex items-center justify-between mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground tracking-wide uppercase">
+            {title}
+          </h2>
+          <div className="flex space-x-4">
             <button
               onClick={() => scroll("left")}
-              className="p-2.5 glass-card hover:glow-on-hover rounded-xl active:scale-95 transition-all"
+              className="p-2 text-foreground border border-border hover:bg-foreground hover:text-background transition-colors duration-300 flex items-center justify-center rounded-full"
             >
-              <ChevronLeft className="text-foreground w-6 h-6" />
+              <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
             </button>
             <button
               onClick={() => scroll("right")}
-              className="p-2.5 glass-card hover:glow-on-hover rounded-xl active:scale-95 transition-all"
+              className="p-2 text-foreground border border-border hover:bg-foreground hover:text-background transition-colors duration-300 flex items-center justify-center rounded-full"
             >
-              <ChevronRight className="text-foreground w-6 h-6" />
+              <ChevronRight className="w-5 h-5" strokeWidth={1.5} />
             </button>
           </div>
         </div>
 
         <div
           ref={scrollRef}
-          className="flex space-x-6 overflow-x-auto scrollbar-hide pb-4 scrollbar-styled"
+          className="flex space-x-6 overflow-x-auto scrollbar-hide pb-8 scrollbar-styled"
         >
           {products.map((product) => {
             return (
               <Link
                 key={product.id}
                 to={`/product/${product.id}`}
-                className="flex-shrink-0 w-80 glass-card hover:glow-on-hover group rounded-2xl overflow-hidden"
+                className="flex-shrink-0 w-72 sm:w-80 group text-left"
               >
                 {/* product image */}
-                <div className="relative overflow-hidden rounded-lg mb-4">
+                <div className="relative overflow-hidden mb-6 bg-secondary aspect-[4/5] flex items-center justify-center">
                   <img
-                    src={product.images[0]?.url || product.images[0]}
+                    src={product?.images?.[0]?.url || product?.images?.[0] || "/placeholder.jpg"}
                     alt={product.name}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   {/* badges */}
-                  <div className="absolute top-3 left-3 flex flex-col space-y-2">
+                  <div className="absolute top-4 left-4 flex flex-col space-y-2">
                     {new Date() - new Date(product.created_at) <
                       30 * 24 * 60 * 60 * 1000 && (
-                        <span className="bg-neutral-200 text-neutral-800 border border-neutral-300 dark:bg-white/20 dark:text-white dark:border-white/30 px-2 py-1 rounded-lg text-xs font-semibold">
+                        <span className="bg-background text-foreground px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
                           NEW
                         </span>
                       )}
                     {product.ratings >= 4.5 && (
-                      <span className="bg-amber-500/90 text-white px-2 py-1 rounded-lg text-xs font-semibold shadow-md">
+                      <span className="bg-foreground text-background px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
                         TOP RATED
                       </span>
                     )}
@@ -90,57 +92,38 @@ const ProductSlider = ({ title, products }) => {
                   {/* Quick add to cart */}
                   <button
                     onClick={(e) => handleAddToCart(product, e)}
-                    className="absolute bottom-3 right-3 p-2 glass-card hover:glow-on-hover animate-smooth opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute bottom-4 right-4 p-3 bg-background text-foreground border border-border hover:bg-foreground hover:text-background opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center rounded-full"
                     disabled={product.stock === 0}
                   >
-                    <ShoppingCart className="text-foreground w-5 h-5" />
+                    <ShoppingCart className="w-4 h-4" strokeWidth={2} />
                   </button>
                 </div>
 
                 {/* product info */}
                 <div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-foreground transition-colors">
+                  <h3 className="text-xs sm:text-sm font-semibold text-foreground mb-1 group-hover:opacity-70 transition-opacity uppercase tracking-widest line-clamp-1">
                     {product.name}
                   </h3>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => {
-                        return (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${i < Math.floor(product.ratings)
-                                ? "text-amber-400 fill-amber-400"
-                                : "text-neutral-500"
-                              }`}
-                          />
-                        );
-                      })}
-                    </div>
-                    <span className="text-sm text-muted-foreground ">
-                      ({product.review_count})
-                    </span>
-                  </div>
+                  
                   {/* product price */}
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-foreground">
+                  <div className="flex items-center space-x-3 mt-3">
+                    <span className="text-base font-medium text-foreground">
                       ₹{product.price}
                     </span>
+                    <div className="flex items-center space-x-1">
+                      <Star className="w-3 h-3 text-foreground fill-foreground" />
+                      <span className="text-xs text-muted-foreground">
+                        {Number(product?.ratings) > 0 ? Number(product.ratings).toFixed(1) : "New"} ({product?.review_count})
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <span
-                      className={`text-xs px-2 py-1 rounded-lg ${product.stock > 5
-                          ? "bg-green-500/20 text-green-500"
-                          : product.stock > 0
-                            ? "bg-amber-500/20 text-amber-600"
-                            : "bg-red-500/20 text-red-500"
-                        }`}
-                    >
-                      {product.stock > 5
-                        ? "In Stock"
+                  
+                  <div className="mt-2 text-[10px] text-muted-foreground uppercase tracking-widest font-semibold text-opacity-80">
+                    {product.stock > 5
+                        ? "Available"
                         : product.stock > 0
-                          ? "Limited Stock"
-                          : "Out of Stock"}
-                    </span>
+                          ? "Low Stock"
+                          : "Sold Out"}
                   </div>
                 </div>
               </Link>

@@ -87,37 +87,37 @@ const ProductDetail = () => {
 
   return (
     <>
-      <div className="min-h-screen pt-20 animate-fade-in">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+      <div className="min-h-screen pt-24 animate-fade-in bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
             <div>
-              <div className="glass-card p-4 mb-4 rounded-2xl">
+              <div className="border border-border p-8 mb-6">
                 {product.images ? (
                   <img
                     src={product.images[selectedImage]?.url}
                     alt={product.name}
-                    className="w-full h-96 object-contain rounded-lg"
+                    className="w-full h-96 object-cover"
                   />
                 ) : (
-                  <div className="glass-card min-h-[418px] p-4 mb-4 animate-pulse" />
+                  <div className="w-full min-h-[418px] bg-secondary animate-pulse" />
                 )}
               </div>
-              <div className="flex space-x-2">
+              <div className="flex space-x-4">
                 {product.images &&
                   product?.images.map((image, index) => {
                     return (
                       <button
                         key={index}
                         onClick={() => setSelectedImage(index)}
-                        className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${selectedImage === index
+                        className={`w-24 h-24 overflow-hidden border transition-all p-2 ${selectedImage === index
                             ? "border-foreground"
-                            : "border-transparent"
+                            : "border-border opacity-70 hover:opacity-100"
                           }`}
                       >
                         <img
                           src={image?.url}
                           alt={`${product.title} ${index + 1}`}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-cover"
                         />
                       </button>
                     );
@@ -125,60 +125,61 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div>
-              <div className="mb-4">
-                <div className="flex space-x-2 mb-4">
+            <div className="flex flex-col">
+              <div className="mb-8">
+                <div className="flex space-x-3 mb-6">
                   {new Date() - new Date(product.created_at) <
                     30 * 24 * 60 * 60 * 1000 && (
-                      <span className="px-2 py-1 bg-neutral-200 text-neutral-800 dark:bg-white/20 dark:text-white border border-neutral-300 dark:border-white/30 text-xs font-semibold rounded-lg">
+                      <span className="px-3 py-1 bg-secondary text-foreground text-[10px] uppercase font-bold tracking-widest border border-border">
                         NEW
                       </span>
                     )}
                   {product.ratings >= 4.5 && (
-                    <span className="px-2 py-1 bg-gradient-to-r from-yellow-400 to-rose-500 text-white  bg-primary text-primary-foreground text-xs font-semibold rounded">
+                    <span className="px-3 py-1 bg-foreground text-background text-[10px] uppercase font-bold tracking-widest">
                       TOP RATED
                     </span>
                   )}
                 </div>
-                <h1 className="text-3xl font-bold text-foreground mb-2">
+                <h1 className="text-3xl font-bold uppercase tracking-[0.2em] text-foreground mb-4 leading-snug">
                   {product.name}
                 </h1>
-                <div className="flex items-center space-x-4 mb-4">
+                <div className="flex items-center space-x-6 mb-8 text-xs font-bold uppercase tracking-widest text-muted-foreground">
                   <div className="flex items-center space-x-1">
                     {[...Array(5)].map((_, i) => {
                       return (
                         <Star
                           key={i}
-                          className={`w-4 h-4 ${i < Math.floor(product.ratings)
-                              ? "text-amber-400 fill-amber-400"
-                              : "text-neutral-500"
+                          strokeWidth={i < Math.floor(product.ratings) ? 0 : 1}
+                          className={`w-3.5 h-3.5 ${i < Math.floor(product.ratings)
+                              ? "fill-foreground text-foreground"
+                              : "text-muted-foreground fill-none"
                             }`}
                         />
                       );
                     })}
                   </div>
-                  <span className="text-foreground font-medium">
+                  <span className="text-foreground">
                     {product.ratings}
                   </span>
-                  <span className="text-muted-foreground">
-                    ({productReviews?.length}) reviews
+                  <span>
+                    ({productReviews?.length} reviews)
                   </span>
                 </div>
-                <div className="flex items-center space-x-4 mb-6">
+                <div className="flex items-center space-x-4 mb-8">
                   <span className="text-2xl font-bold text-foreground">
                     ${product.price}
                   </span>
                 </div>
-                <div className="flex items-center space-x-4 mb-6">
-                  <span className="text-muted-foreground">
-                    Category: {product.category}
+                <div className="flex items-center space-x-6 mb-8 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                  <span>
+                    Collection: <span className="text-foreground">{product.category}</span>
                   </span>
                   <span
-                    className={`px-3 py-1 rounded text-sm ${product.stock > 5
-                        ? "bg-green-500/20 text-green-400"
+                    className={`${product.stock > 5
+                        ? "text-foreground"
                         : product.stock > 0
-                          ? "bg-yellow-500/20 text-yellow-400"
-                          : "bg-red-500/20 text-red-400"
+                          ? "text-foreground"
+                          : "text-muted-foreground"
                       }`}
                   >
                     {product.stock > 5
@@ -188,24 +189,25 @@ const ProductDetail = () => {
                         : "Out of Stock"}
                   </span>
                 </div>
-                <div className="glass-card p-6 mb-6">
-                  <div className="flex items-center space-x-4 mb-6">
-                    <span className="text-lg font-medium">Quantity:</span>
-                    <div className="flex items-center space-x-3">
+
+                <div className="border-t border-border pt-10 mt-10">
+                  <div className="flex items-center space-x-6 mb-8">
+                    <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Quantity:</span>
+                    <div className="flex items-center border border-border">
                       <button
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="p-2 glass-card hover:glow-on-hover animate-smooth"
+                        className="p-3 hover:bg-secondary transition-colors"
                       >
-                        <Minus className="w-4 h-4" />
+                        <Minus className="w-3 h-3 text-foreground" />
                       </button>
-                      <span className="w-12 text-center font-semibold text-lg">
+                      <span className="w-12 text-center font-bold text-xs">
                         {quantity}
                       </span>
                       <button
                         onClick={() => setQuantity(quantity + 1)}
-                        className="p-2 glass-card hover:glow-on-hover animate-smooth"
+                        className="p-3 hover:bg-secondary transition-colors"
                       >
-                        <Plus className="w-4 h-4" />
+                        <Plus className="w-3 h-3 text-foreground" />
                       </button>
                     </div>
                   </div>
@@ -213,30 +215,30 @@ const ProductDetail = () => {
                     <button
                       onClick={handleAddToCart}
                       disabled={product.stock === 0}
-                      className="flex items-center justify-center space-x-2 py-3 gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center justify-center space-x-3 py-4 bg-transparent border border-border text-foreground font-bold text-xs uppercase tracking-widest hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <ShoppingCart className="w-5 h-5" />
+                      <ShoppingCart className="w-4 h-4" />
                       <span>Add to Cart</span>
                     </button>
                     <button
                       disabled={product.stock === 0}
-                      className="flex items-center justify-center space-x-2 py-3 gradient-primary text-primary-foreground rounded-lg hover:glow-on-hover animate-smooth font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center justify-center space-x-3 py-4 bg-foreground text-background font-bold text-xs uppercase tracking-widest hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={handleBuyNow}
                     >
-                      <CircleDollarSign className="w-5 h-5" />
+                      <CircleDollarSign className="w-4 h-4" />
                       <span>Buy Now</span>
                     </button>
                   </div>
-                  <div className="flex items-center space-x-4 mt-4">
-                    <button className="flex items-center space-x-2 text-muted-foreground hover:text-foreground animate-smooth">
-                      <Heart className="w-5 h-5" />
+                  <div className="flex items-center space-x-8 mt-8 border-t border-border pt-8">
+                    <button className="flex items-center space-x-3 text-muted-foreground hover:text-foreground transition-colors font-bold text-[10px] uppercase tracking-widest">
+                      <Heart className="w-4 h-4" />
                       <span>Add to Wishlist</span>
                     </button>
                     <button
                       onClick={handleCopyURL}
-                      className="flex items-center space-x-2 text-muted-foreground hover:text-foreground animate-smooth"
+                      className="flex items-center space-x-3 text-muted-foreground hover:text-foreground transition-colors font-bold text-[10px] uppercase tracking-widest"
                     >
-                      <Share2 className="w-5 h-5" />
+                      <Share2 className="w-4 h-4" />
                       <span>Share</span>
                     </button>
                   </div>
@@ -245,16 +247,16 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          <div className="glass-panel">
-            <div className="flex border-b border-[hsla(var(--glass-border))]">
+          <div className="border border-border">
+            <div className="flex border-b border-border bg-secondary/30">
               {["description", "reviews"].map((tab) => {
                 return (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-6 py-4 font-medium capitalize transition-all duration-300 rounded-t-lg ${activeTab === tab
-                        ? "text-foreground border-b-2 border-foreground bg-secondary"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                    className={`px-12 py-6 font-bold text-xs uppercase tracking-widest transition-colors ${activeTab === tab
+                        ? "text-foreground bg-background border-r border-border first:border-l-0 border-l border-border"
+                        : "text-muted-foreground hover:text-foreground"
                       }`}
                   >
                     {tab}
@@ -262,24 +264,24 @@ const ProductDetail = () => {
                 );
               })}
             </div>
-            <div className="p-6">
+            <div className="p-8 md:p-12">
               {activeTab === "description" && (
-                <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">
-                    Product Description
+                <div className="max-w-3xl">
+                  <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-foreground mb-8">
+                    Description
                   </h3>
-                  <p className="text-muted-foreground loading-relaxed">
+                  <p className="text-sm text-foreground/80 leading-loose">
                     {product.description}
                   </p>
                 </div>
               )}
               {activeTab === "reviews" && (
-                <>
+                <div className="max-w-5xl">
                   <ReviewsContainer
                     product={product}
                     productReviews={productReviews}
                   />
-                </>
+                </div>
               )}
             </div>
           </div>
