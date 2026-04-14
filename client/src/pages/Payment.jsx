@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { ArrowLeft, Check } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { placeOrder } from "../store/slices/orderSlice";
 import { clearCartAPI } from "../store/slices/cartSlice";
@@ -37,8 +37,15 @@ const Payment = () => {
   // ✅ Prevent Razorpay popup from opening twice (React StrictMode)
   const paymentOpenedRef = useRef(false);
 
-  if (!authUser) return navigateTo("/products");
-  // if (cart.length === 0) return navigateTo("/cart");
+  // Clear stale shipping details from sessionStorage when cart is empty
+  useEffect(() => {
+    if (cart.length === 0) {
+      sessionStorage.removeItem("checkout_shipping_details");
+    }
+  }, [cart.length]);
+
+  if (!authUser) return <Navigate to="/products" replace />;
+  if (cart.length === 0) return <Navigate to="/cart" replace />;
 
 
   const total = cart.reduce(
@@ -144,27 +151,6 @@ const Payment = () => {
     shippingDetails.fullName,
     shippingDetails.phone,
   ]);
-
-  if (cart.length === 0) {
-    return (
-      <div className="min-h-screen pt-20 flex items-center justify-center">
-        <div className="text-center glass-panel max-w-md">
-          <h1 className="text-3xl font-bold text-foreground mb-4">
-            No Items in Cart.
-          </h1>
-          <p className="text-muted-foreground mb-8">
-            Add some items to your cart before processing to checkout.
-          </p>
-          <Link
-            to={"/products"}
-            className="inline-flex items-center space-x-2 px-6 py-3 rounded-lg text-primary-foreground gradient-primary hover:glow-on-hover animate-smooth font-semibold"
-          >
-            Browse Products
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -443,7 +429,7 @@ const Payment = () => {
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Shipping</span>
                       <span className="text-foreground">
-                        {totalWithTax >= 50 ? "Free" : "$2"}
+                        {total >= 50 ? "Free" : "$2"}
                       </span>
                     </div>
 

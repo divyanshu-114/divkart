@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Filter, Package, Truck, CheckCircle, XCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { fetchMyOrders } from "../store/slices/orderSlice";
 
 const Orders = () => {
@@ -65,8 +65,7 @@ const Orders = () => {
   ];
 
   const { authUser } = useSelector((state) => state.auth);
-  const navigateTo = useNavigate();
-  if (!authUser) return navigateTo("/products");
+  if (!authUser) return <Navigate to="/products" replace />;
 
   return (
     <>

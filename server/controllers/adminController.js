@@ -30,6 +30,10 @@ export const getAllUsers = catchAsyncErrors(async (req, res, next) => {
 export const deleteUser = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
 
+  if (id === req.user.id) {
+    return next(new ErrorHandler("Admins cannot delete their own account.", 400));
+  }
+
   const deleteUser = await pool.query(
     "DELETE FROM users WHERE id = $1 RETURNING *",
     [id]

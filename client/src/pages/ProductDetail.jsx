@@ -43,8 +43,8 @@ const ProductDetail = () => {
       .then(() => {
         toast.success("URL Copied ", currentURL);
       })
-      .catch((err) => {
-        console.error("Failed to copy:", err);
+      .catch(() => {
+        toast.error("Failed to copy URL. Please copy it manually.");
       });
   };
 

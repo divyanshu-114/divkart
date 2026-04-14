@@ -4,6 +4,9 @@ import pool from "../database/db.js";
 import {v2 as cloudinary} from "cloudinary";
 import { getAIRecommendation } from "../utils/getAIRecommendation.js";
 
+// Prices are stored in USD. Admin enters prices in INR; divide by this rate to convert.
+const INR_TO_USD_RATE = 88;
+
 export const createProduct = catchAsyncErrors(async(req,res,next)=>{
     const {name, description, price, category , stock} = req.body;
     const created_by = req.user.id;
@@ -30,7 +33,7 @@ export const createProduct = catchAsyncErrors(async(req,res,next)=>{
         }
     }
     const product = await pool.query(`insert into products (name, description, price, category, stock, images, created_by) values ($1, $2, $3, $4, $5, $6, $7) returning *`, 
-        [name, description, price / 88, category, stock, JSON.stringify(uploadedImages), created_by]);
+        [name, description, price / INR_TO_USD_RATE, category, stock, JSON.stringify(uploadedImages), created_by]);
 
     res.status(201).json({
         success: true,
@@ -166,7 +169,7 @@ export const updateProduct = catchAsyncErrors(async(req,res,next)=>{
         return next(new ErrorHandler("Product not found", 404));
     }
    const result = await pool.query(`update products set name = $1, description = $2, price = $3, category = $4, stock = $5 where id = $6 returning *`, 
-        [name, description, price / 88, category, stock, productId]);
+        [name, description, price / INR_TO_USD_RATE, category, stock, productId]);
     res.status(200).json({
         success: true,
         message: "Product updated successfully",

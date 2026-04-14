@@ -13,11 +13,12 @@ import {v2 as cloudinary} from "cloudinary";
 export const register = catchAsyncErrors(async(req, res, next) => {
     const {name, email, password} = req.body;
 
-    if(password.length < 8 ||
-        password.length > 16 
-     ){
+    if(password.length < 8 || password.length > 16){
         return next(new ErrorHandler("Password must be between 8 and 16 characters", 400));
-     }
+    }
+    if(!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)){
+        return next(new ErrorHandler("Password must contain at least one uppercase letter, one lowercase letter, and one number", 400));
+    }
 
     if(!name || !email || !password){
         return next(new ErrorHandler("Please provide all required fields", 400));

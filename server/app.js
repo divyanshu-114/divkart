@@ -10,6 +10,7 @@ import productRouter from "./router/productRoutes.js";
 import adminRouter from "./router/adminRoutes.js";
 import orderRouter from "./router/orderRoutes.js";
 import cartRouter from "./router/cartRoutes.js";
+import { rateLimit } from "express-rate-limit";
 // import Stripe from "stripe";
 import pool from "./database/db.js";
 import crypto from "crypto";
@@ -42,6 +43,14 @@ app.use(
 );
 
 app.options(/.*/, cors());
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20,
+  message: { success: false, message: "Too many requests. Please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 
 
@@ -80,47 +89,62 @@ app.post(
           return res.status(200).json({ status: "ok" });
         }
 
-        // ✅ Idempotent update: only if Pending
-        const result = await pool.query(
-          `
-          UPDATE payments
-          SET payment_status = 'Paid'
-          WHERE payment_intent_id = $1 AND payment_status = 'Pending'
-          RETURNING order_id
-          `,
-          [razorpayOrderId]
-        );
+        const client = await pool.connect();
+        try {
+          await client.query("BEGIN");
 
-        // Already processed OR payment row not found
-        if (!result.rows.length) {
-          return res.status(200).json({ status: "ok" });
-        }
-
-        const orderId = result.rows[0].order_id;
-
-        const updateOrder = await pool.query(`UPDATE orders SET paid_at = NOW() WHERE id = $1 RETURNING buyer_id`, [
-          orderId,
-        ]);
-
-        if (updateOrder.rows.length > 0) {
-            const buyerId = updateOrder.rows[0].buyer_id;
-            await pool.query(`DELETE FROM carts WHERE user_id = $1`, [buyerId]);
-        }
-
-        const items = await pool.query(
-          `SELECT product_id, quantity FROM order_items WHERE order_id = $1`,
-          [orderId]
-        );
-
-        for (const item of items.rows) {
-          await pool.query(
+          // ✅ Idempotent update: only if Pending
+          const result = await client.query(
             `
-            UPDATE products
-            SET stock = stock - $1
-            WHERE id = $2 AND stock >= $1
+            UPDATE payments
+            SET payment_status = 'Paid'
+            WHERE payment_intent_id = $1 AND payment_status = 'Pending'
+            RETURNING order_id
             `,
-            [item.quantity, item.product_id]
+            [razorpayOrderId]
           );
+
+          // Already processed OR payment row not found
+          if (!result.rows.length) {
+            await client.query("ROLLBACK");
+            client.release();
+            return res.status(200).json({ status: "ok" });
+          }
+
+          const orderId = result.rows[0].order_id;
+
+          const updateOrder = await client.query(
+            `UPDATE orders SET paid_at = NOW() WHERE id = $1 RETURNING buyer_id`,
+            [orderId]
+          );
+
+          if (updateOrder.rows.length > 0) {
+            const buyerId = updateOrder.rows[0].buyer_id;
+            await client.query(`DELETE FROM carts WHERE user_id = $1`, [buyerId]);
+          }
+
+          const items = await client.query(
+            `SELECT product_id, quantity FROM order_items WHERE order_id = $1`,
+            [orderId]
+          );
+
+          for (const item of items.rows) {
+            await client.query(
+              `
+              UPDATE products
+              SET stock = stock - $1
+              WHERE id = $2 AND stock >= $1
+              `,
+              [item.quantity, item.product_id]
+            );
+          }
+
+          await client.query("COMMIT");
+        } catch (txErr) {
+          await client.query("ROLLBACK");
+          throw txErr;
+        } finally {
+          client.release();
         }
       }
 
@@ -145,7 +169,7 @@ app.use(
   })
 );
 
-app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/auth", authLimiter, authRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/order", orderRouter);

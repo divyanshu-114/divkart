@@ -29,9 +29,14 @@ export const placeNewOrder = catchAsyncErrors(async (req, res, next) => {
     );
   }
 
-  const items = Array.isArray(orderedItems)
-    ? orderedItems
-    : JSON.parse(orderedItems);
+  let items;
+  try {
+    items = Array.isArray(orderedItems)
+      ? orderedItems
+      : JSON.parse(orderedItems);
+  } catch {
+    return next(new ErrorHandler("Invalid order items format.", 400));
+  }
 
   if (!items || items.length === 0) {
     return next(new ErrorHandler("No items in cart.", 400));
