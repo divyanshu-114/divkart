@@ -2,156 +2,127 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Modern E-commerce Design System with Glassmorphism & Animations */
+/* ─── Gramuse-Inspired Design System ────────────────────────────────────── */
 
 @layer base {
   :root {
-    /* Black & white theme - dark mode default */
-    --background: 0 0% 4%;
-    --foreground: 0 0% 98%;
+    /* ── Light / Default (warm cream + forest green) ── */
+    --background: 40 30% 96%;           /* #F7F4EE warm cream */
+    --foreground: 150 47% 10%;          /* #0D2418 very dark green (headings, body) */
 
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;                  /* #FFFFFF */
+    --card-foreground: 150 47% 10%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 47% 10%;
 
-    /* Primary = white (CTA contrast on dark) */
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 4%;
+    --primary: 150 47% 19%;             /* #1a4731 forest green */
+    --primary-foreground: 0 0% 100%;    /* white on green */
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 40 25% 93%;            /* #EDE9E2 light cream */
+    --secondary-foreground: 150 47% 10%;
 
-    --muted: 0 0% 14%;
-    --muted-foreground: 0 0% 55%;
+    --muted: 40 20% 90%;                /* #E5E1D8 */
+    --muted-foreground: 220 9% 46%;     /* #6B7280 medium gray */
 
-    --accent: 0 0% 18%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 77 73% 49%;               /* #ADDE1E lime green */
+    --accent-foreground: 150 47% 10%;   /* dark on lime */
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 18%;
-    --input: 0 0% 14%;
-    --ring: 0 0% 70%;
+    --border: 40 15% 88%;               /* #E1DDD5 subtle border */
+    --input: 40 25% 93%;
+    --ring: 150 47% 19%;
 
-    --radius: 0;
+    --radius: 0.75rem;
 
-    /* Monochrome minimal */
-    --glass-bg: 0 0% 100%;
-    --glass-border: 0 0% 8%;
-    --glass-shadow: none;
-    
-    --gradient-primary: none;
-    --gradient-secondary: none;
-    --gradient-glass: none;
-    
-    --shadow-glow: none;
-    --shadow-glass: none;
-    --shadow-elegant: none;
-    
-    --animation-smooth: all 0.3s ease;
-    --animation-bounce: all 0.4s ease;
-    --animation-spring: all 0.5s ease;
-
+    /* Sidebar */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 0 0% 8%;
-    --sidebar-primary: 0 0% 8%;
+    --sidebar-foreground: 150 47% 10%;
+    --sidebar-primary: 150 47% 19%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 8%;
-    --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 0 0% 8%;
+    --sidebar-accent: 40 25% 93%;
+    --sidebar-accent-foreground: 150 47% 10%;
+    --sidebar-border: 40 15% 88%;
+    --sidebar-ring: 150 47% 19%;
+
+    /* Legacy glass vars → mapped to new tokens */
+    --glass-bg: 0 0% 100%;
+    --glass-border: 40 15% 88%;
+    --animation-smooth: all 0.25s ease;
+    --animation-bounce: all 0.35s ease;
+    --animation-spring: all 0.45s ease;
   }
 
   .light {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 8%;
-
+    --background: 40 30% 96%;
+    --foreground: 150 47% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 8%;
-
+    --card-foreground: 150 47% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 8%;
-
-    --primary: 0 0% 8%;
+    --popover-foreground: 150 47% 10%;
+    --primary: 150 47% 19%;
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 0 0% 98%;
-    --secondary-foreground: 0 0% 8%;
-
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
-
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 8%;
-
-    --destructive: 0 84% 40%;
+    --secondary: 40 25% 93%;
+    --secondary-foreground: 150 47% 10%;
+    --muted: 40 20% 90%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 77 73% 49%;
+    --accent-foreground: 150 47% 10%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 0% 8%;
-
-    --glass-bg: 0 0% 100%;
-    --glass-border: 0 0% 90%;
-    --shadow-glow: none;
-    --shadow-glass: none;
-    --shadow-elegant: none;
-
-    --gradient-primary: none;
-    --gradient-glass: none;
-
+    --border: 40 15% 88%;
+    --input: 40 25% 93%;
+    --ring: 150 47% 19%;
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 0 0% 8%;
-    --sidebar-primary: 0 0% 8%;
+    --sidebar-foreground: 150 47% 10%;
+    --sidebar-primary: 150 47% 19%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 8%;
-    --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 0 0% 8%;
+    --sidebar-accent: 40 25% 93%;
+    --sidebar-accent-foreground: 150 47% 10%;
+    --sidebar-border: 40 15% 88%;
+    --sidebar-ring: 150 47% 19%;
   }
 
   .dark {
-    /* Forcing dark to match light for the ultra minimal feel, 
-       or we can keep it dark but flat and high contrast like #141414 */
-    --background: 0 0% 8%;
-    --foreground: 0 0% 100%;
+    /* ── Dark green forest theme ── */
+    --background: 150 45% 6%;           /* #091410 very dark green */
+    --foreground: 40 25% 93%;           /* #EDE9E2 warm light cream */
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 100%;
+    --card: 150 40% 10%;                /* #0F2117 dark green card */
+    --card-foreground: 40 25% 93%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 150 40% 10%;
+    --popover-foreground: 40 25% 93%;
 
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 8%;
+    --primary: 77 73% 49%;              /* #ADDE1E lime on dark */
+    --primary-foreground: 150 47% 10%;  /* dark text on lime */
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 150 35% 13%;           /* #141F18 slightly lighter dark */
+    --secondary-foreground: 40 20% 80%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 150 30% 16%;
+    --muted-foreground: 150 10% 55%;    /* muted green-gray */
 
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 77 73% 49%;
+    --accent-foreground: 150 47% 10%;
 
-    --destructive: 0 84% 40%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 0 0% 100%;
+    --border: 150 35% 18%;              /* #1F3428 */
+    --input: 150 35% 13%;
+    --ring: 77 73% 49%;
 
-    --sidebar-background: 0 0% 8%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 0 0% 8%;
-    --sidebar-accent: 0 0% 15%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 0 0% 100%;
+    --sidebar-background: 150 40% 10%;
+    --sidebar-foreground: 40 25% 93%;
+    --sidebar-primary: 77 73% 49%;
+    --sidebar-primary-foreground: 150 47% 10%;
+    --sidebar-accent: 150 35% 13%;
+    --sidebar-accent-foreground: 40 25% 93%;
+    --sidebar-border: 150 35% 18%;
+    --sidebar-ring: 77 73% 49%;
   }
 }
 
@@ -166,49 +137,55 @@
 
   body {
     @apply bg-background text-foreground overflow-x-hidden antialiased;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  }
-
-  /* Remove gradient mesh */
-  body::before {
-    display: none;
+    font-family: 'Nunito', sans-serif;
   }
 }
 
 @layer components {
-  /* Minimal utilities replacing glassmorphism */
+  /* ── Card utilities ── */
   .glass {
-    @apply bg-background border-border;
+    @apply bg-card border border-border rounded-xl;
     transition: var(--animation-smooth);
-  }
-  
-  .glass-panel {
-    @apply bg-card border border-border p-6 rounded-none;
-    transition: var(--animation-smooth);
-  }
-  
-  .glass-card {
-    @apply bg-card border border-border p-4 transition-all duration-300 ease-out rounded-none;
-  }
-  
-  .glass-card:hover {
-    @apply border-foreground/30;
   }
 
-  /* Gradient utilities */
-  .gradient-primary {
-    @apply bg-primary;
+  .glass-panel {
+    @apply bg-card border border-border p-6 rounded-xl;
+    transition: var(--animation-smooth);
   }
-  
+
+  .glass-card {
+    @apply bg-card border border-border p-4 transition-all duration-300 ease-out rounded-xl;
+    box-shadow: 0 1px 4px 0 rgba(26, 71, 49, 0.06);
+  }
+
+  .glass-card:hover {
+    box-shadow: 0 4px 16px 0 rgba(26, 71, 49, 0.10);
+    @apply border-primary/20;
+  }
+
+  /* ── Gradient / fill utilities ── */
+  .gradient-primary {
+    @apply bg-primary text-primary-foreground;
+  }
+
   .gradient-glass {
     @apply bg-secondary;
   }
-  
-  /* Animation utilities */
+
+  /* ── Glow (now a soft green shadow) ── */
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.25);
+  }
+
+  .glow-on-hover:hover {
+    box-shadow: 0 4px 20px hsl(var(--primary) / 0.15);
+  }
+
+  /* ── Animation utilities ── */
   .animate-smooth {
     transition: var(--animation-smooth);
   }
-  
+
   .animate-bounce-in {
     transition: var(--animation-bounce);
   }
@@ -216,150 +193,157 @@
   .animate-spring {
     transition: var(--animation-spring);
   }
-  
-  /* Glow effects removed */
-  .glow-primary {
-    box-shadow: none;
-  }
-  
-  .glow-on-hover:hover {
-    box-shadow: none;
-  }
 
-  /* Button press effect */
+  /* ── Button press effect ── */
   .btn-press:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
 
-  /* Input focus */
-  input:focus, textarea:focus {
+  /* ── Input focus ── */
+  input:focus,
+  textarea:focus {
     outline: none;
-    @apply border-foreground;
-    box-shadow: none;
+    @apply border-primary;
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12);
   }
 
-  /* Range slider accent */
+  /* ── Range slider ── */
   input[type="range"] {
     @apply accent-primary;
+  }
+
+  /* ── "See more" link style (Gramuse pattern) ── */
+  .see-more-link {
+    @apply text-sm font-semibold text-primary hover:text-primary/70 transition-colors flex items-center gap-1;
+  }
+
+  /* ── Section heading style ── */
+  .section-title {
+    @apply text-2xl font-bold text-foreground;
+  }
+
+  /* ── Product card ── */
+  .product-card {
+    @apply bg-card rounded-2xl overflow-hidden border border-border transition-all duration-300;
+    box-shadow: 0 1px 4px 0 rgba(26, 71, 49, 0.06);
+  }
+
+  .product-card:hover {
+    box-shadow: 0 6px 24px 0 rgba(26, 71, 49, 0.12);
+    @apply -translate-y-0.5;
+  }
+
+  /* ── Category pill ── */
+  .category-pill {
+    @apply bg-card rounded-2xl border border-border p-4 text-center transition-all duration-200 hover:border-primary/30 hover:shadow-md cursor-pointer;
+    box-shadow: 0 1px 4px 0 rgba(26, 71, 49, 0.06);
+  }
+
+  /* ── Pill / chip button ── */
+  .pill-btn {
+    @apply px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200;
+  }
+
+  .pill-btn-active {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  .pill-btn-inactive {
+    @apply bg-card text-foreground border border-border hover:border-primary/40;
   }
 }
 
 @layer utilities {
-  /* Custom scrollbar - stylish thin */
+  /* ── Scrollbar ── */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
 
-  /* Styled scrollbar for overflow areas */
   .scrollbar-styled::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  .scrollbar-styled::-webkit-scrollbar-track {
-    @apply bg-secondary/50 rounded-full;
-  }
-  .scrollbar-styled::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50;
-    transition: var(--animation-smooth);
+    width: 5px;
+    height: 5px;
   }
 
-  /* Keyframes */
+  .scrollbar-styled::-webkit-scrollbar-track {
+    @apply bg-secondary rounded-full;
+  }
+
+  .scrollbar-styled::-webkit-scrollbar-thumb {
+    @apply bg-primary/30 rounded-full;
+  }
+
+  .scrollbar-styled::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/50;
+  }
+
+  /* ── Keyframes ── */
   @keyframes slideInRight {
     from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+    to   { transform: translateX(0);    opacity: 1; }
   }
-  
+
   @keyframes slideInLeft {
     from { transform: translateX(-100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+    to   { transform: translateX(0);     opacity: 1; }
   }
-  
+
   @keyframes slideInTop {
     from { transform: translateY(-100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(0);     opacity: 1; }
   }
-  
+
   @keyframes fadeInUp {
     from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(0);    opacity: 1; }
   }
 
   @keyframes fadeIn {
     from { opacity: 0; }
-    to { opacity: 1; }
+    to   { opacity: 1; }
   }
 
   @keyframes scaleIn {
     from { transform: scale(0.95); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    to   { transform: scale(1);    opacity: 1; }
   }
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
+    50%       { transform: translateY(-6px); }
   }
 
   @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
   }
 
   @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 20px hsl(0 0% 100% / 0.1); }
-    50% { box-shadow: 0 0 35px hsl(0 0% 100% / 0.15); }
+    0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.15); }
+    50%       { box-shadow: 0 0 35px hsl(var(--primary) / 0.25); }
   }
 
   @keyframes stagger-in {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* Animation classes */
-  .animate-slide-in-right {
-    animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  
-  .animate-slide-in-left {
-    animation: slideInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  
-  .animate-slide-in-top {
-    animation: slideInTop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  
-  .animate-fade-in-up {
-    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
+  /* ── Animation classes ── */
+  .animate-slide-in-right { animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .animate-slide-in-left  { animation: slideInLeft  0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .animate-slide-in-top   { animation: slideInTop   0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .animate-fade-in-up     { animation: fadeInUp     0.5s  cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .animate-fade-in        { animation: fadeIn       0.35s ease-out forwards; }
+  .animate-scale-in       { animation: scaleIn      0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .animate-float          { animation: float        4s    ease-in-out infinite; }
+  .animate-pulse-glow     { animation: pulse-glow   2s    ease-in-out infinite; }
 
-  .animate-fade-in {
-    animation: fadeIn 0.4s ease-out forwards;
-  }
-
-  .animate-scale-in {
-    animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  .animate-float {
-    animation: float 4s ease-in-out infinite;
-  }
-
-  .animate-pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
-  }
-
-  /* Stagger delay utilities */
-  .stagger-1 { animation-delay: 50ms; }
+  /* ── Stagger delays ── */
+  .stagger-1 { animation-delay:  50ms; }
   .stagger-2 { animation-delay: 100ms; }
   .stagger-3 { animation-delay: 150ms; }
   .stagger-4 { animation-delay: 200ms; }
@@ -367,7 +351,7 @@
   .stagger-6 { animation-delay: 300ms; }
 }
 
-/* Reduced motion preference */
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

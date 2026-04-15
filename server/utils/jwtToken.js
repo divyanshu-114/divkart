@@ -8,11 +8,13 @@ export const sendToken = (user, statusCode, message, res) => {
     const cookieMaxAge = Number(process.env.COOKIE_EXPIRES_IN) || 30 * 24 * 60 * 60 * 1000;
 
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.status(statusCode).cookie("token", token, {
         expires: new Date(Date.now() + cookieMaxAge ),
         httpOnly: true,
-        secure : true,
-        sameSite: "none",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
     }).json({
         success: true,
         user,

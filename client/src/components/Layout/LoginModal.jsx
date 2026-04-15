@@ -1,31 +1,19 @@
 import { useState, useEffect } from "react";
-import { X, Mail, Lock, User } from "lucide-react";
+import { X, Leaf } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { toggleAuthPopup } from "../../store/slices/popupSlice";
-import {
-  forgotPassword,
-  login,
-  register,
-  resetPassword,
-} from "../../store/slices/authSlice";
+import { forgotPassword, login, register, resetPassword } from "../../store/slices/authSlice";
 
 const LoginModal = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const {
-    authUser,
-    isSigningUp,
-    isLoggingIn,
-    isRequestingForToken,
-    isUpdatingPassword,
-  } = useSelector((state) => state.auth);
-
+  const { authUser, isSigningUp, isLoggingIn, isRequestingForToken, isUpdatingPassword } =
+    useSelector((state) => state.auth);
   const { isAuthPopupOpen } = useSelector((state) => state.popup);
 
-  const [mode, setMode] = useState("signin"); 
-  // signin | signup | forgot | reset
+  const [mode, setMode] = useState("signin"); // signin | signup | forgot | reset
 
   const [formData, setFormData] = useState({
     name: "",
@@ -34,7 +22,6 @@ const LoginModal = () => {
     confirmPassword: "",
   });
 
-  /* ================= RESET PASSWORD URL ================= */
   useEffect(() => {
     if (location.pathname.startsWith("/password/reset")) {
       setMode("reset");
@@ -42,19 +29,12 @@ const LoginModal = () => {
     }
   }, [location.pathname, dispatch]);
 
-  /* ================= CLEAR FORM AFTER LOGIN ================= */
   useEffect(() => {
     if (authUser) {
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
+      setFormData({ name: "", email: "", password: "", confirmPassword: "" });
     }
   }, [authUser]);
 
-  /* ================= SUBMIT HANDLER ================= */
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -62,16 +42,9 @@ const LoginModal = () => {
       dispatch(forgotPassword({ email: formData.email }));
       return;
     }
-
     if (mode === "reset") {
       const token = location.pathname.split("/").pop();
-      dispatch(
-        resetPassword({
-          token,
-          password: formData.password,
-          confirmPassword: formData.confirmPassword,
-        })
-      );
+      dispatch(resetPassword({ token, password: formData.password, confirmPassword: formData.confirmPassword }));
       return;
     }
 
@@ -89,334 +62,141 @@ const LoginModal = () => {
 
   if (!isAuthPopupOpen || authUser) return null;
 
-  const isLoading =
-    isLoggingIn || isSigningUp || isRequestingForToken || isUpdatingPassword;
+  const isLoading = isLoggingIn || isSigningUp || isRequestingForToken || isUpdatingPassword;
+
+  const inputClass = "w-full px-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 text-sm font-medium text-foreground placeholder-muted-foreground transition-all";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* overlay */}
-      <div className="absolute inset-0 backdrop-blur-sm bg-background/80 animate-fade-in" onClick={() => dispatch(toggleAuthPopup())} />
+      <div
+        className="absolute inset-0 backdrop-blur-sm bg-black/40 animate-fade-in"
+        onClick={() => dispatch(toggleAuthPopup())}
+      />
 
-      <div className="relative z-10 bg-background border border-border w-full max-w-md mx-4 p-8 animate-fade-in">
-        {/* header */}
-        <div className="flex items-center justify-between mb-8 pb-6 border-b border-border">
-          <h2 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground">
-            {mode === "signup"
-              ? "Create Account"
-              : mode === "forgot"
-              ? "Forgot Password"
-              : mode === "reset"
-              ? "Reset Password"
-              : "Sign In"}
-          </h2>
-
+      {/* modal card */}
+      <div className="relative z-10 bg-card border border-border rounded-2xl w-full max-w-md mx-4 shadow-panel animate-scale-in overflow-hidden">
+        {/* green top bar */}
+        <div className="bg-brand-green px-6 py-5 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 bg-accent rounded-full flex items-center justify-center">
+              <Leaf className="w-4 h-4 text-accent-foreground" strokeWidth={2.5} />
+            </div>
+            <h2 className="text-white font-bold text-base">
+              {mode === "signup" ? "Create Account"
+                : mode === "forgot" ? "Reset Password"
+                : mode === "reset"  ? "New Password"
+                : "Welcome back"}
+            </h2>
+          </div>
           <button
             onClick={() => dispatch(toggleAuthPopup())}
-            className="p-2 text-foreground hover:opacity-60 transition-opacity"
+            className="p-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {mode === "signup" && (
-            <input
-              type="text"
-              placeholder="FULL NAME"
-              className="w-full p-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-xs uppercase tracking-widest font-semibold transition-colors placeholder:text-muted-foreground"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              required
-            />
-          )}
+        {/* form body */}
+        <div className="p-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {mode === "signup" && (
+              <input
+                type="text"
+                placeholder="Full name"
+                className={inputClass}
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+            )}
 
-          {mode !== "reset" && (
-            <input
-              type="email"
-              placeholder="EMAIL ADDRESS"
-              className="w-full p-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-xs uppercase tracking-widest font-semibold transition-colors placeholder:text-muted-foreground"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              required
-            />
-          )}
+            {mode !== "reset" && (
+              <input
+                type="email"
+                placeholder="Email address"
+                className={inputClass}
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+              />
+            )}
 
-          {mode !== "forgot" && (
-            <input
-              type="password"
-              placeholder="PASSWORD"
-              className="w-full p-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-xs uppercase tracking-widest font-semibold transition-colors placeholder:text-muted-foreground"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              required
-            />
-          )}
+            {mode !== "forgot" && (
+              <input
+                type="password"
+                placeholder="Password"
+                className={inputClass}
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                required
+              />
+            )}
 
-          {mode === "reset" && (
-            <input
-              type="password"
-              placeholder="CONFIRM PASSWORD"
-              className="w-full p-4 bg-transparent border-b border-border focus:outline-none focus:border-foreground text-xs uppercase tracking-widest font-semibold transition-colors placeholder:text-muted-foreground"
-              value={formData.confirmPassword}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  confirmPassword: e.target.value,
-                })
-              }
-              required
-            />
-          )}
+            {mode === "reset" && (
+              <input
+                type="password"
+                placeholder="Confirm password"
+                className={inputClass}
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                required
+              />
+            )}
 
-          {mode === "signin" && (
+            {mode === "signin" && (
+              <div className="text-right">
+                <button
+                  type="button"
+                  onClick={() => setMode("forgot")}
+                  className="text-xs font-semibold text-primary hover:text-primary/70 transition-colors"
+                >
+                  Forgot password?
+                </button>
+              </div>
+            )}
+
             <button
-              type="button"
-              onClick={() => setMode("forgot")}
-              className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold text-right w-full hover:text-foreground transition-colors pt-2"
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-3.5 bg-primary text-primary-foreground rounded-full font-bold text-sm hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
-              Forgot password?
+              {isLoading ? "Processing…"
+                : mode === "signup" ? "Create Account"
+                : mode === "forgot" ? "Send Reset Link"
+                : mode === "reset"  ? "Reset Password"
+                : "Sign In"}
             </button>
+          </form>
+
+          {(mode === "signin" || mode === "signup") && (
+            <div className="mt-5 pt-4 border-t border-border text-center">
+              <button
+                type="button"
+                onClick={() => setMode((prev) => (prev === "signin" ? "signup" : "signin"))}
+                className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {mode === "signin" ? "Don't have an account? " : "Already have an account? "}
+                <span className="text-primary">{mode === "signin" ? "Sign up" : "Sign in"}</span>
+              </button>
+            </div>
           )}
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full py-4 bg-foreground text-background font-bold text-xs uppercase tracking-widest hover:opacity-80 transition-opacity disabled:opacity-50 mt-4"
-          >
-            {isLoading
-              ? "PROCESSING..."
-              : mode === "signup"
-              ? "CREATE ACCOUNT"
-              : mode === "forgot"
-              ? "SEND RESET LINK"
-              : mode === "reset"
-              ? "RESET PASSWORD"
-              : "SIGN IN"}
-          </button>
-        </form>
-
-        {(mode === "signin" || mode === "signup") && (
-          <div className="mt-8 pt-6 border-t border-border text-center">
-            <button
-              type="button"
-              onClick={() =>
-                setMode((prev) => (prev === "signin" ? "signup" : "signin"))
-              }
-              className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {mode === "signin"
-                ? "DON'T HAVE AN ACCOUNT? SIGN UP"
-                : "ALREADY HAVE AN ACCOUNT? SIGN IN"}
-            </button>
-          </div>
-        )}
+          {mode === "forgot" && (
+            <div className="mt-5 pt-4 border-t border-border text-center">
+              <button
+                type="button"
+                onClick={() => setMode("signin")}
+                className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Back to <span className="text-primary">Sign in</span>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
 export default LoginModal;
-
-
-
-
-
-
-
-
-
-
-
-// import { useState, useEffect } from "react";
-// import { X, Mail, Lock, User } from "lucide-react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { useLocation } from "react-router-dom";
-// import { toggleAuthPopup } from "../../store/slices/popupSlice";
-// import { forgotPassword, login, register, resetPassword } from "../../store/slices/authSlice";
-
-// const LoginModal = () => {
-//   const dispatch = useDispatch();
-//   const location = useLocation();
-
-//   const {authUser, isSigningUp, isLoggingIn, isRequestingForToken} = useSelector((state) => state.auth);
-//   const {isAuthPopupOpen} = useSelector((state) => state.popup);
-
-//   const [mode, setMode] = useState('signin');  // signin | signup | reset-password | forgot-password
-
-//   const [formData , setFormData] = useState({
-//     name : '',
-//     email : '',
-//     password : '',
-//     confirmPassword : '',
-    
-//   })
-
-//   // Detect reset password URL and open popup with reset mode
-
-//   useEffect(() => {
-//     if(location.pathname.startsWith("/password/reset")){
-//       setMode("reset");
-//       dispatch(toggleAuthPopup());
-//     }
-//   }, [location.pathname ,dispatch]);
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-
-//     const data = new FormData();
-
-//     data.append('email', formData.email);
-//     data.append('password', formData.password);
-//     if(mode === "signup"){
-//       data.append('name', formData.name);
-//     }
-//     if(mode === 'forgot'){
-//       dispatch(forgotPassword({email: formData.email})).then(() => {
-//         dispatch(toggleAuthPopup());
-//         setMode('signin');
-//       });
-//       return;
-//     }
-//     if(mode === 'reset'){
-//       const token = location.pathname.split("/").pop();
-//       dispatch(resetPassword({token, password: formData.password, confirmPassword: formData.confirmPassword}))
-
-//       return;
-//     }
-
-//     if(mode==='signup'){
-//       dispatch(register(data))
-//     }else{
-//       dispatch(login(data))
-//     }
-
-//   }
-
-//   if(authUser){
-//     setFormData({name : "", email: "", password: "", confirmPassword: ""})
-//   }
-
-//   if(!isAuthPopupOpen || authUser) return null;
-
-//   let isLoading = isLoggingIn || isSigningUp || isRequestingForToken;
-
-
-
-//   return <>
-//   <div className="fixed inset-0 z-50 flex items-center justify-center ">
-//     {/* overlay */}
-//     <div className="absolute inset-0 backdrop-blur-md bg-[hsla(var(--glass-bg))]"/>
-//     <div className="relative z-10 glass-panel w-full max-w-md mx-4 animate-fade-in-up">
-//       {/* header */}
-//       <div className="flex items-center justify-between mb-6">
-//         <h2 className="text-2l font-bold text-primary ">
-//           {
-//             mode === "reset" ? "Reset Password" : mode === "signup" ? "Create Account" : mode === "forgot" ? "Forgot Password" : "Welcome back"
-//           }
-//         </h2>
-//         <button onClick={()=>dispatch(toggleAuthPopup())} className="p-2 rounded-lg glass-card hover:glow-on-hover animate-smooth"><X className="w-5 h-5 text-primary"/></button>
-//       </div>
-//       {/* authentication form */}
-//       <form onSubmit={handleSubmit} className="space-y-4">
-//         {/* Full name only for signup  */}
-//         {
-//           mode === 'reset' && (
-//             <div className="relative">
-//               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground"/>
-//               <input type='text' placeholder="Full Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full pr-4 pl-10 py-3 rounded-lg border border-border bg-secondary focus:outline-none" required/>
-//             </div>
-//           )
-//         }
-//         {/* email always visible except reset mode */}
-//         {
-//           mode !== 'reset' && (
-//             <div className="relative">
-//               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground"/>
-//               <input type='email' placeholder="Email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full pr-4 pl-10 py-3 rounded-lg border border-border bg-secondary focus:outline-none" required/>
-//             </div>
-//           )
-//         }
-
-//         {/* Password always visisble except for forgot mode */}
-//         {
-//           mode !== 'forgot' && (
-//             <div className="relative">
-//               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground"/>
-//               <input type='password' placeholder="Password" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} className="w-full pr-4 pl-10 py-3 rounded-lg border border-border bg-secondary focus:outline-none" required/>
-//             </div>
-//           )
-//         }
-//         {/* confirm password only visible for reset mode */}
-//         {
-//           mode === 'reset' && (
-//             <div className="relative">
-//               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground"/>
-//               <input type='password' placeholder="Confirm Password" value={formData.confirmPassword} onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} className="w-full pr-4 pl-10 py-3 rounded-lg border border-border bg-secondary focus:outline-none" required/>
-//             </div>
-//           )
-//         }
-//         {/* forgot password toggle button */}
-//         {
-//           mode ==='signin' && (
-//             <div className="text-right-text-sm">
-//               <button type = "button" onClick={()=>setMode('forgot')} className="pl-60 text-primary hover:text-accent animate-smooth">Forgot Password ?</button>
-//             </div>
-//           )
-//         }
-//         {/* sbumit button */}
-//         <button type='submit' disabled={isLoading} className={`w-full py-3 gradient-primary flex 
-//           justify-center items-center gap-2 text-pirmary-foreground rounded-lg font-semibold animate-smooth 
-//           ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:glow-on-hover'}`}>
-//             {
-//               isLoading ? (
-//                 <>
-//                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin "/>
-//                 <span>
-//                   {
-//                     mode === 'reset' 
-//                     ? 'Resetting Password...' 
-//                     : mode === 'signup' 
-//                     ? 'Signing Up...' 
-//                     : mode === 'forgot' 
-//                     ? 'Requesting for email...' 
-//                     : 'Signing In...'
-//                   }
-//                 </span>
-//                 </>
-//               ) : mode ==='reset' 
-//                 ? ('Reset Password') 
-//                 : mode === 'signup'
-//                 ? ('Create Account')
-//                 : mode === 'forgot' 
-//                 ? ('Send request mail')
-//                 : ('Sign In'
-//             )}
-//         </button>
-
-//        </form>
-//       {/* mode toggle */}
-//       {["signin","signup"].includes(mode)&& (
-//         <div className="mt-6 text-center">
-//           <button type="button" onClick={()=>setMode(prev => prev === 'signup' ? 'signin' : 'signup')} className="text-primary hover:text-accent animate-smooth">
-//             {mode === 'signup' ? 'Already have an account? Sign In' : 'Don\'t have an account? Sign Up'}
-//           </button>
-//         </div>
-//       )}
-
-//     </div>
-//   </div>
-  
-//   </>;
-// };
-
-
-
-// export default LoginModal;
-

@@ -1,131 +1,126 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteReview, postReview } from "../../store/slices/productSlice";
-import { Star } from "lucide-react";
+import { Star, Trash2 } from "lucide-react";
 
 const ReviewsContainer = ({ product, productReviews }) => {
   const { authUser } = useSelector((state) => state.auth);
-  const { isReviewDeleting, isPostingReview } = useSelector(
-    (state) => state.product
-  );
+  const { isReviewDeleting, isPostingReview } = useSelector((state) => state.product);
   const dispatch = useDispatch();
 
-  const [rating, setRating] = useState(1);
+  const [rating, setRating] = useState(4);
   const [comment, setComment] = useState("");
+  const [hovered, setHovered] = useState(0);
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();
     dispatch(postReview({ productId: product.id, review: { rating, comment } }));
+    setComment("");
   };
 
   return (
     <>
+      {/* Review form */}
       {authUser && (
-        <form onSubmit={handleReviewSubmit} className="mb-8 space-y-4 animate-fade-in-up">
-          <h4 className="text-lg font-semibold">Leave a Review</h4>
-          <div className="flex items-center space-x-2">
-            {[...Array(5)].map((_, i) => {
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setRating(i + 1)}
-                  className={`text-2xl ${
-                    i < rating ? "text-yellow-400" : "text-gray-300"
+        <form onSubmit={handleReviewSubmit} className="mb-8 bg-secondary/50 rounded-2xl p-5 border border-border animate-fade-in-up">
+          <h4 className="text-base font-bold text-foreground mb-4">Leave a Review</h4>
+
+          {/* star rating */}
+          <div className="flex items-center gap-1 mb-4">
+            {[...Array(5)].map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setRating(i + 1)}
+                onMouseEnter={() => setHovered(i + 1)}
+                onMouseLeave={() => setHovered(0)}
+                className="text-2xl transition-transform hover:scale-110"
+              >
+                <Star
+                  className={`w-6 h-6 transition-colors ${
+                    i < (hovered || rating) ? "text-amber-400 fill-amber-400" : "text-muted-foreground/30"
                   }`}
-                >
-                  ☆
-                </button>
-              );
-            })}
+                />
+              </button>
+            ))}
           </div>
+
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            rows={4}
-            placeholder="Write your review..."
-            className="w-full p-3 rounded-xl border border-border bg-secondary/50 text-foreground focus:ring-2 focus:ring-primary/50 transition-all"
+            rows={3}
+            placeholder="Share your thoughts about this product…"
+            className="w-full px-4 py-3 bg-card border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 text-sm text-foreground placeholder-muted-foreground resize-none transition-all"
           />
           <button
             type="submit"
             disabled={isPostingReview}
-            className="px-6 py-2 rounded-lg gradient-primary text-primary-foreground font-semibold hover:glow-on-hover animate-smooth disabled:opacity-50"
+            className="mt-3 px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-bold text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
           >
-            {isPostingReview ? "Submitting..." : "Submit Review"}
+            {isPostingReview ? "Submitting…" : "Submit Review"}
           </button>
         </form>
       )}
 
-      <h3 className="text-xl font-semibold text-foreground mb-6">
-        Customer Review
+      {/* Reviews list */}
+      <h3 className="text-base font-bold text-foreground mb-4">
+        Customer Reviews
+        {productReviews?.length > 0 && (
+          <span className="ml-2 text-sm font-semibold text-muted-foreground">({productReviews.length})</span>
+        )}
       </h3>
-      {productReviews && productReviews.length > 0 ? (
-        <div className="space-y-6">
-          {productReviews.map((review) => {
-            return (
-              <div key={review.review_id} className="glass-card p-6 rounded-2xl animate-fade-in-up">
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={review.reviewer?.avatar?.url || "/avatar-holder.avif"}
-                    alt={review?.reviewer?.name}
-                    className="w-12 h-12 rounded-full text-foreground"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-4 mb-2">
-                      <h4 className="font-semibold text-foreground">
-                        {review?.reviewer?.name}
-                      </h4>
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => {
-                          return (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < Math.floor(review.rating)
-                                  ? "text-amber-400 fill-amber-400"
-                                  : "text-neutral-500"
-                              }`}
-                            />
-                          );
-                        })}
-                      </div>
-                    </div>
 
-                    <p className="text-muted-foreground mb-2">
-                      {review.comment}
-                    </p>
-                    {authUser?.id === review.reviewer?.id && (
-                      <button
-                        onClick={() =>
-                          dispatch(
-                            deleteReview({
-                              productId: product.id,
-                              reviewId: review.review_id,
-                            })
-                          )
-                        }
-                        className="my-6 w-fit flex items-center space-x-3 p-3 rounded-lg glass-card hover:glow-on-hover text-destructive hover:text-destructive-foreground group"
-                      >
-                        {isReviewDeleting ? (
-                          <>
-                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />{" "}
-                            <span>Deleting Review...</span>
-                          </>
-                        ) : (
-                          <span>Delete Review</span>
-                        )}
-                      </button>
-                    )}
+      {productReviews && productReviews.length > 0 ? (
+        <div className="space-y-4">
+          {productReviews.map((review) => (
+            <div
+              key={review.review_id}
+              className="bg-card rounded-2xl border border-border p-5 shadow-card animate-fade-in-up"
+            >
+              <div className="flex items-start gap-3">
+                <img
+                  src={review.reviewer?.avatar?.url || "/avatar-holder.avif"}
+                  alt={review?.reviewer?.name}
+                  className="w-10 h-10 rounded-full object-cover border-2 border-accent shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-1.5">
+                    <h4 className="font-bold text-sm text-foreground">{review?.reviewer?.name}</h4>
+                    <div className="flex items-center gap-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-3.5 h-3.5 ${
+                            i < Math.floor(review.rating)
+                              ? "text-amber-400 fill-amber-400"
+                              : "text-muted-foreground/20"
+                          }`}
+                        />
+                      ))}
+                    </div>
                   </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{review.comment}</p>
+
+                  {authUser?.id === review.reviewer?.id && (
+                    <button
+                      onClick={() => dispatch(deleteReview({ productId: product.id, reviewId: review.review_id }))}
+                      className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-red-500 hover:text-red-700 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" strokeWidth={2} />
+                      {isReviewDeleting ? "Deleting…" : "Delete Review"}
+                    </button>
+                  )}
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       ) : (
-        <p className="text-muted-foreground">
-          No reviews yet. Be the first one to review this product.
-        </p>
+        <div className="text-center py-10 bg-secondary/50 rounded-2xl border border-border border-dashed">
+          <p className="text-sm text-muted-foreground font-medium">
+            No reviews yet. Be the first to review this product!
+          </p>
+        </div>
       )}
     </>
   );

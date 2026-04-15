@@ -1,36 +1,43 @@
 import { Link } from "react-router-dom";
 import { categories } from "../../data/products";
+import { ChevronRight } from "lucide-react";
+
 const CategoryGrid = () => {
   return (
-    <section className="py-24">
-      <div className="text-center mb-16 animate-fade-in-up">
-        <h2 className="text-3xl font-bold text-foreground mb-4 tracking-wide uppercase">
-          Shop by Category
-        </h2>
-        <div className="w-12 h-[1px] bg-foreground mx-auto mb-6"></div>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Discover our wide range of products across different categories
-        </p>
+    <section className="py-10">
+      {/* Section header */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-extrabold text-foreground">Shop by Category</h2>
+        <Link
+          to="/products"
+          className="flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary/70 transition-colors"
+        >
+          See all <ChevronRight className="w-4 h-4" />
+        </Link>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
+      {/* Category pills — horizontal scroll on mobile, grid on desktop */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {categories.map((category, i) => (
           <Link
             key={category.id}
             to={`/products?category=${category.name}`}
-            className="group flex flex-col items-center text-center"
-            style={{ animationDelay: `${i * 50}ms` }}
+            className="category-pill group animate-fade-in-up"
+            style={{ animationDelay: `${i * 40}ms` }}
           >
-            <div className="w-full aspect-square relative overflow-hidden mb-6 bg-secondary">
+            {/* image */}
+            <div className="w-16 h-16 mx-auto mb-3 overflow-hidden rounded-xl bg-secondary">
               <img
                 src={category.image}
                 alt={category.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
             </div>
-            <h3 className="text-sm font-semibold text-foreground tracking-widest uppercase">
+
+            <h3 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
               {category.name}
             </h3>
+            <p className="text-xs text-muted-foreground mt-0.5">In store</p>
           </Link>
         ))}
       </div>

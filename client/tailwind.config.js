@@ -18,6 +18,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Nunito", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -62,45 +65,54 @@ module.exports = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        /* ── Gramuse brand tokens ── */
+        "brand-green": "#1a4731",
+        "brand-lime":  "#ADDE1E",
+        "brand-cream": "#F7F4EE",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      boxShadow: {
+        card: "0 1px 4px 0 rgba(26,71,49,0.07)",
+        "card-hover": "0 6px 24px 0 rgba(26,71,49,0.13)",
+        panel: "0 8px 40px 0 rgba(26,71,49,0.12)",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          to:   { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          to:   { height: "0" },
         },
         float: {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-6px)" },
+          "50%":       { transform: "translateY(-6px)" },
         },
         "fade-in-up": {
           from: { opacity: "0", transform: "translateY(16px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
+          to:   { opacity: "1", transform: "translateY(0)" },
         },
         "scale-in": {
           from: { opacity: "0", transform: "scale(0.96)" },
-          to: { opacity: "1", transform: "scale(1)" },
+          to:   { opacity: "1", transform: "scale(1)" },
         },
         shimmer: {
           from: { backgroundPosition: "-200% 0" },
-          to: { backgroundPosition: "200% 0" },
+          to:   { backgroundPosition:  "200% 0" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        float: "float 4s ease-in-out infinite",
-        "fade-in-up": "fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
-        "scale-in": "scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-        shimmer: "shimmer 2s linear infinite",
+        "accordion-up":   "accordion-up 0.2s ease-out",
+        float:            "float 4s ease-in-out infinite",
+        "fade-in-up":     "fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+        "scale-in":       "scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+        shimmer:          "shimmer 2s linear infinite",
       },
     },
   },

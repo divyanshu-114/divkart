@@ -6,6 +6,7 @@ import {
   fetchAllOrders,
   updateOrderStatus,
   deleteOrder,
+  verifyPayment,
 } from "../controllers/orderController.js";
 import {
   isAuthenticated,
@@ -14,6 +15,7 @@ import {
 
 const router = express.Router();
 router.post("/new", isAuthenticated, placeNewOrder);
+router.post("/payment/verify", isAuthenticated, verifyPayment);
 router.get("/orders/me", isAuthenticated, fetchMyOrders);
 router.get("/:orderId", isAuthenticated, fetchSingleOrder);
 router.get(

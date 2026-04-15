@@ -1,5 +1,5 @@
 import React from "react";
-import { Star, ShoppingCart } from "lucide-react";
+import { Star, Plus } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCartAPI } from "../../store/slices/cartSlice";
@@ -10,110 +10,95 @@ const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const { authUser } = useSelector((state) => state.auth);
 
-  const handleAddToCart = (product, e) => {
+  const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     if (!authUser) {
       toast.error("Please login to add items to cart");
       navigate("/login");
       return;
     }
-
     dispatch(addToCartAPI({ product, quantity: 1 }));
   };
 
+  const stockStatus = product.stock > 5
+    ? { label: "In Stock",      cls: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" }
+    : product.stock > 0
+    ? { label: "Limited Stock", cls: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400" }
+    : { label: "Out of Stock",  cls: "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" };
+
   return (
-    <>
-      <Link
-        key={product.id}
-        to={`/product/${product.id}`}
-        className="glass-card hover:glow-on-hover group rounded-2xl overflow-hidden block"
-      >
-        {/* product image */}
-        <div className="relative overflow-hidden rounded-xl mb-4">
-          {product?.images?.length > 0 ? (
-            <img
-              src={product?.images?.[0]?.url || product?.images?.[0]}
-              alt={product.name}
-              className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
-            />
-          ) : (
-            <div className="w-full h-48 bg-gray-200 animate-pulse" />
+    <Link
+      to={`/product/${product.id}`}
+      className="product-card group block"
+    >
+      {/* image area */}
+      <div className="relative overflow-hidden aspect-square bg-secondary">
+        {product?.images?.length > 0 ? (
+          <img
+            src={product?.images?.[0]?.url || product?.images?.[0]}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+          />
+        ) : (
+          <div className="w-full h-full bg-secondary animate-pulse" />
+        )}
+
+        {/* badges */}
+        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
+          {new Date() - new Date(product.created_at) < 30 * 24 * 60 * 60 * 1000 && (
+            <span className="bg-accent text-accent-foreground text-[9px] font-extrabold px-2.5 py-1 rounded-full">
+              NEW
+            </span>
           )}
-          {/* badges */}
-          <div className="absolute top-3 left-3 flex flex-col space-y-2">
-            {new Date() - new Date(product.created_at) <
-              30 * 24 * 60 * 60 * 1000 && (
-                <span className="bg-neutral-200 text-neutral-800 border border-neutral-300 dark:bg-white/20 dark:text-white dark:border-white/30 px-2 py-1 rounded-lg text-xs font-semibold">
-                  NEW
-                </span>
-              )}
-            {product.ratings >= 4.5 && (
-              <span className="bg-amber-500/90 text-white px-2 py-1 rounded-lg text-xs font-semibold shadow-md">
-                TOP RATED
-              </span>
-            )}
-          </div>
+          {product.ratings >= 4.5 && (
+            <span className="bg-primary text-primary-foreground text-[9px] font-extrabold px-2.5 py-1 rounded-full">
+              TOP RATED
+            </span>
+          )}
+        </div>
+      </div>
 
-          {/* Quick add to cart */}
-          <button
-            onClick={(e) => handleAddToCart(product, e)}
-            className="absolute bottom-3 right-3 p-2.5 glass-card hover:glow-on-hover opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl active:scale-95"
-            disabled={product.stock === 0}
-          >
-            <ShoppingCart className="text-foreground w-5 h-5" />
-          </button>
+      {/* info */}
+      <div className="p-4 pb-3">
+        <h3 className="text-sm font-semibold text-foreground mb-1.5 line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+          {product.name}
+        </h3>
+
+        {/* stars */}
+        <div className="flex items-center gap-1 mb-2">
+          {[...Array(5)].map((_, i) => (
+            <Star
+              key={i}
+              className={`w-3.5 h-3.5 ${
+                i < Math.floor(product.ratings)
+                  ? "text-amber-400 fill-amber-400"
+                  : "text-muted-foreground/30"
+              }`}
+            />
+          ))}
+          <span className="text-xs text-muted-foreground ml-1">({product.review_count})</span>
         </div>
 
-        {/* product info */}
-        <div>
-          <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-foreground transition-colors duration-300 line-clamp-2">
-            {product.name}
-          </h3>
-          <div className="flex items-center space-x-2 mb-2">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => {
-                return (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${i < Math.floor(product.ratings)
-                        ? "text-amber-400 fill-amber-400"
-                        : "text-neutral-500"
-                      }`}
-                  />
-                );
-              })}
-            </div>
-            <span className="text-sm text-muted-foreground ">
-              ({product.review_count})
-            </span>
-          </div>
-          {/* product price */}
-          <div className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-foreground">
-              ₹{product.price}
-            </span>
-          </div>
-          <div>
-            <span
-              className={`text-xs px-2 py-1 rounded-lg ${product.stock > 5
-                  ? "bg-green-500/20 text-green-500"
-                  : product.stock > 0
-                    ? "bg-amber-500/20 text-amber-600"
-                    : "bg-red-500/20 text-red-500"
-                }`}
-            >
-              {product.stock > 5
-                ? "In Stock"
-                : product.stock > 0
-                  ? "Limited Stock"
-                  : "Out of Stock"}
-            </span>
-          </div>
+        {/* price + stock */}
+        <div className="flex items-center justify-between">
+          <span className="text-lg font-extrabold text-foreground">₹{product.price}</span>
+          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${stockStatus.cls}`}>
+            {stockStatus.label}
+          </span>
         </div>
-      </Link>
-    </>
+      </div>
+
+      {/* add to cart button */}
+      <button
+        onClick={handleAddToCart}
+        disabled={product.stock === 0}
+        className="w-full py-3 bg-secondary hover:bg-primary hover:text-primary-foreground text-foreground text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed border-t border-border rounded-b-2xl"
+      >
+        <Plus className="w-4 h-4" strokeWidth={2.5} />
+        Add to Cart
+      </button>
+    </Link>
   );
 };
 

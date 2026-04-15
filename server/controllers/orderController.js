@@ -3,6 +3,7 @@ import { catchAsyncErrors } from "../middlewares/catchAsyncError.js";
 import pool from "../database/db.js";
 // import { generatePaymentIntent } from "../utils/generatePaymentIntent.js";
 import {generateRazorpayOrder} from "../utils/generateRazorpayOrder.js"
+import crypto from "crypto";
 
 export const placeNewOrder = catchAsyncErrors(async (req, res, next) => {
   const {
@@ -326,5 +327,82 @@ export const deleteOrder = catchAsyncErrors(async (req, res, next) => {
 });
 
 
+
+/* ===================== VERIFY RAZORPAY PAYMENT ===================== */
+export const verifyPayment = catchAsyncErrors(async (req, res, next) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    return next(new ErrorHandler("Missing payment verification data.", 400));
+  }
+
+  // Verify HMAC signature: sha256(order_id + "|" + payment_id, key_secret)
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  const expectedSignature = crypto
+    .createHmac("sha256", keySecret)
+    .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+    .digest("hex");
+
+  if (expectedSignature !== razorpay_signature) {
+    return next(new ErrorHandler("Payment signature verification failed.", 400));
+  }
+
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+
+    // Find the order via the Razorpay order ID stored in payments table
+    const paymentResult = await client.query(
+      `UPDATE payments
+       SET payment_status = 'Paid'
+       WHERE payment_intent_id = $1 AND payment_status = 'Pending'
+       RETURNING order_id`,
+      [razorpay_order_id]
+    );
+
+    if (!paymentResult.rows.length) {
+      // Already paid or not found — still return success (idempotent)
+      await client.query("ROLLBACK");
+      client.release();
+      return res.status(200).json({ success: true, message: "Payment already processed." });
+    }
+
+    const orderId = paymentResult.rows[0].order_id;
+
+    // Mark order as paid
+    const orderResult = await client.query(
+      `UPDATE orders SET paid_at = NOW() WHERE id = $1 RETURNING buyer_id`,
+      [orderId]
+    );
+
+    if (orderResult.rows.length > 0) {
+      const buyerId = orderResult.rows[0].buyer_id;
+
+      // Clear the buyer's cart
+      await client.query(`DELETE FROM carts WHERE user_id = $1`, [buyerId]);
+    }
+
+    // Decrement stock for each ordered item
+    const items = await client.query(
+      `SELECT product_id, quantity FROM order_items WHERE order_id = $1`,
+      [orderId]
+    );
+    for (const item of items.rows) {
+      await client.query(
+        `UPDATE products SET stock = stock - $1 WHERE id = $2 AND stock >= $1`,
+        [item.quantity, item.product_id]
+      );
+    }
+
+    await client.query("COMMIT");
+    client.release();
+
+    res.status(200).json({ success: true, message: "Payment verified and order confirmed." });
+  } catch (err) {
+    await client.query("ROLLBACK");
+    client.release();
+    throw err;
+  }
+});
 
 //  Backend Completed

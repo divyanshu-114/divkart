@@ -17,6 +17,23 @@ export const fetchMyOrders = createAsyncThunk(
   }
 );
 
+/* ===================== VERIFY RAZORPAY PAYMENT ===================== */
+export const verifyPayment = createAsyncThunk(
+  "order/payment/verify",
+  async (data, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post("/order/payment/verify", data);
+      toast.success("Payment confirmed! Order placed successfully.");
+      return res.data;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Payment verification failed.");
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Verification failed"
+      );
+    }
+  }
+);
+
 /* ===================== PLACE ORDER (RAZORPAY) ===================== */
 export const placeOrder = createAsyncThunk(
   "order/new",

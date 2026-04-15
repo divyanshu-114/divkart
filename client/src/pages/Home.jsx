@@ -7,22 +7,18 @@ import NewsletterSection from "../components/Home/NewsletterSection";
 import { useSelector } from "react-redux";
 
 const Index = () => {
-  const { topRatedProducts, newProducts } = useSelector(
-    (state) => state.product
-  );
+  const { topRatedProducts, newProducts } = useSelector((state) => state.product);
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <HeroSlider />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-2">
         <CategoryGrid />
         {newProducts.length > 0 && (
           <ProductSlider title="New Arrivals" products={newProducts} />
         )}
         {topRatedProducts.length > 0 && (
-          <ProductSlider
-            title="Top Rated Products"
-            products={topRatedProducts}
-          />
+          <ProductSlider title="Top Rated Products" products={topRatedProducts} />
         )}
         <FeatureSection />
         <NewsletterSection />

@@ -1,39 +1,42 @@
 import { useState } from "react";
-import { Mail, Send } from "lucide-react";
+import { Mail } from "lucide-react";
 
 const NewsletterSection = () => {
   const [email, setEmail] = useState("");
 
   return (
-    <section className="py-24 border-t border-border mt-16">
-      <div className="max-w-xl mx-auto text-center px-4">
-        <h2 className="text-2xl font-bold text-foreground mb-6 uppercase tracking-[0.2em]">
-          Stay in the Loop
-        </h2>
-        <p className="text-xs text-foreground/70 mb-12 tracking-widest uppercase font-semibold">
-          Sign up to receive updates on new arrivals and special offers.
-        </p>
+    <section className="py-8 mb-4">
+      <div className="bg-brand-green rounded-2xl px-8 py-10 md:px-14 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <Mail className="w-5 h-5 text-accent" strokeWidth={2} />
+            <span className="text-accent text-sm font-bold tracking-wide">Newsletter</span>
+          </div>
+          <h2 className="text-2xl font-extrabold text-white mb-2">Stay in the Loop</h2>
+          <p className="text-white/60 text-sm max-w-sm">
+            Sign up to receive updates on new arrivals, exclusive deals, and special offers.
+          </p>
+        </div>
 
-        <form className="flex w-full mx-auto border-b border-foreground mb-4 pb-3">
+        <form
+          className="flex w-full md:w-auto gap-2 min-w-0 md:min-w-[380px]"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <input
             type="email"
-            placeholder="ENTER YOUR EMAIL ADDRESS"
+            placeholder="Enter your email…"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground placeholder-foreground/40 text-xs tracking-[0.1em]"
+            className="flex-1 px-5 py-3 rounded-full bg-white/15 border border-white/20 text-white placeholder-white/40 text-sm font-medium focus:outline-none focus:bg-white/20 focus:border-white/40 transition-all min-w-0"
             required
           />
           <button
             type="submit"
-            className="text-foreground hover:opacity-60 transition-opacity font-bold text-xs tracking-[0.2em] uppercase flex items-center ml-4"
+            className="px-6 py-3 bg-accent text-accent-foreground rounded-full font-bold text-sm hover:bg-accent/90 transition-all whitespace-nowrap shrink-0"
           >
-            Submit
+            Subscribe
           </button>
         </form>
-
-        <p className="text-[10px] text-foreground/50 mt-10 tracking-widest uppercase font-medium">
-          We respect your privacy. Unsubscribe at any time.
-        </p>
       </div>
     </section>
   );
